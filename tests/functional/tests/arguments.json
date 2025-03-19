@@ -1,0 +1,11 @@
+{
+    "tests": [
+        {
+            "name": "No arguments",
+            "description": "Test the program with no arguments",
+            "input": "./arcade",
+            "expected_output": "Error",
+            "expected_return": 84
+        }
+    ]
+}
