@@ -1,8 +1,8 @@
 ##
 ## EPITECH PROJECT, 2025
-## tekspice
+## arcade
 ## File description:
-## tester
+## Tester
 ##
 
 from Parser import *
