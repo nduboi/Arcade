@@ -8,13 +8,16 @@
 #ifndef IEVENT_HPP_
 #define IEVENT_HPP_
 
+#include <pair>
+
 class IEvent {
     public:
         // IEvent();
         virtual ~IEvent() = default;
         virtual void init() = 0;
-        virtual int pollEvents() = 0;
+        virtual int pollEvents(std::pair<int, int> gridSize) = 0;
         virtual void cleanup() = 0;
+        virtual std::pair<int, int> getMousePos() = 0;
         enum event_t {
             UP,
             DOWN,
