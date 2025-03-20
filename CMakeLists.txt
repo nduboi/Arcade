@@ -8,6 +8,6 @@ add_compile_options("-fno-gnu-unique")
 
 #add_subdirectory(libSDL2)
 #add_subdirectory(libSFML)
-add_subdirectory(libCACA)
+add_subdirectory(display)
 add_subdirectory(games)
 add_subdirectory(src)
