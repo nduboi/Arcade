@@ -5,7 +5,7 @@
 #ifndef GAMEMODULE_HPP
 #define GAMEMODULE_HPP
 
-#include "AGameModule.hpp"
+#include "IGameModule.hpp"
 
 
 class GameModule : public IGameModule {

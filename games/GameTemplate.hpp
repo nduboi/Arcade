@@ -2,30 +2,30 @@
 ** EPITECH PROJECT, 2025
 ** arcade
 ** File description:
-** AGameModule
+** GameTemplate
 */
 
-#ifndef AGAMEMODULE_HPP_
-#define AGAMEMODULE_HPP_
+#ifndef GameTemplate_HPP_
+#define GameTemplate_HPP_
 
 #include "IGameModule.hpp"
 
-class AGameModule : public IGameModule {
+class GameTemplate : public IGameModule {
     protected:
-        std::string _name;
-        size_t _highScore;
-        size_t _score;
+        std::size_t _highScore;
+        std::size_t _score;
         grid_t _entities;
-    
+
     public:
-        AGameModule();
-        ~AGameModule() = default;
+        GameTemplate() = default;
+        ~GameTemplate() = default;
 
         std::size_t getHighScore() const override;
         void setHighScore(std::size_t highScore) override;
         std::size_t getScore() const override;
         void setScore(std::size_t score) override;
         grid_t getEntities() const override;
+        std::pair<size_t, size_t> getGridSize() const override;
 };
 
 #endif /* !AGAMEMODULE_HPP_ */

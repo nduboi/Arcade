@@ -32,7 +32,7 @@ void GameModule::setScore(std::size_t score) {
 grid_t GameModule::getEntities() const {
 	if (!this->_object)
 		throw GameModuleException("Error no lib Loaded");
-	return grid_t {};
+	return this->_object->getEntities();
 }
 
 std::pair<size_t, size_t> GameModule::getGridSize() const {

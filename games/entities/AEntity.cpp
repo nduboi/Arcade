@@ -32,27 +32,37 @@ gameState_t AEntity::onInteract(grid_t &grid)
     return gameState_t::PLAYING;
 }
 
+std::pair<size_t, size_t> AEntity::getPosition() const
+{
+    return this->_position;
+}
+
+void AEntity::setPosition(std::pair<size_t, size_t> position)
+{
+    this->_position = position;
+}
+
 std::string AEntity::getSpriteName() const
 {
-    return _spriteName;
+    return this->_spriteName;
 }
 
 std::size_t AEntity::getColor() const
 {
-    return _color;
+    return this->_color;
 }
 
 std::string AEntity::getText() const
 {
-    return _text;
+    return this->_text;
 }
 
 bool AEntity::isMovable() const
 {
-    return _isMovable;
+    return this->_isMovable;
 }
 
 bool AEntity::hasCollisions() const
 {
-    return _hasCollisions;
+    return this->_hasCollisions;
 }
