@@ -15,7 +15,7 @@ class AGameModule : public IGameModule {
         std::string _name;
         size_t _highScore;
         size_t _score;
-        grid_t entities;
+        grid_t _entities;
     
     public:
         AGameModule();
