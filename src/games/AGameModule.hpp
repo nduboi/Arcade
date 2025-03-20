@@ -8,7 +8,7 @@
 #ifndef AGAMEMODULE_HPP_
 #define AGAMEMODULE_HPP_
 
-#include "../common/IGameModule.hpp"
+#include "IGameModule.hpp"
 
 class AGameModule : public IGameModule {
     protected:

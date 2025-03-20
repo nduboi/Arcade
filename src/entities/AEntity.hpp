@@ -8,7 +8,7 @@
 #ifndef AENTITY_HPP_
 #define AENTITY_HPP_
 
-#include "../common/IEntity.hpp"
+#include "IEntity.hpp"
 
 class AEntity : public IEntity {
     protected:
