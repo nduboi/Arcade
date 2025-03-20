@@ -3,8 +3,7 @@
 //
 
 #include "GameModule.hpp"
-
-#include <Exception.hpp>
+#include "Exception.hpp"
 
 std::size_t GameModule::getHighScore() const {
 	if (!this->_object)

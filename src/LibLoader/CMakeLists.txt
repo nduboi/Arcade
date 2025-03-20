@@ -3,4 +3,4 @@ add_library(LibLoader STATIC
         DynamicLib.cpp
 )
 
-target_include_directories(LibLoader PRIVATE ../../include)
+target_include_directories(LibLoader PRIVATE ../../include ../)

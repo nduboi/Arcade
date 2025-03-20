@@ -11,7 +11,7 @@ add_subdirectory(games)
 
 target_link_libraries(arcade LibLoader WindowModule GameModule EntitiesModules)
 
-target_include_directories(arcade PRIVATE ../include window/include games/include entities/include)
+target_include_directories(arcade PRIVATE ../include window games entities LibLoader ./)
 
 add_custom_command(TARGET arcade POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
