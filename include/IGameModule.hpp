@@ -16,7 +16,6 @@
 
 class IGameModule {
     public:
-        IGameModule();
         virtual ~IGameModule() = default;
 
         virtual std::size_t getHighScore() const = 0;
