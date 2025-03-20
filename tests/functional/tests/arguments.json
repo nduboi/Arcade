@@ -4,7 +4,28 @@
             "name": "No arguments",
             "description": "Test the program with no arguments",
             "input": "./arcade",
-            "expected_output": "Error",
+            "expected_output": "Usage: ./arcade [lib]",
+            "expected_return": 84
+        },
+        {
+            "name": "Too many arguments",
+            "description": "Test the program with too many arguments",
+            "input": "./arcade lib1 lib2",
+            "expected_output": "Usage: ./arcade [lib]",
+            "expected_return": 84
+        },
+        {
+            "name": "Not existing library",
+            "description": "Test the program with a not existing library",
+            "input": "./arcade not_existing_library.so",
+            "expected_output": "Error during dlopen(not_existing_library.so, ...): not_existing_library.so: cannot open shared object file: No such file or directory",
+            "expected_return": 84
+        },
+        {
+            "name": "Invalid library",
+            "description": "Test the program with an invalid library",
+            "input": "./arcade tests/functional/exampleFiles/invalid.so",
+            "expected_output": "Error during dlopen(tests/functional/exampleFiles/invalid.so, ...): tests/functional/exampleFiles/invalid.so: file too short",
             "expected_return": 84
         }
     ]
