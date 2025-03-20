@@ -15,7 +15,7 @@ class AGameModule : public IGameModule {
         std::string _name;
         size_t _highScore;
         size_t _score;
-        std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> _entities;
+        grid_t entities;
     
     public:
         AGameModule();
@@ -25,7 +25,7 @@ class AGameModule : public IGameModule {
         void setHighScore(std::size_t highScore) override;
         std::size_t getScore() const override;
         void setScore(std::size_t score) override;
-        std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> getEntities() const override;
+        grid_t getEntities() const override;
 };
 
 #endif /* !AGAMEMODULE_HPP_ */

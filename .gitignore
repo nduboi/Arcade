@@ -1,0 +1,7 @@
+.idea
+.vscode
+vg*
+arcade
+*.so
+cmake-build-debug
+*build*

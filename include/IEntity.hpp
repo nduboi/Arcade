@@ -13,11 +13,12 @@
 #include <vector>
 #include <memory>
 
+class IEntity;
+
 typedef std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> grid_t;
 
 class IEntity {
     public:
-        IEntity();
         ~IEntity() = default;
 
         virtual void onClick(grid_t &grid) = 0;
