@@ -5,3 +5,4 @@ arcade
 *.so
 cmake-build-debug
 *build*
+doc
