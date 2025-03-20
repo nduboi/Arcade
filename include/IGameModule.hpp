@@ -23,7 +23,8 @@ class IGameModule {
         virtual void setHighScore(std::size_t highScore) = 0;
         virtual std::size_t getScore() const = 0;
         virtual void setScore(std::size_t score) = 0;
-        virtual std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> getEntities() const = 0;
+        virtual grid_t getEntities() const = 0;
+        virtual std::pair<size_t, size_t> getGridSize() const = 0;
         //maybe more ?
 };
 
