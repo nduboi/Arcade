@@ -16,7 +16,9 @@ private:
 public:
 	void init() override;
 
-	int pollEvents() override;
+	int pollEvents(std::pair<int, int> gridSize) override;
+
+	std::pair<int, int> getMousePos() override;
 
 	void cleanup() override;
 

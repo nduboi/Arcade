@@ -17,15 +17,29 @@ class IEntity;
 
 typedef std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> grid_t;
 
+typedef enum clickType_e {
+    LEFT_CLICK,
+    RIGHT_CLICK,
+    MIDDLE_CLICK
+} clickType_t;
+
+typedef enum gameState_e {
+    PLAYING,
+    WIN,
+    LOSE
+} gameState_t;
+
 class IEntity {
     public:
         virtual ~IEntity() = default;
 
-        virtual void onClick(grid_t &grid) = 0;
-        virtual void moveEntity(grid_t &grid) = 0;
-        virtual void moveEntity(grid_t &grid, std::pair<size_t, size_t> direction);
-        virtual void onInteract(grid_t &grid) = 0;
+        virtual gameState_t onClick(grid_t &grid, clickType_t type) = 0;
+        virtual gameState_t moveEntity(grid_t &grid) = 0;
+        virtual gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction) = 0;
+        virtual gameState_t onInteract(grid_t &grid) = 0;
 
+        virtual std::pair<size_t, size_t> getPosition() const = 0;
+        virtual void setPosition(std::pair<size_t, size_t> position) = 0;
         virtual std::string getSpriteName() const = 0;
         virtual std::size_t getColor() const = 0;
         virtual std::string getText() const = 0;

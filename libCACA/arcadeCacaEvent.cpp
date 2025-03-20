@@ -7,8 +7,12 @@
 void arcadeCacaEvent::init() {
 }
 
-int arcadeCacaEvent::pollEvents() {
+int arcadeCacaEvent::pollEvents(std::pair<int, int> gridSize) {
 	return 0;
+}
+
+std::pair<int, int> arcadeCacaEvent::getMousePos() {
+	return {};
 }
 
 void arcadeCacaEvent::cleanup() {

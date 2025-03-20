@@ -32,6 +32,7 @@ void Program::displayAllLib()
 		}
 	} catch (const std::filesystem::filesystem_error &e) {
 		std::cerr << "Error accessing directory: " << e.what() << std::endl;
+		return;
 	}
 	std::cout << "Display lib:" << std::endl;
 	for (auto s: display)

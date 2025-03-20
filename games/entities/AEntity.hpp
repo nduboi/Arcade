@@ -13,11 +13,9 @@
 class AEntity : public IEntity {
     protected:
         std::pair<size_t, size_t> _position;
-        std::pair<size_t, size_t> _size;
         std::string _spriteName;
         std::size_t _color;
         std::string _text;
-        std::size_t _zIndex;
         bool _isMovable;
         bool _hasCollisions;
 
@@ -25,11 +23,13 @@ class AEntity : public IEntity {
         AEntity();
         ~AEntity() = default;
 
-        void onClick(grid_t &grid) override;
-        void moveEntity(grid_t &grid) override;
-        void moveEntity(grid_t &grid, std::pair<size_t, size_t> direction);
-        void onInteract(grid_t &grid) override;
+        virtual gameState_t onClick(grid_t &grid, clickType_t type) override;
+        virtual gameState_t moveEntity(grid_t &grid) override;
+        virtual gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction) override;
+        virtual gameState_t onInteract(grid_t &grid) override;
 
+        std::pair<size_t, size_t> getPosition() const override;
+        void setPosition(std::pair<size_t, size_t> position) override;
         std::string getSpriteName() const override;
         std::size_t getColor() const override;
         std::string getText() const override;

@@ -13,10 +13,16 @@ void EventModule::init() {
 	this->_object->init();
 }
 
-int EventModule::pollEvents() {
+int EventModule::pollEvents(std::pair<int, int> gridSize) {
 	if (!this->_object)
 		throw EventModuleException("No lib loaded");
-	return this->_object->pollEvents();
+	return this->_object->pollEvents(gridSize);
+}
+
+std::pair<int, int> EventModule::getMousePos() {
+	if (!this->_object)
+		throw EventModuleException("No lib loaded");
+	return this->_object->getMousePos();
 }
 
 void EventModule::cleanup() {
