@@ -5,11 +5,10 @@ add_executable(arcade
 )
 
 add_subdirectory(LibLoader)
-add_subdirectory(entities)
 add_subdirectory(window)
 add_subdirectory(games)
 
-target_link_libraries(arcade LibLoader WindowModule GameModule EntitiesModules)
+target_link_libraries(arcade LibLoader WindowModule GameModule)
 
 target_include_directories(arcade PRIVATE ../include window games entities LibLoader ./)
 
