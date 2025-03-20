@@ -7,25 +7,29 @@
 
 #include "AEntity.hpp"
 
-void AEntity::onClick(grid_t &grid)
+gameState_t onClick(grid_t &grid, clickType_t type)
 {
     (void)grid;
+    return gameState_t::PLAYING;
 }
 
-void AEntity::moveEntity(grid_t &grid)
+gameState_t AEntity::moveEntity(grid_t &grid)
 {
     (void)grid;
+    return gameState_t::PLAYING;
 }
 
-void moveEntity(grid_t &grid, std::pair<size_t, size_t> direction)
+gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction)
 {
     (void)grid;
     (void)direction;
+    return gameState_t::PLAYING;
 }
 
-void AEntity::onInteract(grid_t &grid)
+gameState_t AEntity::onInteract(grid_t &grid)
 {
     (void)grid;
+    return gameState_t::PLAYING;
 }
 
 std::string AEntity::getSpriteName() const

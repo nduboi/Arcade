@@ -27,6 +27,7 @@ class IEvent {
             NEXTGAME,
             MENU,
             REFRESH,
+            MOUSECLICK,
         };
     protected:
     private:
