@@ -48,9 +48,17 @@ void Program::loadDisplayModule(const std::string &path)
 	this->display.reset();
 	this->_displayLoader.closeLib();
 	this->_displayLoader.openLib(path);
-	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE) {
+	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
 		throw ProgramCoreException("Error the library loaded is not a Display Module");
-	}
 	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPointDisplay());
 	this->event = std::make_unique<EventModule>(this->_displayLoader.initEntryPointEvent(*this->display));
+}
+
+void Program::loadGameModule(const std::string &path) {
+	this->game.reset();
+	this->_gameLoader.closeLib();
+	this->_gameLoader.openLib(path.c_str());
+	if (this->_displayLoader.getModuleType() != Loader::GAME_MODULE)
+		throw ProgramCoreException("Error the library loaded is not a Game Module");
+	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
 }

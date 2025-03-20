@@ -13,9 +13,9 @@
 #define PROGRAM_HPP
 
 #include <memory>
-#include <event/EventModule.hpp>
-
+#include "EventModule.hpp"
 #include "WindowModule.hpp"
+#include "GameModule.hpp"
 
 /**
  * @class Program
@@ -27,13 +27,13 @@
 class Program {
 private:
 	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
-	// std::unique_ptr<Loader::LibLoader> _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
-
-	// std::unique_ptr<GameModule> game; ///< Unique pointer to the game GameModule.
+	Loader::LibLoader _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
 
 public:
 	std::unique_ptr<WindowModule> display; ///< Unique pointer to the display WindowModule.
 	std::unique_ptr<EventModule> event; ///< Unique pointer to the display WindowModule.
+	std::unique_ptr<GameModule> game; ///< Unique pointer to the game GameModule.
+	// std::unique_ptr<Enti>
 	/**
 	 * @brief Display All lib.
 	 *
@@ -47,6 +47,8 @@ public:
 	 * This function permit to load a display Module
 	 */
 	void loadDisplayModule(const std::string &displayLib);
+
+	void loadGameModule(const std::string &gameLib);
 
 	/**
 	 * @brief Constructs a new Program object.

@@ -19,7 +19,7 @@ typedef std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> grid_t;
 
 class IEntity {
     public:
-        ~IEntity() = default;
+        virtual ~IEntity() = default;
 
         virtual void onClick(grid_t &grid) = 0;
         virtual void moveEntity(grid_t &grid) = 0;

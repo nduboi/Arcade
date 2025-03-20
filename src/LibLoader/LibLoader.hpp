@@ -13,6 +13,7 @@
 #ifndef LIBLOADER_HPP
 #define LIBLOADER_HPP
 
+#include <IGameModule.hpp>
 #include <memory>
 #include "IWindow.hpp"
 #include "IEvent.hpp"
@@ -66,6 +67,7 @@ namespace Loader
 		 */
 		IWindow *initEntryPointDisplay() const;
 		IEvent *initEntryPointEvent(IWindow &win) const;
+		IGameModule *initEntryPointGame() const;
 
 		/**
 		 * @brief Closes the currently loaded library.

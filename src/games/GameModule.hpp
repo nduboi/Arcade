@@ -24,7 +24,8 @@ public:
 
 	std::pair<size_t, size_t> getGridSize() const override;
 
-	GameModule() = default;
+	GameModule(IGameModule *);
+
 	~GameModule() = default;
 };
 #endif //GAMEMODULE_HPP

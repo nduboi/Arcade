@@ -131,6 +131,33 @@ public:
     ~EventModuleException() = default;
 };
 
+/**
+ * @class EntityModuleException
+ * @brief Exception class for handling DLL-related errors.
+ *
+ * The EntityModuleException class is used to handle errors related to display module
+ *
+ */
+class EntityModuleException : public std::exception {
+private:
+    std::string _msg; ///< Error message.
+
+public:
+    /**
+     * @brief Returns the error message.
+     * @return The error message.
+     */
+    const char *what() const noexcept override { return this->_msg.c_str(); }
+    /**
+     * @brief Constructor for EntityModuleException.
+     * @param msg The error message.
+     */
+    EntityModuleException(const std::string &msg) : _msg(msg) {}
+    /**
+     * @brief Destructor for EntityModuleException.
+     */
+    ~EntityModuleException() = default;
+};
 
 /**
  * @class ProgramCoreException

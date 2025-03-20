@@ -16,9 +16,10 @@ int main(int ac, char **av) {
             return 0;
         }
         window_data.loadDisplayModule(av[1]);
-        if (ac > 2) {
+        if (ac >= 2)
             window_data.loadDisplayModule(av[2]);
-        }
+        if (ac >= 3)
+            window_data.loadGameModule(av[3]);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 84;

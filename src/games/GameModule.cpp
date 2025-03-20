@@ -40,3 +40,7 @@ std::pair<size_t, size_t> GameModule::getGridSize() const {
 		throw GameModuleException("Error no lib Loaded");
 	return this->_object->getGridSize();
 }
+
+GameModule::GameModule(IGameModule *mdl) {
+	this->_object.reset(mdl);
+}

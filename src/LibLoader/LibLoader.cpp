@@ -39,6 +39,13 @@ namespace Loader {
 		return (*create)(win);
 	}
 
+	IGameModule * LibLoader::initEntryPointGame() const {
+		IGameModule *(*create)() = reinterpret_cast<IGameModule *(*)()>(getFunctionDynamicLib(this->_moduleHandle, "createGame"));
+		if (!create)
+			throw DllException("Error cannot createGame function");
+		return (*create)();
+	}
+
 	void LibLoader::closeLib() {
 		if (this->_moduleHandle)
 			closeDynamicLib(this->_moduleHandle);
