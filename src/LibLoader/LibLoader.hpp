@@ -15,6 +15,7 @@
 
 #include <memory>
 #include "IWindow.hpp"
+#include "IEvent.hpp"
 #include "LoaderType.hpp"
 #include "Exception.hpp"
 #include "DynamicLib.hpp"
@@ -63,13 +64,8 @@ namespace Loader
 		 * @return T* A pointer to an instance of the specified class type `T`.
 		 * @throws DllException If the "getClass" function cannot be retrieved or invoked.
 		 */
-		template<class T>
-		T *initEntryPoint() {
-			T *(*create)() = reinterpret_cast< T *(*)()>(getFunctionDynamicLib(this->_moduleHandle, "getClass"));
-			if (!create)
-				throw DllException("Error cannot getClass function");
-			return (*create)();
-		}
+		IWindow *initEntryPointDisplay() const;
+		IEvent *initEntryPointEvent(IWindow &win) const;
 
 		/**
 		 * @brief Closes the currently loaded library.

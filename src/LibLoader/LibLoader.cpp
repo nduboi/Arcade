@@ -19,10 +19,24 @@ namespace Loader {
 		} catch (...) {
 			throw DllException("Error during dlopen("+path+", ...): " + std::string(getDlError()));
 		}
-		this->_getModuleType = reinterpret_cast<GetModuleTypeFct>(getFunctionDynamicLib(this->_moduleHandle, "getModuleType"));
+		this->_getModuleType = reinterpret_cast<GetModuleTypeFct>(getFunctionDynamicLib(this->_moduleHandle, "getType"));
 		if (!this->_getModuleType)
-			throw DllException("Error cannot getModuleType function");
+			throw DllException("Error cannot getType function");
 		this->_moduleType = this->_getModuleType();
+	}
+
+	IWindow * LibLoader::initEntryPointDisplay() const {
+		IWindow *(*create)() = reinterpret_cast<IWindow *(*)()>(getFunctionDynamicLib(this->_moduleHandle, "createInstance"));
+		if (!create)
+			throw DllException("Error cannot createInstance function");
+		return (*create)();
+	}
+
+	IEvent * LibLoader::initEntryPointEvent(IWindow &win) const {
+		IEvent *(*create)(IWindow &) = reinterpret_cast<IEvent *(*)(IWindow &)>(getFunctionDynamicLib(this->_moduleHandle, "createEvent"));
+		if (!create)
+			throw DllException("Error cannot createEvent function");
+		return (*create)(win);
 	}
 
 	void LibLoader::closeLib() {

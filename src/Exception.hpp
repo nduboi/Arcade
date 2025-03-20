@@ -104,6 +104,35 @@ public:
 };
 
 /**
+ * @class EventModuleException
+ * @brief Exception class for handling DLL-related errors.
+ *
+ * The EventModuleException class is used to handle errors related to display module
+ *
+ */
+class EventModuleException : public std::exception {
+private:
+    std::string _msg; ///< Error message.
+
+public:
+    /**
+     * @brief Returns the error message.
+     * @return The error message.
+     */
+    const char *what() const noexcept override { return this->_msg.c_str(); }
+    /**
+     * @brief Constructor for EventModuleException.
+     * @param msg The error message.
+     */
+    EventModuleException(const std::string &msg) : _msg(msg) {}
+    /**
+     * @brief Destructor for EventModuleException.
+     */
+    ~EventModuleException() = default;
+};
+
+
+/**
  * @class ProgramCoreException
  * @brief Exception class for handling DLL-related errors.
  *

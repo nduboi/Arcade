@@ -13,6 +13,8 @@
 #define PROGRAM_HPP
 
 #include <memory>
+#include <event/EventModule.hpp>
+
 #include "WindowModule.hpp"
 
 /**
@@ -27,10 +29,11 @@ private:
 	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
 	// std::unique_ptr<Loader::LibLoader> _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
 
-	std::unique_ptr<WindowModule> display; ///< Unique pointer to the display WindowModule.
 	// std::unique_ptr<GameModule> game; ///< Unique pointer to the game GameModule.
 
 public:
+	std::unique_ptr<WindowModule> display; ///< Unique pointer to the display WindowModule.
+	std::unique_ptr<EventModule> event; ///< Unique pointer to the display WindowModule.
 	/**
 	 * @brief Display All lib.
 	 *

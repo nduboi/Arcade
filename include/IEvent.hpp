@@ -10,7 +10,6 @@
 
 class IEvent {
     public:
-        // IEvent();
         virtual ~IEvent() = default;
         virtual void init() = 0;
         virtual int pollEvents() = 0;

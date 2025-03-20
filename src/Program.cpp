@@ -51,5 +51,6 @@ void Program::loadDisplayModule(const std::string &path)
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE) {
 		throw ProgramCoreException("Error the library loaded is not a Display Module");
 	}
-	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPoint<IWindow>());
+	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPointDisplay());
+	this->event = std::make_unique<EventModule>(this->_displayLoader.initEntryPointEvent(*this->display));
 }
