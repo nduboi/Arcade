@@ -29,6 +29,8 @@ private:
 	std::unique_ptr<IWindow> _object; /**< Reference to the library loader. */
 
 public:
+	IWindow &getObject() {return *this->_object;};
+
 	void initWindow() override;
 	void display() override;
 	void closeWindow() override;

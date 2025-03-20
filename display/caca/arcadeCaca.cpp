@@ -16,7 +16,7 @@ void arcadeCaca::closeWindow() {
 }
 
 bool arcadeCaca::isOpen() {
-	return false;
+	return true;
 }
 
 void arcadeCaca::clear() {

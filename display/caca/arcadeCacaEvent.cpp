@@ -7,8 +7,8 @@
 void arcadeCacaEvent::init() {
 }
 
-int arcadeCacaEvent::pollEvents(std::pair<int, int> gridSize) {
-	return 0;
+IEvent::event_t arcadeCacaEvent::pollEvents(std::pair<int, int> gridSize) {
+	return static_cast<IEvent::event_t>(-1);
 }
 
 std::pair<int, int> arcadeCacaEvent::getMousePos() {

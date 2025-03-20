@@ -13,7 +13,7 @@ void EventModule::init() {
 	this->_object->init();
 }
 
-int EventModule::pollEvents(std::pair<int, int> gridSize) {
+IEvent::event_t EventModule::pollEvents(std::pair<int, int> gridSize) {
 	if (!this->_object)
 		throw EventModuleException("No lib loaded");
 	return this->_object->pollEvents(gridSize);

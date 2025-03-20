@@ -32,7 +32,7 @@ public:
 
 	void init() override;
 
-	int pollEvents(std::pair<int, int> gridSize) override;
+	IEvent::event_t pollEvents(std::pair<int, int> gridSize) override;
 
 	std::pair<int, int> getMousePos() override;
 

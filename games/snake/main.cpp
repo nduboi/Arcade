@@ -12,7 +12,7 @@
 #include "SnakeGame.hpp"
 
 extern "C" {
-	IGameModule *getInstanceGame(void) {
+	IGameModule *createGame(void) {
 		return new SnakeGame();
 	}
 	Loader::ModuleType_t getType(void) {

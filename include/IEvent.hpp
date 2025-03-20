@@ -12,12 +12,7 @@
 
 class IEvent {
     public:
-        virtual ~IEvent() = default;
-        virtual void init() = 0;
-        virtual int pollEvents(std::pair<int, int> gridSize) = 0;
-        virtual void cleanup() = 0;
-        virtual std::pair<int, int> getMousePos() = 0;
-        enum event_t {
+        typedef enum event_e {
             UP,
             DOWN,
             LEFT,
@@ -30,7 +25,13 @@ class IEvent {
             MENU,
             REFRESH,
             MOUSECLICK,
-        };
+            NOTHING,
+        } event_t;
+        virtual ~IEvent() = default;
+        virtual void init() = 0;
+        virtual event_t pollEvents(std::pair<int, int> gridSize) = 0;
+        virtual void cleanup() = 0;
+        virtual std::pair<int, int> getMousePos() = 0;
     protected:
     private:
 };

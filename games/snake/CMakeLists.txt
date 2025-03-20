@@ -1,8 +1,9 @@
 add_library(arcade_snake SHARED
     main.cpp
+    SnakeGame.cpp
 )
 
-target_include_directories(arcade_snake PRIVATE . ../../include ../../src/LibLoader ../)
+target_include_directories(arcade_snake PRIVATE . ../../include ../../src/LibLoader ../ ../entities)
 
 add_custom_command(TARGET arcade_snake POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
