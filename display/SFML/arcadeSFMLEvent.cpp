@@ -35,6 +35,18 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::ENTER;
             }
         }
+        if (event.type == sf::Event::JoystickMoved) {
+            if (event.joystickMove.axis== sf::Joystick::Axis::PovX) {
+                if (sf::Joystick::getAxisPosition(event.joystickMove.joystickId, sf::Joystick::Axis::PovX) > 0)
+                    return IEvent::UP;
+                return IEvent::DOWN;
+            }
+            if (event.joystickMove.axis == sf::Joystick::PovY) {
+                if (sf::Joystick::getAxisPosition(event.joystickMove.joystickId, sf::Joystick::Axis::PovY) > 0)
+                    return IEvent::RIGHT;
+                return IEvent::LEFT;
+            }
+        }
         if (event.type == sf::Event::MouseButtonPressed)
             return IEvent::MOUSECLICK;
     }
