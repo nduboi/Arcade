@@ -18,10 +18,11 @@ SnakeGame::SnakeGame()
     for (int y = 0; y < 17; y++) {
         this->_entities[y].resize(17);
         for (int x = 0; x < 17; x++) {
+            this->_entities[y][x].resize(3);
             if (grass)
-                this->_entities[y][x].push_back(std::make_shared<VoidEntity>("assets/snake/grass_bright.png", 0, "", std::make_pair(x, y)));
+                this->_entities[y][x][0] = std::make_shared<VoidEntity>("assets/snake/grass_bright.png", 0, "", std::make_pair(x, y));
             else
-                this->_entities[y][x].push_back(std::make_shared<VoidEntity>("assets/snake/grass_dark.png", 0, "", std::make_pair(x, y)));
+                this->_entities[y][x][0] = std::make_shared<VoidEntity>("assets/snake/grass_dark.png", 0, "", std::make_pair(x, y));
             grass = !grass;
         }
     }
