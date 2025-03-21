@@ -51,6 +51,21 @@ void Core::_analyze() {
 		printf("EVENT DOWN\n");
 #endif
 	}
+	if (event == IEvent::event_t::MOUSECLICK) {
+#ifdef _DEBUG
+		printf("EVENT MOUSECLICK\n");
+#endif
+	}
+	if (event == IEvent::event_t::MOUSELEFTCLICK) {
+#ifdef _DEBUG
+		printf("EVENT MOUSELEFTCLICK\n");
+#endif
+	}
+	if (event == IEvent::event_t::MOUSERIGHTCLICK) {
+#ifdef _DEBUG
+		printf("EVENT MOUSERIGHTCLICK\n");
+#endif
+	}
 	if (event == IEvent::event_t::NEXTGRAPHIC) {
 #ifdef _DEBUG
 		printf("EVENT NEXTGRAPHIC\n");
