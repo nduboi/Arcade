@@ -132,6 +132,34 @@ public:
 };
 
 /**
+ * @class MenuModuleException
+ * @brief Exception class for handling DLL-related errors.
+ *
+ * The MenuModuleException class is used to handle errors related to display module
+ *
+ */
+class MenuModuleException : public std::exception {
+private:
+    std::string _msg; ///< Error message.
+
+public:
+    /**
+     * @brief Returns the error message.
+     * @return The error message.
+     */
+    const char *what() const noexcept override { return this->_msg.c_str(); }
+    /**
+     * @brief Constructor for MenuModuleException.
+     * @param msg The error message.
+     */
+    MenuModuleException(const std::string &msg) : _msg(msg) {}
+    /**
+     * @brief Destructor for MenuModuleException.
+     */
+    ~MenuModuleException() = default;
+};
+
+/**
  * @class EventModuleException
  * @brief Exception class for handling DLL-related errors.
  *

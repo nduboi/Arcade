@@ -4,9 +4,9 @@
 
 #ifndef MENU_HPP
 #define MENU_HPP
-#include <IGameModule.hpp>
+#include "IMenuModule.hpp"
 
-class Menu : public IGameModule {
+class Menu : public IMenuModule {
 private:
 	std::size_t _score;
 	std::size_t _highScore;

@@ -13,8 +13,9 @@
 #ifndef LIBLOADER_HPP
 #define LIBLOADER_HPP
 
-#include <IGameModule.hpp>
 #include <memory>
+#include "IGameModule.hpp"
+#include "IMenuModule.hpp"
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 #include "LoaderType.hpp"
@@ -66,8 +67,12 @@ namespace Loader
 		 * @throws DllException If the "getClass" function cannot be retrieved or invoked.
 		 */
 		IWindow *initEntryPointDisplay() const;
+
 		IEvent *initEntryPointEvent(IWindow &win) const;
+
 		IGameModule *initEntryPointGame() const;
+
+		IMenuModule *initEntryPointMenu() const;
 
 		/**
 		 * @brief Closes the currently loaded library.
