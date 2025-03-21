@@ -4,5 +4,3 @@ add_library(entities STATIC
 )
 
 target_compile_options(entities PRIVATE -fPIC)
-
-target_include_directories(entities PRIVATE . ../../include ../src/LibLoader)

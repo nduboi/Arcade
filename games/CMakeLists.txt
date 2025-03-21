@@ -15,9 +15,9 @@ add_dependencies(arcade_menu entities)
 
 add_dependencies(gameTemplate entities)
 
-target_include_directories(gameTemplate PRIVATE . ../include)
-
 target_link_libraries(arcade_snake entities gameTemplate)
 
 target_link_libraries(arcade_menu entities gameTemplate)
+
+target_include_directories(arcade_snake PRIVATE ./ entities)
 

@@ -4,7 +4,7 @@ add_library(arcade_menu SHARED
         Menu.hpp
 )
 
-target_include_directories(arcade_menu PRIVATE . ../../include ../../src/LibLoader ../)
+target_include_directories(arcade_menu PRIVATE . ../../include ../../core/LibLoader ../)
 
 add_custom_command(TARGET arcade_menu POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy

@@ -6,8 +6,6 @@ add_library(arcade_sfml SHARED
     arcadeSFMLEvent.hpp
 )
 
-target_include_directories(arcade_sfml PRIVATE . ../../include ../../src/LibLoader)
-
 target_link_libraries(arcade_sfml sfml-graphics sfml-window sfml-system)
 
 add_custom_command(TARGET arcade_sfml POST_BUILD
