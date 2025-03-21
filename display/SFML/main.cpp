@@ -32,7 +32,7 @@ extern "C" {
 		return new arcadeSFML();
 	}
 	IEvent *createEvent(IWindow &Window) {
-		return new arcadeSFMLEvent(static_cast<arcadeSFML &>(Window));
+		return new arcadeSFMLEvent(Window);
 	}
 	Loader::ModuleType_t getType(void) {
 		return Loader::ModuleType_t::DISPLAY_MODULE;
