@@ -8,6 +8,8 @@
 #ifndef AENTITY_HPP_
 #define AENTITY_HPP_
 
+#include <string>
+#include <utility>
 #include "IEntity.hpp"
 
 class AEntity : public IEntity {
@@ -20,13 +22,13 @@ class AEntity : public IEntity {
         bool _hasCollisions;
 
     public:
-        AEntity();
+        AEntity() = default;
         ~AEntity() = default;
 
-        virtual gameState_t onClick(grid_t &grid, clickType_t type) override;
-        virtual gameState_t moveEntity(grid_t &grid) override;
-        virtual gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction) override;
-        virtual gameState_t onInteract(grid_t &grid) override;
+        gameState_t onClick(grid_t &grid, clickType_t type) override;
+        gameState_t moveEntity(grid_t &grid) override;
+        gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction) override;
+        gameState_t onInteract(grid_t &grid) override;
 
         std::pair<size_t, size_t> getPosition() const override;
         void setPosition(std::pair<size_t, size_t> position) override;

@@ -1,6 +1,9 @@
 add_library(arcade_snake SHARED
     main.cpp
     SnakeGame.cpp
+    ../GameTemplate.cpp
+    ../entities/AEntity.cpp
+    ../entities/VoidEntity.cpp
 )
 
 add_custom_command(TARGET arcade_snake POST_BUILD

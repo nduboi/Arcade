@@ -1,10 +1,10 @@
 add_library(arcade_menu SHARED
     main.cpp
-        Menu.cpp
-        Menu.hpp
+    Menu.cpp
+    ../GameTemplate.cpp
+    ../entities/AEntity.cpp
+    ../entities/VoidEntity.cpp
 )
-
-target_include_directories(arcade_menu PRIVATE . ../../include ../../core/LibLoader ../)
 
 add_custom_command(TARGET arcade_menu POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy

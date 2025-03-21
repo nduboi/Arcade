@@ -7,7 +7,7 @@
 
 #include "AEntity.hpp"
 
-gameState_t onClick(grid_t &grid, clickType_t type)
+gameState_t AEntity::onClick(grid_t &grid, clickType_t type)
 {
     (void)grid;
     return gameState_t::PLAYING;
@@ -19,7 +19,7 @@ gameState_t AEntity::moveEntity(grid_t &grid)
     return gameState_t::PLAYING;
 }
 
-gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction)
+gameState_t AEntity::moveEntity(grid_t &grid, std::pair<size_t, size_t> direction)
 {
     (void)grid;
     (void)direction;
