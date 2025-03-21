@@ -19,6 +19,7 @@ class AEntity : public IEntity {
         std::size_t _color;
         std::string _text;
         bool _isMovable;
+        bool _isControlable;
         bool _hasCollisions;
 
     public:
@@ -27,7 +28,7 @@ class AEntity : public IEntity {
 
         gameState_t onClick(grid_t &grid, clickType_t type) override;
         gameState_t moveEntity(grid_t &grid) override;
-        gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction) override;
+        gameState_t moveEntity(grid_t &grid, std::pair<int, int> direction) override;
         gameState_t onInteract(grid_t &grid) override;
 
         std::pair<size_t, size_t> getPosition() const override;
@@ -36,6 +37,7 @@ class AEntity : public IEntity {
         std::size_t getColor() const override;
         std::string getText() const override;
         bool isMovable() const override;
+        bool isControlable() const override;
         bool hasCollisions() const override;
 };
 

@@ -31,6 +31,10 @@ private:
 		this->_displayStatus = data;
 	};
 
+	IEvent::event_t _lastEvent;
+
+	std::pair<int, int> _getEventDirection() const;
+
 	void _analyze();
 
 	void _compute();

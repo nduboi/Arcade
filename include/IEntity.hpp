@@ -35,7 +35,7 @@ class IEntity {
 
         virtual gameState_t onClick(grid_t &grid, clickType_t type) = 0;
         virtual gameState_t moveEntity(grid_t &grid) = 0;
-        virtual gameState_t moveEntity(grid_t &grid, std::pair<size_t, size_t> direction) = 0;
+        virtual gameState_t moveEntity(grid_t &grid, std::pair<int, int> direction) = 0;
         virtual gameState_t onInteract(grid_t &grid) = 0;
 
         virtual std::pair<size_t, size_t> getPosition() const = 0;
@@ -44,6 +44,7 @@ class IEntity {
         virtual std::size_t getColor() const = 0;
         virtual std::string getText() const = 0;
         virtual bool isMovable() const = 0;
+        virtual bool isControlable() const = 0;
         virtual bool hasCollisions() const = 0;
 };
 
