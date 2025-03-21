@@ -7,6 +7,8 @@
 #include <vector>
 #include "Core.hpp"
 
+#include <cstring>
+
 Core::Core() {
 	this->_refreshLibList();
 	this->_lastEvent = IEvent::event_t::NOTHING;
@@ -16,7 +18,10 @@ Core::~Core() {
 }
 
 void Core::_analyze() {
-	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+	std::pair<size_t, size_t> gridSize {};
+
+	if (this->_moduleLoaded == GAME)
+		gridSize = this->game.get()->getGridSize();
 	IEvent::event_t event = this->event->pollEvents(gridSize);
 	this->_lastEvent = IEvent::event_t::NOTHING;
 
@@ -64,27 +69,30 @@ std::pair<int, int> Core::_getEventDirection() const {
 }
 
 void Core::_compute() {
-	grid_t grid = this->game.get()->getEntities();
-	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+	if (this->_moduleLoaded == GAME) {
+		grid_t grid = this->game.get()->getEntities();
+		std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
 
-	for (int y = 0; y < gridSize.first; y++) {
-		for (int x = 0; x < gridSize.second; x++) {
-			for (int z = 0; z < grid[y][x].size(); z++) {
-				IEntity *entity = grid[y][x][z].get();
+		for (int y = 0; y < gridSize.first; y++) {
+			for (int x = 0; x < gridSize.second; x++) {
+				for (int z = 0; z < grid[y][x].size(); z++) {
+					IEntity *entity = grid[y][x][z].get();
 
-				if (entity->isMovable()) {
-					if (entity->isControlable()) {
-						entity->moveEntity(grid, this->_getEventDirection());
-					} else {
-						entity->moveEntity(grid);
+					if (entity->isMovable()) {
+						if (entity->isControlable()) {
+							entity->moveEntity(grid, this->_getEventDirection());
+						} else {
+							entity->moveEntity(grid);
+						}
 					}
 				}
 			}
 		}
+		this->_computeGameDisplay();
 	}
 }
 
-void Core::_computeDisplay() {
+void Core::_computeGameDisplay() {
 	grid_t grid = this->game.get()->getEntities();
 	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
 
@@ -98,7 +106,6 @@ void Core::_computeDisplay() {
 			}
 		}
 	}
-	this->display->display();
 }
 
 void Core::_refreshLibList() {
@@ -126,12 +133,12 @@ void Core::_refreshLibList() {
 }
 
 void Core::_loadNextGame() {
-	if (this->_gameLibPath.size() == 1)
+	if (this->_gameLibPath.size() == 1 && this->_moduleLoaded == GAME)
 		return;
 	this->_gameLibIndex++;
 	if (this->_gameLibIndex >= this->_gameLibPath.size())
 		this->_gameLibIndex = 0;
-	if (std::filesystem::canonical(this->_gameLibPath.at(this->_gameLibIndex)) == std::filesystem::canonical(this->_gameLoader.getModulePath()))
+	if (strcmp(this->_gameLoader.getModulePath(), "") != 0 && std::filesystem::canonical(this->_gameLibPath.at(this->_gameLibIndex)) == std::filesystem::canonical(this->_gameLoader.getModulePath()))
 		return this->_loadNextGame();
 	this->loadGameModule(this->_gameLibPath.at(this->_gameLibIndex));
 }
@@ -145,10 +152,6 @@ void Core::_loadNextGraphic() {
 	if (std::filesystem::canonical(this->_displayLibPath.at(this->_displayLibIndex)) == std::filesystem::canonical(this->_displayLoader.getModulePath()))
 		return this->_loadNextGraphic();
 	this->loadDisplayModule(this->_displayLibPath.at(this->_displayLibIndex));
-}
-
-void Core::_waitDisplayReady() const {
-	while (this->_displayStatus != READY && this->_displayStatus != ERROR);
 }
 
 void Core::displayAllLib()
@@ -182,6 +185,7 @@ void Core::loadGameModule(const std::string &path) {
 	this->_gameLoader.openLib(path.c_str());
 	if (this->_gameLoader.getModuleType() != Loader::GAME_MODULE)
 		throw CoreException("Error the library loaded is not a Game Module");
+	this->_moduleLoaded = GAME;
 	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
 }
 
@@ -191,6 +195,7 @@ void Core::loadMenuModule(const std::string &path) {
 	this->_menuLoader.openLib(path.c_str());
 	if (this->_menuLoader.getModuleType() != Loader::MENU_MODULE)
 		throw CoreException("Error the library loaded is not a Menu Module");
+	this->_moduleLoaded = MENU;
 	this->menu = std::make_unique<MenuModule>(this->_menuLoader.initEntryPointMenu());
 }
 
@@ -204,7 +209,6 @@ void Core::loop() {
 		if (this->display.get()->isOpen() == false)
 			break;
 		this->_compute();
-
-		this->_computeDisplay();
+		this->display->display();
 	}
 }
