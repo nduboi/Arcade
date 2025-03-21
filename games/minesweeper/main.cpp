@@ -12,22 +12,22 @@
 #include "MinesweeperGame.hpp"
 
 extern "C" {
-	IGameModule *getInstanceGame(void) {
+	IGameModule *createGame(void) {
 		return new MinesweeperGame();
 	}
-	Loader::ModuleType_t getModuleType(void) {
+	Loader::ModuleType_t getType(void) {
 		return Loader::ModuleType_t::GAME_MODULE;
 	}
 	__attribute__((constructor)) void construct()
 	{
 		#ifdef _DEBUG
-			std::cout << "Loaded dynamic lib: Lib SNAKE" << std::endl;
+			std::cout << "Loaded dynamic lib: Lib MINESWEEPER" << std::endl;
 		#endif
 	}
 	__attribute__((destructor)) void deconstruct()
 	{
 		#ifdef _DEBUG
-			std::cout << "Unloaded dynamic lib: Lib SNAKE" << std::endl;
+			std::cout << "Unloaded dynamic lib: Lib MINESWEEPER" << std::endl;
 		#endif
 	}
 }

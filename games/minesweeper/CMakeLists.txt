@@ -1,8 +1,11 @@
 add_library(arcade_minesweeper SHARED
     main.cpp
+    Cell.cpp
+    MinesweeperGame.cpp
+    ../GameTemplate.cpp
+    ../entities/AEntity.cpp
+    ../entities/VoidEntity.cpp
 )
-
-target_include_directories(arcade_minesweeper PRIVATE . ../../include ../../src/LibLoader ../)
 
 add_custom_command(TARGET arcade_minesweeper POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy

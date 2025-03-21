@@ -9,16 +9,16 @@
 
 Cell::Cell(size_t x, size_t y)
 {
-    _isRevealed = false;
-    _isFlagged = false;
-    _isMine = false;
-    _adjacentMines = 0;
-    _position = {x, y};
-    _spriteName = "hidden.png";
-    _color = 0xCCCCCC;
-    _text = "";
-    _isMovable = false;
-    _hasCollisions = false;
+    this->_isRevealed = false;
+    this->_isFlagged = false;
+    this->_isMine = false;
+    this->_adjacentMines = 0;
+    this->_position = {x, y};
+    this->_spriteName = "./assets/minesweeper/hidden.png";
+    this->_color = 0xCCCCCC;
+    this->_text = "";
+    this->_isMovable = false;
+    this->_hasCollisions = false;
 }
 
 gameState_t Cell::onClick(grid_t &grid, clickType_t type)
@@ -38,66 +38,62 @@ gameState_t Cell::onInteract(grid_t &grid)
 
 std::string Cell::getSpriteName() const
 {
-    if (_isFlagged) {
-        return "flag.png";
-    } else if (!_isRevealed) {
-        return "hidden.png";
-    } else if (_isMine) {
-        return "mine.png";
+    if (this->_isFlagged) {
+        return "./assets/minesweeper/flag.png";
+    } else if (!this->_isRevealed) {
+        return "./assets/minesweeper/hidden.png";
+    } else if (this->_isMine) {
+        return "./assets/minesweeper/mine.png";
     } else {
-        return "cell_" + std::to_string(_adjacentMines) + ".png";
+        return "./assets/minesweeper/cell_" + std::to_string(_adjacentMines) + ".png";
     }
 }
 
 std::size_t Cell::getColor() const
 {
-    if (!_isRevealed) {
+    if (!this->_isRevealed)
         return 0xCCCCCC;  // Light gray for hide cells
-    } else if (_isMine) {
+    if (this->_isMine)
         return 0xFF0000;  // Red for mines
-    } else if (_adjacentMines == 0) {
+    if (this->_adjacentMines == 0)
         return 0xFFFFFF;  // White for empty cells
-    } else {
-        static const std::size_t colors[] = {
-            0x0000FF,  // 1: Blue
-            0x008000,  // 2: Green
-            0xFA8072,  // 3: Light red
-            0x000080,  // 4: Dark blue
-            0x800000,  // 5: Brown
-            0x008080,  // 6: Cyan
-            0x000000,  // 7: Black
-            0x808080   // 8: Grey
-        };
-        return colors[std::min(_adjacentMines, static_cast<size_t>(8)) - 1];
-    }
+    static const std::size_t colors[] = {
+        0x0000FF,  // 1: Blue
+        0x008000,  // 2: Green
+        0xFA8072,  // 3: Light red
+        0x000080,  // 4: Dark blue
+        0x800000,  // 5: Brown
+        0x008080,  // 6: Cyan
+        0x000000,  // 7: Black
+        0x808080   // 8: Grey
+    };
+    return colors[std::min(_adjacentMines, static_cast<size_t>(8)) - 1];
 }
 
 std::string Cell::getText() const
 {
-    if (_isFlagged) {
+    if (this->_isFlagged)
         return "F";
-    } else if (!_isRevealed) {
+    if (!this->_isRevealed)
         return "";
-    } else if (_isMine) {
+    if (this->_isMine)
         return "#";
-    } else if (_adjacentMines > 0) {
-        return std::to_string(_adjacentMines);
-    } else {
-        return "";
-    }
+    if (this->_adjacentMines > 0)
+        return std::to_string(this->_adjacentMines);
+    return "";
 }
 
 
 void Cell::setRevealed(bool revealed)
 {
-    _isRevealed = revealed;
+    this->_isRevealed = revealed;
     if (revealed) {
-        if (_isMine) {
-            _spriteName = "mine_reveal.png";
-            _color = 0xFF0000; // Red for mines
-            _text = "*";
-        } else if (_adjacentMines > 0) {
-            _spriteName = "cell_" + std::to_string(_adjacentMines) + ".png";
+        if (this->_isMine) {
+            this->_spriteName = "./assets/minesweeper/mine_reveal.png";
+            this->_color = 0xFF0000; // Red for mines
+            this->_text = "*";
+        } else if (this->_adjacentMines > 0) {
+            this->_spriteName = "./assets/minesweeper/cell_" + std::to_string(this->_adjacentMines) + ".png";
             static const std::size_t colors[] = {
                 0x0000FF,  // 1: Blue
                 0x008000,  // 2: Green
@@ -108,58 +104,58 @@ void Cell::setRevealed(bool revealed)
                 0x000000,  // 7: Black
                 0x808080   // 8: Grey
             };
-            _color = colors[std::min(_adjacentMines, static_cast<size_t>(8)) - 1];
-            _text = std::to_string(_adjacentMines);
+            this->_color = colors[std::min(this->_adjacentMines, static_cast<size_t>(8)) - 1];
+            this->_text = std::to_string(this->_adjacentMines);
         } else {
-            _spriteName = "cell_0.png";
-            _color = 0xFFFFFF; // White for empty cells
-            _text = "";
+            this->_spriteName = "./assets/minesweeper/cell_0.png";
+            this->_color = 0xFFFFFF; // White for empty cells
+            this->_text = "";
         }
     } else {
-        _spriteName = "hidden.png";
-        _color = 0xCCCCCC; // Light gray for hide cells
-        _text = "";
+        this->_spriteName = "./assets/minesweeper/hidden.png";
+        this->_color = 0xCCCCCC; // Light gray for hide cells
+        this->_text = "";
     }
 }
 
 bool Cell::isRevealed() const
 {
-    return _isRevealed;
+    return this->_isRevealed;
 }
 
 void Cell::setFlagged(bool flagged)
 {
-    _isFlagged = flagged;
+    this->_isFlagged = flagged;
     if (flagged) {
-        _spriteName = "flag.png";
-        _text = "F";
+        this->_spriteName = "./assets/minesweeper/flag.png";
+        this->_text = "F";
     } else if (!_isRevealed) {
-        _spriteName = "hidden.png";
-        _text = "";
+        this->_spriteName = "./assets/minesweeper/hidden.png";
+        this->_text = "";
     }
 }
 
 bool Cell::isFlagged() const
 {
-    return _isFlagged;
+    return this->_isFlagged;
 }
 
 void Cell::setMine(bool mine)
 {
-    _isMine = mine;
+    this->_isMine = mine;
 }
 
 bool Cell::isMine() const
 {
-    return _isMine;
+    return this->_isMine;
 }
 
 void Cell::setAdjacentMines(size_t count)
 {
-    _adjacentMines = count;
+    this->_adjacentMines = count;
 }
 
 size_t Cell::getAdjacentMines() const
 {
-    return _adjacentMines;
+    return this->_adjacentMines;
 }
