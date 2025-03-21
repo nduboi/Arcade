@@ -27,6 +27,10 @@ class arcadeSDL : public IWindow {
 	std::string _libName = "Arcade SDL2"; ///< The name of the library.
 	std::pair<int, int> _mapSize; ///< The size of the map.
 
+private:
+	std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
+	void _resizeTexture(SDL_Rect &rect, std::pair<int, int> position);
+
 public:
 	SDL_Window* _window = nullptr;
 	SDL_Renderer* _renderer = nullptr;

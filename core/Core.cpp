@@ -190,6 +190,8 @@ void Core::loop() {
 	while (this->display->isOpen()) {
 		this->display->clear();
 		this->_analyze();
+		if (this->display.get()->isOpen() == false)
+			break;
 		this->_compute();
 
 		this->_computeDisplay();
