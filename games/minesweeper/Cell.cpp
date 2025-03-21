@@ -29,16 +29,19 @@ gameState_t Cell::onClick(grid_t &grid, clickType_t type)
 
 gameState_t Cell::moveEntity(grid_t &grid)
 {
+    // Meme chose ici ?
     return PLAYING;
 }
 
 gameState_t Cell::moveEntity(grid_t &grid, std::pair<size_t, size_t> direction)
 {
+    // Meme chose ici ?
     return PLAYING;
 }
 
 gameState_t Cell::onInteract(grid_t &grid)
 {
+    // Meme chose ici ?
     return onClick(grid, LEFT_CLICK);
 }
 
