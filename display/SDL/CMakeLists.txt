@@ -6,7 +6,7 @@ add_library(arcade_sdl2 SHARED
     arcadeSDLEvent.hpp
 )
 
-target_link_libraries(arcade_sdl2 SDL2 SDL2_ttf)
+target_link_libraries(arcade_sdl2 SDL2)
 
 add_custom_command(TARGET arcade_sdl2 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
