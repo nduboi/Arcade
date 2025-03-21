@@ -25,6 +25,7 @@
  */
 class arcadeSDL : public IWindow {
 	std::string _libName = "Arcade SDL2"; ///< The name of the library.
+	std::pair<int, int> _mapSize; ///< The size of the map.
 
 public:
 	SDL_Window* _window = nullptr;
@@ -39,6 +40,14 @@ public:
 	bool isOpen() override;
 
 	void clear() override;
+
+	void drawSprite(std::string asset, int color, std::pair<int, int> position) override;
+
+	void drawRectangle(int color, std::pair<int, int> position) override;
+
+	void drawText(std::string text, int color, std::pair<int, int> position) override;
+
+	void setMapSize(std::pair<int, int> size) override;
 
 	arcadeSDL();
 

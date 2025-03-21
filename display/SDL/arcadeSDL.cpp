@@ -67,9 +67,31 @@ void arcadeSDL::clear() {
     SDL_RenderClear(this->_renderer);
 }
 
+void arcadeSDL::drawSprite(std::string asset, int color, std::pair<int, int> position) {
+    (void)asset;
+    (void)color;
+    (void)position;
+}
+
+void arcadeSDL::drawRectangle(int color, std::pair<int, int> position) {
+    (void)color;
+    (void)position;
+}
+
+void arcadeSDL::drawText(std::string text, int color, std::pair<int, int> position) {
+    (void)text;
+    (void)color;
+    (void)position;
+}
+
+void arcadeSDL::setMapSize(std::pair<int, int> size) {
+    this->_mapSize = size;
+}
+
 arcadeSDL::arcadeSDL() : _window(nullptr), _renderer(nullptr)
 {
     this->arcadeSDL::initWindow();
+    this->_mapSize = {0, 0};
 }
 
 arcadeSDL::~arcadeSDL() {
