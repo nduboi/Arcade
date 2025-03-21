@@ -8,7 +8,8 @@
 #include <iostream>
 #include "arcadeSDL.hpp"
 
-void arcadeSDL::initWindow() {
+void arcadeSDL::initWindow()
+{
     if (SDL_WasInit(SDL_INIT_VIDEO) == 0) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) < 0) {
             std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
@@ -68,6 +69,7 @@ void arcadeSDL::clear() {
 
 arcadeSDL::arcadeSDL() : _window(nullptr), _renderer(nullptr)
 {
+    this->arcadeSDL::initWindow();
 }
 
 arcadeSDL::~arcadeSDL() {
