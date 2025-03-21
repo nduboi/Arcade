@@ -9,16 +9,20 @@
 
 Cell::Cell(size_t x, size_t y)
 {
-    _position = {x,y};
     _isRevealed = false;
     _isFlagged = false;
     _isMine = false;
     _adjacentMines = 0;
+    _position = {x, y};
+    _spriteName = "hidden";
+    _color = 0xCCCCCC;
+    _text = "";
+    _isMovable = false;
+    _hasCollisions = false;
 }
 
 gameState_t Cell::onClick(grid_t &grid, clickType_t type)
 {
-    // Pourquoi on return gameState ici ?
     if (type == LEFT_CLICK) {
         return PLAYING;
     } else if (type == RIGHT_CLICK) {
@@ -27,32 +31,9 @@ gameState_t Cell::onClick(grid_t &grid, clickType_t type)
     return PLAYING;
 }
 
-gameState_t Cell::moveEntity(grid_t &grid)
-{
-    // Meme chose ici ?
-    return PLAYING;
-}
-
-gameState_t Cell::moveEntity(grid_t &grid, std::pair<size_t, size_t> direction)
-{
-    // Meme chose ici ?
-    return PLAYING;
-}
-
 gameState_t Cell::onInteract(grid_t &grid)
 {
-    // Meme chose ici ?
     return onClick(grid, LEFT_CLICK);
-}
-
-std::pair<size_t, size_t> Cell::getPosition() const
-{
-    return _position;
-}
-
-void Cell::setPosition(std::pair<size_t, size_t> position)
-{
-    _position = position;
 }
 
 std::string Cell::getSpriteName() const
@@ -106,19 +87,39 @@ std::string Cell::getText() const
     }
 }
 
-bool Cell::isMovable() const
-{
-    return false;
-}
-
-bool Cell::hasCollisions() const
-{
-    return false;
-}
 
 void Cell::setRevealed(bool revealed)
 {
     _isRevealed = revealed;
+    if (revealed) {
+        if (_isMine) {
+            _spriteName = "mine";
+            _color = 0xFF0000; // Red for mines
+            _text = "*";
+        } else if (_adjacentMines > 0) {
+            _spriteName = "cell_" + std::to_string(_adjacentMines);
+            static const std::size_t colors[] = {
+                0x0000FF,  // 1: Blue
+                0x008000,  // 2: Green
+                0xFA8072,  // 3: Light red
+                0x000080,  // 4: Dark blue
+                0x800000,  // 5: Brown
+                0x008080,  // 6: Cyan
+                0x000000,  // 7: Black
+                0x808080   // 8: Grey
+            };
+            _color = colors[std::min(_adjacentMines, static_cast<size_t>(8)) - 1];
+            _text = std::to_string(_adjacentMines);
+        } else {
+            _spriteName = "cell_0";
+            _color = 0xFFFFFF; // White for empty cells
+            _text = "";
+        }
+    } else {
+        _spriteName = "hidden";
+        _color = 0xCCCCCC; // Light gray for hide cells
+        _text = "";
+    }
 }
 
 bool Cell::isRevealed() const
@@ -129,6 +130,13 @@ bool Cell::isRevealed() const
 void Cell::setFlagged(bool flagged)
 {
     _isFlagged = flagged;
+    if (flagged) {
+        _spriteName = "flag";
+        _text = "F";
+    } else if (!_isRevealed) {
+        _spriteName = "hidden";
+        _text = "";
+    }
 }
 
 bool Cell::isFlagged() const
