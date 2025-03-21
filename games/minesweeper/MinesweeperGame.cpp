@@ -24,12 +24,12 @@ MinesweeperGame::MinesweeperGame(size_t width, size_t height, size_t mineCount)
 
 void MinesweeperGame::initializeGrid()
 {
-    _entities.resize(1);
-    _entities[0].resize(_height);
+    _entities.resize(_height);
     for (size_t y = 0; y < _height; ++y) {
-        _entities[0][y].resize(_width);
+        _entities[y].resize(_width);
         for (size_t x = 0; x < _width; ++x) {
-            _entities[0][y][x] = std::make_shared<Cell>(x, y);
+            _entities[y][x].resize(1);
+            _entities[y][x][0] = std::make_shared<Cell>(x, y);
         }
     }
 }
