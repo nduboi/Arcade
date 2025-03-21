@@ -2,16 +2,16 @@
 // Created by roussierenoa on 3/20/25.
 //
 
-#ifndef ARCADESFMLEVENT_HPP
-#define ARCADESFMLEVENT_HPP
+#ifndef ARCADESDLEVENT_HPP
+#define ARCADESDLEVENT_HPP
 
-#include <memory>
-
-#include "arcadeSFML.hpp"
 #include "IEvent.hpp"
 #include "IWindow.hpp"
+#include <memory>
 
-class arcadeSFMLEvent : public IEvent {
+#include "arcadeSDL.hpp"
+
+class arcadeSDLEvent : public IEvent {
 private:
 	IWindow &_window;
 public:
@@ -23,9 +23,9 @@ public:
 
 	void cleanup() override;
 
-	arcadeSFMLEvent(IWindow &window);
+	arcadeSDLEvent(IWindow &window);
 
-	~arcadeSFMLEvent() = default;
+	~arcadeSDLEvent() = default;
 };
 
-#endif //ARCADECACAEVENT_HPP
+#endif //ARCADESDLEVENT_HPP

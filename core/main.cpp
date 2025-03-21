@@ -1,8 +1,15 @@
+/*
+** EPITECH PROJECT, 2025
+** arcade
+** File description:
+** main
+*/
+
 #include <dlfcn.h>
 #include <iostream>
 #include <string>
 #include <exception>
-
+#include <thread>
 #include "Core.hpp"
 
 int main(int ac, char **av) {
@@ -24,18 +31,26 @@ int main(int ac, char **av) {
     try {
         window_data.loadDisplayModule(lib);
         window_data.loadGameModule("./lib/arcade_menu.so");
+        window_data.display->initWindow();
+        window_data.event->init();
+
         while (window_data.display->isOpen()) {
-            IEvent::event_t event = window_data.event->pollEvents({});
-            if (event == IEvent::event_t::CLOSE)
-                window_data.display->closeWindow();
-            if (event == IEvent::event_t::LEFT)
-                printf("EVENT LEFT\n");
-            if (event == IEvent::event_t::RIGHT)
-                printf("EVENT RIGHT\n");
-            if (event == IEvent::event_t::UP)
-                printf("EVENT UP\n");
-            if (event == IEvent::event_t::DOWN)
-                printf("EVENT DOWN\n");
+            window_data.display->clear();
+            IEvent::event_t event;
+            while ((event = window_data.event->pollEvents({})) != IEvent::event_t::NOTHING) {
+                if (event == IEvent::event_t::CLOSE)
+                    window_data.display->closeWindow();
+                if (event == IEvent::event_t::LEFT)
+                    printf("EVENT LEFT\n");
+                if (event == IEvent::event_t::RIGHT)
+                    printf("EVENT RIGHT\n");
+                if (event == IEvent::event_t::UP)
+                    printf("EVENT UP\n");
+                if (event == IEvent::event_t::DOWN)
+                    printf("EVENT DOWN\n");
+            }
+            window_data.display->display();
+            std::this_thread::sleep_for(std::chrono::milliseconds(16)); // ~60 FPS
         }
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
