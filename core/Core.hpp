@@ -1,8 +1,8 @@
 /**
- * @file Program.hpp
- * @brief Header file for the Program class.
+ * @file Core.hpp
+ * @brief Header file for the Core class.
  *
- * This file contains the declaration of the Program class, which manages
+ * This file contains the declaration of the Core class, which manages
  * three WindowModule objects: Bar, Foo, and Gra.
  *
  * @date 3/17/25
@@ -18,13 +18,13 @@
 #include "GameModule.hpp"
 
 /**
- * @class Program
+ * @class Core
  * @brief Manages WindowModule objects.
  *
- * The Program class is responsible for initializing and managing three
+ * The Core class is responsible for initializing and managing three
  * WindowModule objects: Bar, Foo, and Gra.
  */
-class Program {
+class Core {
 private:
 	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
 	Loader::LibLoader _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
@@ -51,18 +51,18 @@ public:
 	void loadGameModule(const std::string &gameLib);
 
 	/**
-	 * @brief Constructs a new Program object.
+	 * @brief Constructs a new Core object.
 	 *
 	 * The constructor initializes the unique pointers to the DisplayModule objects.
 	 */
-	Program();
+	Core();
 
 	/**
-	 * @brief Destroys the Program object.
+	 * @brief Destroys the Core object.
 	 *
-	 * The destructor cleans up the resources used by the Program.
+	 * The destructor cleans up the resources used by the Core.
 	 */
-	~Program();
+	~Core();
 };
 
 #endif // PROGRAM_HPP

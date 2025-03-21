@@ -3,7 +3,7 @@
 #include <string>
 #include <exception>
 
-#include "Program.hpp"
+#include "Core.hpp"
 
 int main(int ac, char **av) {
     if (ac != 2) {
@@ -12,7 +12,7 @@ int main(int ac, char **av) {
     }
 
     std::string lib = av[1];
-    Program window_data;
+    Core window_data;
 
     if (lib == "-h" || lib == "--help") {
         std::cout << "Run the program with lib as argument:" << std::endl;
