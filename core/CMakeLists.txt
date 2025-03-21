@@ -1,7 +1,7 @@
 add_executable(arcade
         main.cpp
-        Program.cpp
-        Program.hpp
+        Core.cpp
+        Core.hpp
 )
 
 add_custom_command(TARGET arcade POST_BUILD

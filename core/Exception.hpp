@@ -76,6 +76,34 @@ public:
 };
 
 /**
+ * @class CoreException
+ * @brief Exception class for handling DLL-related errors.
+ *
+ * The CoreException class is used to handle errors related to display module
+ *
+ */
+class CoreException : public std::exception {
+private:
+    std::string _msg; ///< Error message.
+
+public:
+    /**
+     * @brief Returns the error message.
+     * @return The error message.
+     */
+    const char *what() const noexcept override { return this->_msg.c_str(); }
+    /**
+     * @brief Constructor for CoreException.
+     * @param msg The error message.
+     */
+    CoreException(const std::string &msg) : _msg(msg) {}
+    /**
+     * @brief Destructor for CoreException.
+     */
+    ~CoreException() = default;
+};
+
+/**
  * @class GameModuleException
  * @brief Exception class for handling DLL-related errors.
  *

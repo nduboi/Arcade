@@ -10,8 +10,7 @@
 #include <string>
 #include <exception>
 #include <thread>
-
-#include "Program.hpp"
+#include "Core.hpp"
 
 int main(int ac, char **av) {
     if (ac != 2) {
@@ -20,7 +19,7 @@ int main(int ac, char **av) {
     }
 
     std::string lib = av[1];
-    Program window_data;
+    Core window_data;
 
     if (lib == "-h" || lib == "--help") {
         std::cout << "Run the program with lib as argument:" << std::endl;
@@ -36,10 +35,7 @@ int main(int ac, char **av) {
         window_data.event->init();
 
         while (window_data.display->isOpen()) {
-            // Clear the screen
             window_data.display->clear();
-
-            // Handle events - process all pending events
             IEvent::event_t event;
             while ((event = window_data.event->pollEvents({})) != IEvent::event_t::NOTHING) {
                 if (event == IEvent::event_t::CLOSE)
@@ -53,10 +49,7 @@ int main(int ac, char **av) {
                 if (event == IEvent::event_t::DOWN)
                     printf("EVENT DOWN\n");
             }
-
             window_data.display->display();
-
-            // Use a much shorter sleep time for smoother interaction
             std::this_thread::sleep_for(std::chrono::milliseconds(16)); // ~60 FPS
         }
     } catch (std::exception &e) {

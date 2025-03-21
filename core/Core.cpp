@@ -5,14 +5,14 @@
 #include <filesystem>
 #include <iostream>
 #include <vector>
-#include "Program.hpp"
+#include "Core.hpp"
 
-Program::Program() {}
+Core::Core() {}
 
-Program::~Program() {
+Core::~Core() {
 }
 
-void Program::displayAllLib()
+void Core::displayAllLib()
 {
 	const std::string libFolder = "./lib";
 	Loader::LibLoader libLoader;
@@ -44,23 +44,23 @@ void Program::displayAllLib()
 		std::cout << "  " << s << std::endl;
 }
 
-void Program::loadDisplayModule(const std::string &path)
+void Core::loadDisplayModule(const std::string &path)
 {
 	this->display.reset();
 	this->_displayLoader.closeLib();
 	this->_displayLoader.openLib(path);
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
-		throw ProgramCoreException("Error the library loaded is not a Display Module");
+		throw CoreException("Error the library loaded is not a Display Module");
 	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPointDisplay());
 	auto &displayObject = this->display->getObject();
 	this->event = std::make_unique<EventModule>(this->_displayLoader.initEntryPointEvent(displayObject));
 }
 
-void Program::loadGameModule(const std::string &path) {
+void Core::loadGameModule(const std::string &path) {
 	this->game.reset();
 	this->_gameLoader.closeLib();
 	this->_gameLoader.openLib(path.c_str());
 	if (this->_gameLoader.getModuleType() != Loader::GAME_MODULE)
-		throw ProgramCoreException("Error the library loaded is not a Game Module");
+		throw CoreException("Error the library loaded is not a Game Module");
 	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
 }
