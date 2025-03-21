@@ -25,6 +25,7 @@ class IEvent {
             MENU,
             REFRESH,
             MOUSECLICK,
+            NEXTGRAPHIC,
             NOTHING,
         } event_t;
         virtual ~IEvent() = default;

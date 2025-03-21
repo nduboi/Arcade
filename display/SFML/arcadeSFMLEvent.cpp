@@ -33,6 +33,14 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::SPACE;
                 case sf::Keyboard::Enter:
                     return IEvent::ENTER;
+                case sf::Keyboard::BackSpace:
+                    return IEvent::MENU;
+                case sf::Keyboard::F6:
+                    return IEvent::NEXTGRAPHIC;
+                case sf::Keyboard::F5:
+                    return IEvent::REFRESH;
+                case sf::Keyboard::F4:
+                    return IEvent::NEXTGAME;
             }
         }
         if (event.type == sf::Event::JoystickMoved) {

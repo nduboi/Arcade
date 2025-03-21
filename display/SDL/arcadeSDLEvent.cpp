@@ -42,6 +42,12 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::SPACE;
                 case SDLK_RETURN:
                     return IEvent::ENTER;
+                case SDLK_F4:
+                    return IEvent::NEXTGAME;
+                case SDLK_F5:
+                    return IEvent::REFRESH;
+                case SDLK_F6:
+                    return IEvent::NEXTGRAPHIC;
             }
         }
         if (event.type == SDL_JOYAXISMOTION) {
