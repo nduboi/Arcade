@@ -25,30 +25,54 @@ void Core::_analyze() {
 	IEvent::event_t event = this->event->pollEvents(gridSize);
 	this->_lastEvent = IEvent::event_t::NOTHING;
 
-	if (event == IEvent::event_t::CLOSE)
+	if (event == IEvent::event_t::CLOSE) {
+#ifdef _DEBUG
+		printf("EVENT CLOSE\n");
+#endif
 		this->display->closeWindow();
-	if (event == IEvent::event_t::LEFT)
+	}
+	if (event == IEvent::event_t::LEFT) {
+#ifdef _DEBUG
 		printf("EVENT LEFT\n");
-	if (event == IEvent::event_t::RIGHT)
+#endif
+	}
+	if (event == IEvent::event_t::RIGHT) {
+#ifdef _DEBUG
 		printf("EVENT RIGHT\n");
-	if (event == IEvent::event_t::UP)
+#endif
+	}
+	if (event == IEvent::event_t::UP) {
+#ifdef _DEBUG
 		printf("EVENT UP\n");
-	if (event == IEvent::event_t::DOWN)
+#endif
+	}
+	if (event == IEvent::event_t::DOWN) {
+#ifdef _DEBUG
 		printf("EVENT DOWN\n");
+#endif
+	}
 	if (event == IEvent::event_t::NEXTGRAPHIC) {
+#ifdef _DEBUG
 		printf("EVENT NEXTGRAPHIC\n");
+#endif
 		this->_loadNextGraphic();
 	}
 	if (event == IEvent::event_t::REFRESH) {
+#ifdef _DEBUG
 		printf("EVENT REFRESH\n");
+#endif
 		this->_refreshLibList();
 	}
 	if (event == IEvent::event_t::NEXTGAME) {
+#ifdef _DEBUG
 		printf("EVENT NEXTGAME\n");
+#endif
 		this->_loadNextGame();
 	}
 	if (event == IEvent::event_t::MENU) {
+#ifdef _DEBUG
 		printf("EVENT MENU\n");
+#endif
 		this->loadGameModule("./lib/arcade_menu.so");
 	}
 	this->_lastEvent = event;
