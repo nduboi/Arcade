@@ -39,6 +39,8 @@ private:
 
 	void _compute();
 
+	void _computeDisplay();
+
 	void _refreshLibList();
 
 	void _loadNextGame();

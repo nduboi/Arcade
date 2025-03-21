@@ -84,6 +84,23 @@ void Core::_compute() {
 	}
 }
 
+void Core::_computeDisplay() {
+	grid_t grid = this->game.get()->getEntities();
+	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+
+	this->display.get()->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
+	for (int y = 0; y < gridSize.first; y++) {
+		for (int x = 0; x < gridSize.second; x++) {
+			for (int z = 0; z < grid[y][x].size(); z++) {
+				IEntity *entity = grid[y][x][z].get();
+
+				this->display->drawSprite(entity->getSpriteName(), entity->getColor(), {x, y});
+			}
+		}
+	}
+	this->display->display();
+}
+
 void Core::_refreshLibList() {
 	const std::string libFolder = "./lib";
 	Loader::LibLoader libLoader;
@@ -175,6 +192,6 @@ void Core::loop() {
 		this->_analyze();
 		this->_compute();
 
-		this->display->display();
+		this->_computeDisplay();
 	}
 }

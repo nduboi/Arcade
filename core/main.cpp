@@ -29,7 +29,7 @@ int main(int ac, char **av) {
 
     try {
         window_data.loadDisplayModule(lib);
-        window_data.loadGameModule("./lib/arcade_menu.so");
+        window_data.loadGameModule("./lib/arcade_snake.so");
         window_data.loop();
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
