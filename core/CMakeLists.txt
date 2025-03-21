@@ -9,6 +9,11 @@ add_custom_command(TARGET arcade POST_BUILD
         "$<TARGET_FILE_DIR:arcade>/arcade"
         "$<TARGET_FILE_DIR:arcade>/../../arcade")
 
+add_custom_target(copy_arcade ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory "$<TARGET_FILE_DIR:arcade>/../.."
+        COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:arcade>" "$<TARGET_FILE_DIR:arcade>/../../arcade"
+        DEPENDS arcade)
+
 add_dependencies(arcade LibLoader WindowModule GameModule EventModule MenuModule)
 
 add_subdirectory(LibLoader)
