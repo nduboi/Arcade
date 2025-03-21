@@ -24,3 +24,20 @@ void arcadeCaca::clear() {
 
 arcadeCaca::arcadeCaca() {
 }
+
+void arcadeCaca::drawSprite(std::string asset, int color, std::pair<int, int> position) {
+	(void)asset;
+	(void)color;
+	(void)position;
+}
+
+void arcadeCaca::drawRectangle(int color, std::pair<int, int> position) {
+	(void)color;
+	(void)position;
+}
+
+void arcadeCaca::drawText(std::string text, int color, std::pair<int, int> position) {
+	(void)text;
+	(void)color;
+	(void)position;
+}

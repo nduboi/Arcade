@@ -24,6 +24,7 @@
  */
 class arcadeCaca : public IWindow {
 	std::string _libName = "Arcade Caca"; ///< The name of the library.
+	std::pair<int, int> _mapSize; ///< The size of the map.
 
 public:
 	void initWindow() override;
@@ -35,6 +36,14 @@ public:
 	bool isOpen() override;
 
 	void clear() override;
+
+	void drawSprite(std::string asset, int color, std::pair<int, int> position) override;
+
+	void drawRectangle(int color, std::pair<int, int> position) override;
+
+	void drawText(std::string text, int color, std::pair<int, int> position) override;
+
+	void setMapSize(std::pair<int, int> size) override;
 
 	arcadeCaca();
 
