@@ -23,7 +23,7 @@ int main(int ac, char **av) {
 
     try {
         window_data.loadDisplayModule(lib);
-        window_data.loadGameModule("./lib/arcade_snake.so");
+        window_data.loadGameModule("./lib/arcade_menu.so");
         while (window_data.display->isOpen()) {
             IEvent::event_t event = window_data.event->pollEvents({});
             if (event == IEvent::event_t::CLOSE)
