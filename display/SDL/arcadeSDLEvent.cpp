@@ -50,6 +50,16 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::NEXTGRAPHIC;
             }
         }
+        if (event.type == SDL_MOUSEBUTTONDOWN) {
+            switch (event.button.button) {
+                case SDL_BUTTON_LEFT:
+                    return IEvent::MOUSELEFTCLICK;
+                case SDL_BUTTON_RIGHT:
+                    return IEvent::MOUSERIGHTCLICK;
+                case SDL_BUTTON_MIDDLE:
+                    return IEvent::MOUSECLICK;
+            }
+        }
         if (event.type == SDL_JOYAXISMOTION) {
             if (event.jaxis.axis == 0) { // X axis
                 if (event.jaxis.value > 3200)

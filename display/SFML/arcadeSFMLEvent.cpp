@@ -43,6 +43,14 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::NEXTGAME;
             }
         }
+        if (event.type == sf::Event::MouseButtonPressed) {
+            if (event.mouseButton.button == sf::Mouse::Button::Right)
+                return MOUSERIGHTCLICK;
+            if (event.mouseButton.button == sf::Mouse::Button::Left)
+                return MOUSELEFTCLICK;
+            if (event.mouseButton.button == sf::Mouse::Button::Middle)
+                return MOUSECLICK;
+        }
         if (event.type == sf::Event::JoystickMoved) {
             if (event.joystickMove.axis== sf::Joystick::Axis::PovX) {
                 if (sf::Joystick::getAxisPosition(event.joystickMove.joystickId, sf::Joystick::Axis::PovX) > 0)
