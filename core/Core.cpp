@@ -9,45 +9,79 @@
 
 Core::Core() {
 	this->_refreshLibList();
+	this->_lastEvent = IEvent::event_t::NOTHING;
 }
 
 Core::~Core() {
 }
 
 void Core::_analyze() {
-	IEvent::event_t event;
-	while ((event = this->event->pollEvents({})) != IEvent::event_t::NOTHING) {
-		if (event == IEvent::event_t::CLOSE)
-			this->display->closeWindow();
-		if (event == IEvent::event_t::LEFT)
-			printf("EVENT LEFT\n");
-		if (event == IEvent::event_t::RIGHT)
-			printf("EVENT RIGHT\n");
-		if (event == IEvent::event_t::UP)
-			printf("EVENT UP\n");
-		if (event == IEvent::event_t::DOWN)
-			printf("EVENT DOWN\n");
-		if (event == IEvent::event_t::NEXTGRAPHIC) {
-			printf("EVENT NEXTGRAPHIC\n");
-			this->_loadNextGraphic();
-		}
-		if (event == IEvent::event_t::REFRESH) {
-			printf("EVENT REFRESH\n");
-			this->_refreshLibList();
-		}
-		if (event == IEvent::event_t::NEXTGAME) {
-			printf("EVENT NEXTGAME\n");
-			this->_loadNextGame();
-		}
-		if (event == IEvent::event_t::MENU) {
-			printf("EVENT MENU\n");
-			this->loadGameModule("./lib/arcade_menu.so");
-		}
+	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+	IEvent::event_t event = this->event->pollEvents(gridSize);
+	this->_lastEvent = IEvent::event_t::NOTHING;
+
+	if (event == IEvent::event_t::CLOSE)
+		this->display->closeWindow();
+	if (event == IEvent::event_t::LEFT)
+		printf("EVENT LEFT\n");
+	if (event == IEvent::event_t::RIGHT)
+		printf("EVENT RIGHT\n");
+	if (event == IEvent::event_t::UP)
+		printf("EVENT UP\n");
+	if (event == IEvent::event_t::DOWN)
+		printf("EVENT DOWN\n");
+	if (event == IEvent::event_t::NEXTGRAPHIC) {
+		printf("EVENT NEXTGRAPHIC\n");
+		this->_loadNextGraphic();
 	}
+	if (event == IEvent::event_t::REFRESH) {
+		printf("EVENT REFRESH\n");
+		this->_refreshLibList();
+	}
+	if (event == IEvent::event_t::NEXTGAME) {
+		printf("EVENT NEXTGAME\n");
+		this->_loadNextGame();
+	}
+	if (event == IEvent::event_t::MENU) {
+		printf("EVENT MENU\n");
+		this->loadGameModule("./lib/arcade_menu.so");
+	}
+	this->_lastEvent = event;
+}
+
+std::pair<int, int> Core::_getEventDirection() const {
+	std::pair<int, int> direction = {0, 0};
+
+	if (this->_lastEvent == IEvent::event_t::UP)
+		direction = {0, 1};
+	if (this->_lastEvent == IEvent::event_t::DOWN)
+		direction = {0, -1};
+	if (this->_lastEvent == IEvent::event_t::LEFT)
+		direction = {-1, 0};
+	if (this->_lastEvent == IEvent::event_t::RIGHT)
+		direction = {1, 0};
+	return direction;
 }
 
 void Core::_compute() {
+	grid_t grid = this->game.get()->getEntities();
+	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
 
+	for (int y = 0; y < gridSize.first; y++) {
+		for (int x = 0; x < gridSize.second; x++) {
+			for (int z = 0; z < grid[y][x].size(); z++) {
+				IEntity *entity = grid[y][x][z].get();
+
+				if (entity->isMovable()) {
+					if (entity->isControlable()) {
+						entity->moveEntity(grid, this->_getEventDirection());
+					} else {
+						entity->moveEntity(grid);
+					}
+				}
+			}
+		}
+	}
 }
 
 void Core::_refreshLibList() {
@@ -153,6 +187,5 @@ void Core::loop() {
 		this->_compute();
 
 		this->display->display();
-		std::this_thread::sleep_for(std::chrono::milliseconds(16));
 	}
 }
