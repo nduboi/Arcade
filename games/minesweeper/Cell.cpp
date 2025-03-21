@@ -14,7 +14,7 @@ Cell::Cell(size_t x, size_t y)
     _isMine = false;
     _adjacentMines = 0;
     _position = {x, y};
-    _spriteName = "hidden";
+    _spriteName = "hidden.png";
     _color = 0xCCCCCC;
     _text = "";
     _isMovable = false;
@@ -93,11 +93,11 @@ void Cell::setRevealed(bool revealed)
     _isRevealed = revealed;
     if (revealed) {
         if (_isMine) {
-            _spriteName = "mine";
+            _spriteName = "mine_reveal.png";
             _color = 0xFF0000; // Red for mines
             _text = "*";
         } else if (_adjacentMines > 0) {
-            _spriteName = "cell_" + std::to_string(_adjacentMines);
+            _spriteName = "cell_" + std::to_string(_adjacentMines) + ".png";
             static const std::size_t colors[] = {
                 0x0000FF,  // 1: Blue
                 0x008000,  // 2: Green
@@ -111,12 +111,12 @@ void Cell::setRevealed(bool revealed)
             _color = colors[std::min(_adjacentMines, static_cast<size_t>(8)) - 1];
             _text = std::to_string(_adjacentMines);
         } else {
-            _spriteName = "cell_0";
+            _spriteName = "cell_0.png";
             _color = 0xFFFFFF; // White for empty cells
             _text = "";
         }
     } else {
-        _spriteName = "hidden";
+        _spriteName = "hidden.png";
         _color = 0xCCCCCC; // Light gray for hide cells
         _text = "";
     }
@@ -131,10 +131,10 @@ void Cell::setFlagged(bool flagged)
 {
     _isFlagged = flagged;
     if (flagged) {
-        _spriteName = "flag";
+        _spriteName = "flag.png";
         _text = "F";
     } else if (!_isRevealed) {
-        _spriteName = "hidden";
+        _spriteName = "hidden.png";
         _text = "";
     }
 }
