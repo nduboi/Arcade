@@ -19,6 +19,9 @@
  * @var Loader::ModuleType_t::GAME_MODULE
  * Represents a game module type.
  *
+ * @var Loader::ModuleType_t::MENU_MODULE
+ * Represents a menu module type.
+ *
  * @var Loader::ModuleType_t::TYPE_COUNT
  * Represents the total count of module types.
  */
@@ -37,6 +40,7 @@ namespace Loader
     typedef enum ModuleType_s {
         DISPLAY_MODULE,
         GAME_MODULE,
+        MENU_MODULE,
         TYPE_COUNT
     } ModuleType_t;
 } // namespace Loader

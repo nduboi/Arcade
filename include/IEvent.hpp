@@ -22,10 +22,12 @@ class IEvent {
             ESCAPE,
             CLOSE,
             NEXTGAME,
-            MENU,
+            NEXTGRAPHIC,
             REFRESH,
             MOUSECLICK,
-            NEXTGRAPHIC,
+            MOUSERIGHTCLICK,
+            MOUSELEFTCLICK,
+            MENU,
             NOTHING,
         } event_t;
         virtual ~IEvent() = default;
