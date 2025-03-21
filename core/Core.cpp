@@ -56,13 +56,15 @@ void Core::_refreshLibList() {
 
 	this->_gameLibIndex = 0;
 	this->_displayLibIndex = 0;
+	this->_displayLibPath.clear();
+	this->_gameLibPath.clear();
 	try {
 		for (const auto &entry : std::filesystem::directory_iterator(libFolder)) {
 			if (entry.path().extension() == ".so") {
 				libLoader.openLib(entry.path().string());
 				if (libLoader.getModuleType() == Loader::GAME_MODULE)
 					this->_gameLibPath.push_back(entry.path().string());
-				else
+				if (libLoader.getModuleType() == Loader::DISPLAY_MODULE)
 					this->_displayLibPath.push_back(entry.path().string());
 				libLoader.closeLib();
 			}
@@ -130,6 +132,15 @@ void Core::loadGameModule(const std::string &path) {
 	if (this->_gameLoader.getModuleType() != Loader::GAME_MODULE)
 		throw CoreException("Error the library loaded is not a Game Module");
 	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
+}
+
+void Core::loadMenuModule(const std::string &path) {
+	this->menu.reset();
+	this->_menuLoader.closeLib();
+	this->_menuLoader.openLib(path.c_str());
+	if (this->_menuLoader.getModuleType() != Loader::MENU_MODULE)
+		throw CoreException("Error the library loaded is not a Menu Module");
+	this->menu = std::make_unique<MenuModule>(this->_menuLoader.initEntryPointMenu());
 }
 
 void Core::loop() {
