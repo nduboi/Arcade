@@ -26,6 +26,8 @@
 class arcadeNCURSES : public IWindow {
 	std::string _libName = "Arcade NCURSES"; ///< The name of the library.
 	std::pair<int, int> _mapSize; ///< The size of the map.
+	FILE *_stdOut;
+	FILE *_stdErr;
 
 private:
 	bool _isOpen = false;
