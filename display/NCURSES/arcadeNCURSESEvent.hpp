@@ -1,0 +1,31 @@
+//
+// Created by roussierenoa on 3/20/25.
+//
+
+#ifndef ARCADESDLEVENT_HPP
+#define ARCADESDLEVENT_HPP
+
+#include "IEvent.hpp"
+#include "IWindow.hpp"
+#include <memory>
+
+#include "arcadeNCURSES.hpp"
+
+class arcadeNCURSESEvent : public IEvent {
+private:
+	IWindow &_window;
+public:
+	void init() override;
+
+	IEvent::event_t pollEvents(std::pair<int, int> gridSize) override;
+
+	std::pair<int, int> getMousePos() override;
+
+	void cleanup() override;
+
+	arcadeNCURSESEvent(IWindow &window);
+
+	~arcadeNCURSESEvent() = default;
+};
+
+#endif //ARCADESDLEVENT_HPP
