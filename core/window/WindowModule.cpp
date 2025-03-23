@@ -68,4 +68,5 @@ WindowModule::WindowModule(IWindow *mdl)
 
 WindowModule::~WindowModule()
 {
+	this->_object.reset();
 }

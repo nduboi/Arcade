@@ -52,7 +52,7 @@ public:
 
 	arcadeSFML();
 
-	~arcadeSFML() = default;
+	~arcadeSFML() override;
 };
 
 #endif // arcadeSFML_HPP

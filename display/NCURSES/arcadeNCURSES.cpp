@@ -10,25 +10,43 @@
 #include <cstdio>
 #include "arcadeNCURSES.hpp"
 
+#include <ncurses.h>
+#include <exception>
 
 void arcadeNCURSES::initWindow()
 {
+    sleep(1);
+    this->header = subwin(this->mainWindow, 3, COLS, 0, 0);
+    if (!this->header) {
+        throw std::runtime_error("Canot create header");
+    }
+    box(this->header, 0, 0);
 }
 
 void arcadeNCURSES::display()
 {
-    wrefresh(this->window);
-    usleep(50000);
+    if (!this->_isOpen) {
+        std::cerr << "Error: Trying to refresh a closed window" << std::endl;
+        return;
+    }
+    if (this->header && is_wintouched(this->header))
+        wrefresh(this->header);
+    if (this->game && is_wintouched(this->game))
+        wrefresh(this->game);
+    // if (this->mainWindow && is_wintouched(this->mainWindow)) {
+    //     refresh();
+    // }
 }
 
 void arcadeNCURSES::closeWindow()
 {
-    if (this->window) {
-        delwin(this->window);
-        this->window = nullptr;
-    }
+    if (this->header && is_wintouched(this->header))
+        delwin(this->header);
+    if (this->game && is_wintouched(this->game))
+        delwin(this->game);
     endwin();
     this->_isOpen = false;
+    std::cout << "Closing Window" << std::endl;
 }
 
 bool arcadeNCURSES::isOpen() {
@@ -37,21 +55,21 @@ bool arcadeNCURSES::isOpen() {
 
 void arcadeNCURSES::clear()
 {
-    werase(this->window);
+    if (this->header && is_wintouched(this->header))
+        wrefresh(this->header);
+    if (this->game && is_wintouched(this->game))
+        wrefresh(this->game);
 }
 
 void arcadeNCURSES::drawSprite(std::string asset, int color, std::pair<int, int> position)
 {
-    attron(COLOR_PAIR(color));
-    mvwprintw(this->window, position.second, position.first, asset.c_str());
-    attroff(COLOR_PAIR(color));
 }
 
 void arcadeNCURSES::drawRectangle(int color, std::pair<int, int> position)
 {
     attron(COLOR_PAIR(color));
     for (int i = 0; i < 5; ++i) {
-        mvwprintw(this->window, position.second + i, position.first, "#####");
+        mvwprintw(this->game, position.second + i, position.first, "#####");
     }
     attroff(COLOR_PAIR(color));
 }
@@ -59,38 +77,48 @@ void arcadeNCURSES::drawRectangle(int color, std::pair<int, int> position)
 void arcadeNCURSES::drawText(std::string text, int color, std::pair<int, int> position)
 {
     attron(COLOR_PAIR(color));
-    mvprintw(position.second, position.first, text.c_str());
+    mvwprintw(this->game, position.second, position.first, text.c_str());
     attroff(COLOR_PAIR(color));
 }
 
 void arcadeNCURSES::setMapSize(std::pair<int, int> size)
 {
-    resize_term(size.second, size.first);
+    if (this->game && is_wintouched(this->game))
+        delwin(this->game);
+    this->game = subwin(this->mainWindow, size.first, size.second, 4, 4);
+    if (!this->game) {
+        throw std::runtime_error("Cannot create game");
+    }
+    box(this->game, 0, 0);
 }
 
 arcadeNCURSES::arcadeNCURSES()
 {
-    initscr();
+    std::cout << "Creating initScr" << std::endl;
+    system("reset");
+    system("clear");
+    system("stty sane");
+    if (!isendwin())
+        endwin();
+    sleep(1);
+    this->mainWindow = initscr();
+    sleep(1);
+    nodelay(stdscr, TRUE);
+    if (this->mainWindow != stdscr) {
+        this->arcadeNCURSES::closeWindow();
+        std::cerr << "Error: initscr() failed" << std::endl;
+        throw std::runtime_error("Error: initscr() failed");
+    }
+    start_color();
     cbreak();
     noecho();
-    curs_set(0);
-    start_color();
     keypad(stdscr, TRUE);
-    timeout(50);
-    int height = 10, width = 40;
-    int startY = 5, startX = 10;
-    this->window = newwin(LINES, COLS, 0, 0);
-    if (this->window == nullptr) {
-        endwin();
-        std::cerr << "Cannot create the window" << std::endl;
-        return;
-    }
     this->_isOpen = true;
 }
 
 arcadeNCURSES::~arcadeNCURSES()
 {
-    if (this->_isOpen) {
-        arcadeNCURSES::closeWindow();
-    }
+    this->arcadeNCURSES::closeWindow();
+    system("reset");
+    std::cout << "Destroying arcadeNCURSES instance" << std::endl;
 }

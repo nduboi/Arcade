@@ -59,6 +59,7 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::pair<int, int> pos
     SDL_Surface *surface = IMG_Load(asset.c_str());
     if (!surface) {
         std::cerr << "Error loading image: " << IMG_GetError() << std::endl;
+        this->drawRectangle(color, position);
         return;
     }
 
@@ -67,6 +68,7 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::pair<int, int> pos
 
     if (!texture) {
         std::cerr << "Error creating texture: " << SDL_GetError() << std::endl;
+        this->drawRectangle(color, position);
         return;
     }
 
@@ -133,6 +135,7 @@ arcadeSDL::arcadeSDL() : _window(nullptr), _renderer(nullptr)
 }
 
 arcadeSDL::~arcadeSDL() {
+    std::cout << "Calling SDL destructor" << std::endl;
     if (this->isOpen()) {
         SDL_DestroyRenderer(this->_renderer);
         SDL_DestroyWindow(this->_window);

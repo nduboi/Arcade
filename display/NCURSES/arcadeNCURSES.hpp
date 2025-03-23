@@ -25,15 +25,16 @@
  */
 class arcadeNCURSES : public IWindow {
 	std::string _libName = "Arcade NCURSES"; ///< The name of the library.
-	std::pair<int, int> _mapSize; ///< The size of the map.
-	FILE *_stdOut;
-	FILE *_stdErr;
+	std::pair<int, int> _mapSize = {0, 0}; ///< The size of the map.
+
 
 private:
 	bool _isOpen = false;
 
 public:
-	WINDOW *window;
+	WINDOW *mainWindow = nullptr;
+	WINDOW *header = nullptr;
+	WINDOW *game = nullptr;
 
 	void initWindow() override;
 
@@ -55,7 +56,7 @@ public:
 
 	arcadeNCURSES();
 
-	~arcadeNCURSES();
+	~arcadeNCURSES() override;
 };
 
 #endif // arcadeNCURSES_HPP

@@ -21,16 +21,10 @@ void Core::_analyze() {
 	std::pair<size_t, size_t> gridSize {};
 
 	if (this->_moduleLoaded == GAME)
-		gridSize = this->game.get()->getGridSize();
+		gridSize = this->game->getGridSize();
 	IEvent::event_t event = this->event->pollEvents(gridSize);
 	this->_lastEvent = IEvent::event_t::NOTHING;
 
-	if (event == IEvent::event_t::CLOSE) {
-#ifdef _DEBUG
-		printf("EVENT CLOSE\n");
-#endif
-		this->display->closeWindow();
-	}
 	if (event == IEvent::event_t::LEFT) {
 #ifdef _DEBUG
 		printf("EVENT LEFT\n");
@@ -72,6 +66,12 @@ void Core::_analyze() {
 #endif
 		this->_loadNextGraphic();
 	}
+	if (event == IEvent::event_t::CLOSE) {
+#ifdef _DEBUG
+		printf("EVENT CLOSE\n");
+#endif
+		this->display->closeWindow();
+	}
 	if (event == IEvent::event_t::REFRESH) {
 #ifdef _DEBUG
 		printf("EVENT REFRESH\n");
@@ -109,8 +109,8 @@ std::pair<int, int> Core::_getEventDirection() const {
 
 void Core::_compute() {
 	if (this->_moduleLoaded == GAME) {
-		grid_t grid = this->game.get()->getEntities();
-		std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+		grid_t grid = this->game->getEntities();
+		std::pair<size_t, size_t> gridSize = this->game->getGridSize();
 
 		for (int y = 0; y < gridSize.first; y++) {
 			for (int x = 0; x < gridSize.second; x++) {
@@ -127,21 +127,29 @@ void Core::_compute() {
 				}
 			}
 		}
-		this->_computeGameDisplay();
 	}
 }
 
-void Core::_computeGameDisplay() {
-	grid_t grid = this->game.get()->getEntities();
-	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+void Core::_display() {
+	this->display->clear();
+	if (this->_moduleLoaded == GAME)
+		this->_displayGame();
+	this->display->display();
 
-	this->display.get()->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
+}
+
+void Core::_displayGame() {
+	grid_t grid = this->game->getEntities();
+	std::pair<size_t, size_t> gridSize = this->game->getGridSize();
+
+	this->display->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
 	for (int y = 0; y < gridSize.first; y++) {
 		for (int x = 0; x < gridSize.second; x++) {
 			for (int z = 0; z < grid[y][x].size(); z++) {
 				IEntity *entity = grid[y][x][z].get();
 
 				this->display->drawSprite(entity->getSpriteName(), entity->getColor(), {x, y});
+				this->display->drawText(entity->getText(), entity->getColor(), {x, y});
 			}
 		}
 	}
@@ -207,15 +215,20 @@ void Core::displayAllLib()
 
 void Core::loadDisplayModule(const std::string &path)
 {
-	this->display.reset();
 	this->event.reset();
+	this->display.reset();
 	this->_displayLoader.closeLib();
+	sleep(1);
 	this->_displayLoader.openLib(path);
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
 		throw CoreException("Error the library loaded is not a Display Module");
 	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPointDisplay());
 	auto &displayObject = this->display->getObject();
 	this->event = std::make_unique<EventModule>(this->_displayLoader.initEntryPointEvent(displayObject));
+	// std::cout << "[CORE] call initWindow display" << std::endl;
+	this->display->initWindow();
+	// std::cout << "[CORE] call Init event" << std::endl;
+	this->event->init();
 }
 
 void Core::loadGameModule(const std::string &path) {
@@ -239,15 +252,14 @@ void Core::loadMenuModule(const std::string &path) {
 }
 
 void Core::loop() {
-	this->display->initWindow();
-	this->event->init();
-
 	while (this->display->isOpen()) {
-		this->display->clear();
 		this->_analyze();
-		if (this->display.get()->isOpen() == false)
+		// std::cout << "[CORE] is open" << std::endl;
+		if (this->display->isOpen() == false)
 			break;
+		// std::cout << "[CORE] compute" << std::endl;
 		this->_compute();
-		this->display->display();
+		// std::cout << "[CORE] display" << std::endl;
+		this->_display();
 	}
 }

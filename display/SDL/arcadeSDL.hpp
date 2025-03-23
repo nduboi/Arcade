@@ -55,7 +55,7 @@ public:
 
 	arcadeSDL();
 
-	~arcadeSDL();
+	~arcadeSDL() override;
 };
 
 #endif // arcadeSDL_HPP

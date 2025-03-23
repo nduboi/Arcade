@@ -46,8 +46,10 @@ void arcadeSFML::drawSprite(std::string asset, int color, std::pair<int, int> po
 	sf::Sprite sprite;
 	std::pair<int, int> windowPosition = this->_getWindowPosition(position);
 
-	if (!texture.loadFromFile(asset))
+	if (!texture.loadFromFile(asset)) {
 		std::cerr << "Error loading texture" << std::endl;
+		this->drawRectangle(color, position);
+	}
 	sprite.setTexture(texture);
 	sprite.setPosition(windowPosition.first, windowPosition.second);
 	this->_resizeSprite(sprite, position);
@@ -73,4 +75,8 @@ arcadeSFML::arcadeSFML() :
 	window(sf::VideoMode(800, 800), "SFML window", sf::Style::Titlebar | sf::Style::Close)
 {
 	this->_mapSize = {0, 0};
+}
+
+arcadeSFML::~arcadeSFML() {
+	std::cout << "Calling SFML destrctor" << std::endl;
 }

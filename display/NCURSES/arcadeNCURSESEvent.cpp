@@ -7,6 +7,7 @@
 
 #include "arcadeNCURSESEvent.hpp"
 
+#include <complex.h>
 #include <iostream>
 #include <memory>
 #include <ncurses.h>
