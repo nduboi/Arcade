@@ -25,7 +25,6 @@ void arcadeNCURSES::_displayHeader() {
 
 void arcadeNCURSES::initWindow()
 {
-    sleep(1);
     this->header = subwin(this->mainWindow, 3, COLS, 0, 0);
     if (!this->header) {
         throw std::runtime_error("Canot create header");
@@ -39,25 +38,44 @@ void arcadeNCURSES::initWindow()
 
 void arcadeNCURSES::display()
 {
+    sleep(1);
     if (!this->_isOpen) {
         std::cerr << "Error: Trying to refresh a closed window" << std::endl;
         return;
     }
-    if (this->header && is_wintouched(this->header))
+    if (this->mainWindow == nullptr) {
+        std::cerr << "Error: Main window is null" << std::endl;
+        this->_isOpen = false;
+        return;
+    }
+    if (this->header != nullptr) {
+        box(this->header, 0, 0);
         wrefresh(this->header);
-    if (this->game && is_wintouched(this->game))
+    } else {
+        this->_displayHeader();
+    }
+    if (this->game != nullptr) {
+        box(this->game, 0, 0);
         wrefresh(this->game);
+    } else {
+        this->game = subwin(this->mainWindow, 0, 0, 4, 0);
+    }
 }
 
 void arcadeNCURSES::closeWindow()
 {
-    if (this->header && is_wintouched(this->header))
+    if (this->header != nullptr) {
         delwin(this->header);
-    if (this->game && is_wintouched(this->game))
+        this->header = nullptr;
+    }
+    if (this->game != nullptr) {
         delwin(this->game);
-    endwin();
-    this->_isOpen = false;
-    std::cout << "Closing Window" << std::endl;
+        this->game = nullptr;
+    }
+    if (this->_isOpen) {
+        endwin();
+        this->_isOpen = false;
+    }
 }
 
 bool arcadeNCURSES::isOpen() {
@@ -66,8 +84,10 @@ bool arcadeNCURSES::isOpen() {
 
 void arcadeNCURSES::clear()
 {
-    if (this->game && is_wintouched(this->game)) {
-        werase(this->game);
+    if (this->game) {
+        if (werase(this->game) == ERR) {
+            std::cerr << "Error: Failed to clear game window" << std::endl;
+        }
     }
 }
 
@@ -93,6 +113,8 @@ void arcadeNCURSES::drawText(std::string text, int color, std::pair<int, int> po
 
 void arcadeNCURSES::setMapSize(std::pair<int, int> size)
 {
+    if (size.first <= 0 || size.second <= 0)
+        return;
     if (!this->game) {
         throw std::runtime_error("Cannot create game");
     }
@@ -102,7 +124,7 @@ void arcadeNCURSES::setMapSize(std::pair<int, int> size)
     box(this->game, 0, 0);
 }
 
-arcadeNCURSES::arcadeNCURSES()
+arcadeNCURSES::arcadeNCURSES() : mainWindow(nullptr), header(nullptr), game(nullptr), _isOpen(false)
 {
     system("reset");
     system("clear");
@@ -111,10 +133,12 @@ arcadeNCURSES::arcadeNCURSES()
         endwin();
     sleep(1);
     this->mainWindow = initscr();
-    sleep(1);
+    if (this->mainWindow == nullptr) {
+        throw std::runtime_error("Failed to initialize ncurses");
+    }
     nodelay(stdscr, TRUE);
     if (this->mainWindow != stdscr) {
-        this->arcadeNCURSES::closeWindow();
+        endwin();
         std::cerr << "Error: initscr() failed" << std::endl;
         throw std::runtime_error("Error: initscr() failed");
     }
@@ -129,6 +153,5 @@ arcadeNCURSES::arcadeNCURSES()
 arcadeNCURSES::~arcadeNCURSES()
 {
     this->arcadeNCURSES::closeWindow();
-    system("reset");
     std::cout << "Destroying arcadeNCURSES instance" << std::endl;
 }

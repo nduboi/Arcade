@@ -20,8 +20,7 @@ Core::~Core() {
 void Core::_analyze() {
 	std::pair<size_t, size_t> gridSize {};
 
-	if (this->_moduleLoaded == GAME)
-		gridSize = this->game->getGridSize();
+	gridSize = this->game->getGridSize();
 	IEvent::event_t event = this->event->pollEvents(gridSize);
 	this->_lastEvent = IEvent::event_t::NOTHING;
 
@@ -108,21 +107,19 @@ std::pair<int, int> Core::_getEventDirection() const {
 }
 
 void Core::_compute() {
-	if (this->_moduleLoaded == GAME) {
-		grid_t grid = this->game->getEntities();
-		std::pair<size_t, size_t> gridSize = this->game->getGridSize();
+	grid_t grid = this->game->getEntities();
+	std::pair<size_t, size_t> gridSize = this->game->getGridSize();
 
-		for (int y = 0; y < gridSize.first; y++) {
-			for (int x = 0; x < gridSize.second; x++) {
-				for (int z = 0; z < grid[y][x].size(); z++) {
-					IEntity *entity = grid[y][x][z].get();
+	for (int y = 0; y < gridSize.first; y++) {
+		for (int x = 0; x < gridSize.second; x++) {
+			for (int z = 0; z < grid[y][x].size(); z++) {
+				IEntity *entity = grid[y][x][z].get();
 
-					if (entity->isMovable()) {
-						if (entity->isControlable()) {
-							entity->moveEntity(grid, this->_getEventDirection());
-						} else {
-							entity->moveEntity(grid);
-						}
+				if (entity->isMovable()) {
+					if (entity->isControlable()) {
+						entity->moveEntity(grid, this->_getEventDirection());
+					} else {
+						entity->moveEntity(grid);
 					}
 				}
 			}
@@ -132,8 +129,7 @@ void Core::_compute() {
 
 void Core::_display() {
 	this->display->clear();
-	if (this->_moduleLoaded == GAME)
-		this->_displayGame();
+	this->_displayGame();
 	this->display->display();
 
 }
@@ -180,7 +176,7 @@ void Core::_refreshLibList() {
 }
 
 void Core::_loadNextGame() {
-	if (this->_gameLibPath.size() == 1 && this->_moduleLoaded == GAME)
+	if (this->_gameLibPath.size() == 1)
 		return;
 	this->_gameLibIndex++;
 	if (this->_gameLibIndex >= this->_gameLibPath.size())
@@ -225,9 +221,7 @@ void Core::loadDisplayModule(const std::string &path)
 	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPointDisplay());
 	auto &displayObject = this->display->getObject();
 	this->event = std::make_unique<EventModule>(this->_displayLoader.initEntryPointEvent(displayObject));
-	// std::cout << "[CORE] call initWindow display" << std::endl;
 	this->display->initWindow();
-	// std::cout << "[CORE] call Init event" << std::endl;
 	this->event->init();
 }
 
@@ -237,29 +231,15 @@ void Core::loadGameModule(const std::string &path) {
 	this->_gameLoader.openLib(path.c_str());
 	if (this->_gameLoader.getModuleType() != Loader::GAME_MODULE)
 		throw CoreException("Error the library loaded is not a Game Module");
-	this->_moduleLoaded = GAME;
 	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
-}
-
-void Core::loadMenuModule(const std::string &path) {
-	this->menu.reset();
-	this->_menuLoader.closeLib();
-	this->_menuLoader.openLib(path.c_str());
-	if (this->_menuLoader.getModuleType() != Loader::MENU_MODULE)
-		throw CoreException("Error the library loaded is not a Menu Module");
-	this->_moduleLoaded = MENU;
-	this->menu = std::make_unique<MenuModule>(this->_menuLoader.initEntryPointMenu());
 }
 
 void Core::loop() {
 	while (this->display->isOpen()) {
 		this->_analyze();
-		// std::cout << "[CORE] is open" << std::endl;
 		if (this->display->isOpen() == false)
 			break;
-		// std::cout << "[CORE] compute" << std::endl;
 		this->_compute();
-		// std::cout << "[CORE] display" << std::endl;
 		this->_display();
 	}
 }

@@ -7,11 +7,11 @@
 #include "Menu.hpp"
 
 extern "C" {
-	IMenuModule *createMenu(void) {
+	IGameModule *createGame(void) {
 		return new Menu();
 	}
 	Loader::ModuleType_t getType(void) {
-		return Loader::ModuleType_t::MENU_MODULE;
+		return Loader::ModuleType_t::GAME_MODULE;
 	}
 	__attribute__((constructor)) void construct()
 	{

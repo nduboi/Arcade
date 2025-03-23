@@ -46,13 +46,6 @@ namespace Loader {
 		return (*create)();
 	}
 
-	IMenuModule * LibLoader::initEntryPointMenu() const {
-		IMenuModule *(*create)() = reinterpret_cast<IMenuModule *(*)()>(getFunctionDynamicLib(this->_moduleHandle, "createMenu"));
-		if (!create)
-			throw DllException("Error cannot createMenu function");
-		return (*create)();
-	}
-
 	void LibLoader::closeLib() {
 		if (this->_moduleHandle)
 			closeDynamicLib(this->_moduleHandle);

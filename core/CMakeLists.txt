@@ -14,19 +14,17 @@ add_custom_target(copy_arcade ALL
         COMMAND ${CMAKE_COMMAND} -E copy "$<TARGET_FILE:arcade>" "$<TARGET_FILE_DIR:arcade>/../../arcade"
         DEPENDS arcade)
 
-add_dependencies(arcade LibLoader WindowModule GameModule EventModule MenuModule)
+add_dependencies(arcade LibLoader WindowModule GameModule EventModule )
 
 add_subdirectory(LibLoader)
 add_subdirectory(window)
 add_subdirectory(games)
-add_subdirectory(menu)
 add_subdirectory(event)
 
-target_link_libraries(arcade LibLoader WindowModule GameModule EventModule MenuModule)
+target_link_libraries(arcade LibLoader WindowModule GameModule EventModule )
 target_include_directories(arcade PRIVATE window games entities event menu LibLoader ./)
 target_include_directories(EventModule PRIVATE LibLoader ./)
 target_include_directories(GameModule PRIVATE ./)
-target_include_directories(MenuModule PRIVATE ./)
 target_include_directories(WindowModule PRIVATE ./ LibLoader)
 target_include_directories(LibLoader PRIVATE ./)
 target_include_directories(arcade_snake PRIVATE LibLoader)
