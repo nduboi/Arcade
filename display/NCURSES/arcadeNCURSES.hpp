@@ -30,7 +30,7 @@ class arcadeNCURSES : public IWindow {
 private:
 	bool _isOpen = false;
 
-	void _displayHeader();
+	void _initHeader();
 
 public:
 	WINDOW *mainWindow = nullptr;

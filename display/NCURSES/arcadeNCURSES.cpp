@@ -8,12 +8,10 @@
 #include <iostream>
 #include <unistd.h>
 #include <cstdio>
+#include <exception>
 #include "arcadeNCURSES.hpp"
 
-#include <ncurses.h>
-#include <exception> // Hides the cursor
-
-void arcadeNCURSES::_displayHeader() {
+void arcadeNCURSES::_initHeader() {
     box(this->header, 0, 0);
     int x = (COLS - std::string("Arcade Ncurses").length()) / 2;
     int y = 1;
@@ -29,11 +27,12 @@ void arcadeNCURSES::initWindow()
     if (!this->header) {
         throw std::runtime_error("Canot create header");
     }
-    this->_displayHeader();
+    this->_initHeader();
     this->game = subwin(this->mainWindow, 0, 0, 4, 0);
     if (!this->game) {
         throw std::runtime_error("Canot create game");
     }
+    sleep(1);
 }
 
 void arcadeNCURSES::display()
@@ -52,7 +51,7 @@ void arcadeNCURSES::display()
         box(this->header, 0, 0);
         wrefresh(this->header);
     } else {
-        this->_displayHeader();
+        this->_initHeader();
     }
     if (this->game != nullptr) {
         box(this->game, 0, 0);
