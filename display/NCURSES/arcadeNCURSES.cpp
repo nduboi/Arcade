@@ -11,7 +11,17 @@
 #include "arcadeNCURSES.hpp"
 
 #include <ncurses.h>
-#include <exception>
+#include <exception> // Hides the cursor
+
+void arcadeNCURSES::_displayHeader() {
+    box(this->header, 0, 0);
+    int x = (COLS - std::string("Arcade Ncurses").length()) / 2;
+    int y = 1;
+    mvwprintw(this->header, y, x, "Arcade Ncurses");
+    this->poxXCloseButton = COLS - 5;
+    this->poxYCloseButton = 1;
+    mvwprintw(this->header, this->poxYCloseButton, this->poxXCloseButton, "[X]");
+}
 
 void arcadeNCURSES::initWindow()
 {
@@ -20,7 +30,11 @@ void arcadeNCURSES::initWindow()
     if (!this->header) {
         throw std::runtime_error("Canot create header");
     }
-    box(this->header, 0, 0);
+    this->_displayHeader();
+    this->game = subwin(this->mainWindow, 0, 0, 4, 0);
+    if (!this->game) {
+        throw std::runtime_error("Canot create game");
+    }
 }
 
 void arcadeNCURSES::display()
@@ -33,9 +47,6 @@ void arcadeNCURSES::display()
         wrefresh(this->header);
     if (this->game && is_wintouched(this->game))
         wrefresh(this->game);
-    // if (this->mainWindow && is_wintouched(this->mainWindow)) {
-    //     refresh();
-    // }
 }
 
 void arcadeNCURSES::closeWindow()
@@ -55,10 +66,9 @@ bool arcadeNCURSES::isOpen() {
 
 void arcadeNCURSES::clear()
 {
-    if (this->header && is_wintouched(this->header))
-        wrefresh(this->header);
-    if (this->game && is_wintouched(this->game))
-        wrefresh(this->game);
+    if (this->game && is_wintouched(this->game)) {
+        werase(this->game);
+    }
 }
 
 void arcadeNCURSES::drawSprite(std::string asset, int color, std::pair<int, int> position)
@@ -83,18 +93,17 @@ void arcadeNCURSES::drawText(std::string text, int color, std::pair<int, int> po
 
 void arcadeNCURSES::setMapSize(std::pair<int, int> size)
 {
-    if (this->game && is_wintouched(this->game))
-        delwin(this->game);
-    this->game = subwin(this->mainWindow, size.first, size.second, 4, 4);
     if (!this->game) {
         throw std::runtime_error("Cannot create game");
+    }
+    if (wresize(this->game, size.first, size.second) == ERR) {
+        throw std::runtime_error("Cannot resize subwindow");
     }
     box(this->game, 0, 0);
 }
 
 arcadeNCURSES::arcadeNCURSES()
 {
-    std::cout << "Creating initScr" << std::endl;
     system("reset");
     system("clear");
     system("stty sane");
@@ -110,6 +119,7 @@ arcadeNCURSES::arcadeNCURSES()
         throw std::runtime_error("Error: initscr() failed");
     }
     start_color();
+    curs_set(0);
     cbreak();
     noecho();
     keypad(stdscr, TRUE);

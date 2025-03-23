@@ -27,14 +27,18 @@ class arcadeNCURSES : public IWindow {
 	std::string _libName = "Arcade NCURSES"; ///< The name of the library.
 	std::pair<int, int> _mapSize = {0, 0}; ///< The size of the map.
 
-
 private:
 	bool _isOpen = false;
+
+	void _displayHeader();
 
 public:
 	WINDOW *mainWindow = nullptr;
 	WINDOW *header = nullptr;
 	WINDOW *game = nullptr;
+
+	int poxXCloseButton = 0;
+	int poxYCloseButton = 0;
 
 	void initWindow() override;
 

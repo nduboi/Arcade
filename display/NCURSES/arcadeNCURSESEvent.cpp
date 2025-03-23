@@ -17,6 +17,8 @@ void arcadeNCURSESEvent::init() {
 
 IEvent::event_t arcadeNCURSESEvent::pollEvents(std::pair<int, int> gridSize) {
     int ch = getch();
+    MEVENT event;
+    arcadeNCURSES &window = static_cast<arcadeNCURSES &>(this->_window);
 
     switch(ch) {
         case 27:
@@ -35,6 +37,14 @@ IEvent::event_t arcadeNCURSESEvent::pollEvents(std::pair<int, int> gridSize) {
             return IEvent::REFRESH;
         case KEY_F(4):
             return IEvent::NEXTGAME;
+    }
+    mousemask(ALL_MOUSE_EVENTS, nullptr);
+    if (ch == KEY_MOUSE) {
+        if (getmouse(&event) == OK && event.bstate & BUTTON1_CLICKED) {
+            if (event.y == window.poxYCloseButton && event.x >= window.poxXCloseButton && event.x <= window.poxXCloseButton + 2) {
+                return IEvent::CLOSE;
+            }
+        }
     }
     return IEvent::NOTHING;
 }
