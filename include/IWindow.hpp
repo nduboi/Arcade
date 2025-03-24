@@ -8,6 +8,8 @@
 #ifndef IWINDOW_HPP_
 #define IWINDOW_HPP_
 
+#include <string>
+
 class IWindow {
     public:
         virtual ~IWindow() = default;
@@ -16,6 +18,13 @@ class IWindow {
         virtual void closeWindow() = 0;
         virtual bool isOpen() = 0;
         virtual void clear() = 0;
+
+        // Display
+        virtual void drawSprite(std::string asset, int color, std::pair<int, int> position) = 0;
+        virtual void drawRectangle(int color, std::pair<int, int> position) = 0;
+        virtual void drawText(std::string text, int color, std::pair<int, int> position) = 0;
+
+        virtual void setMapSize(std::pair<int, int> size) = 0;
     protected:
     private:
 };

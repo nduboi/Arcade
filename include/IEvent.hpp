@@ -8,17 +8,11 @@
 #ifndef IEVENT_HPP_
 #define IEVENT_HPP_
 
-#include <pair>
+#include <utility>
 
 class IEvent {
     public:
-        // IEvent();
-        virtual ~IEvent() = default;
-        virtual void init() = 0;
-        virtual int pollEvents(std::pair<int, int> gridSize) = 0;
-        virtual void cleanup() = 0;
-        virtual std::pair<int, int> getMousePos() = 0;
-        enum event_t {
+        typedef enum event_e {
             UP,
             DOWN,
             LEFT,
@@ -28,10 +22,19 @@ class IEvent {
             ESCAPE,
             CLOSE,
             NEXTGAME,
-            MENU,
+            NEXTGRAPHIC,
             REFRESH,
             MOUSECLICK,
-        };
+            MOUSERIGHTCLICK,
+            MOUSELEFTCLICK,
+            MENU,
+            NOTHING,
+        } event_t;
+        virtual ~IEvent() = default;
+        virtual void init() = 0;
+        virtual event_t pollEvents(std::pair<int, int> gridSize) = 0;
+        virtual void cleanup() = 0;
+        virtual std::pair<int, int> getMousePos() = 0;
     protected:
     private:
 };

@@ -1,4 +1,4 @@
-/*
+ /*
 ** EPITECH PROJECT, 2025
 ** B-OOP-400-NAN-4-1-arcade-albane.merian
 ** File description:

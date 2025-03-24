@@ -12,10 +12,10 @@
 #include "SnakeGame.hpp"
 
 extern "C" {
-	IGameModule *getInstanceGame(void) {
+	IGameModule *createGame(void) {
 		return new SnakeGame();
 	}
-	Loader::ModuleType_t getModuleType(void) {
+	Loader::ModuleType_t getType(void) {
 		return Loader::ModuleType_t::GAME_MODULE;
 	}
 	__attribute__((constructor)) void construct()
