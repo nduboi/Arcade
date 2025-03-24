@@ -31,11 +31,6 @@ gameState_t Cell::onClick(grid_t &grid, clickType_t type)
     return PLAYING;
 }
 
-gameState_t Cell::onInteract(grid_t &grid)
-{
-    return onClick(grid, LEFT_CLICK);
-}
-
 std::string Cell::getSpriteName() const
 {
     if (this->_isFlagged) {

@@ -18,7 +18,6 @@ class Cell : public AEntity {
 
         // Method
         gameState_t onClick(grid_t &grid, clickType_t type) override;
-        gameState_t onInteract(grid_t &grid) override;
         bool isRevealed() const;
         bool isFlagged() const;
         bool isMine() const;
