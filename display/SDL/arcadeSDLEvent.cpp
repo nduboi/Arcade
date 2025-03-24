@@ -86,8 +86,14 @@ std::pair<int, int> arcadeSDLEvent::getMousePos() {
     return {x, y};
 }
 
+void arcadeSDLEvent::setMapSize(std::pair<int, int> size) {
+    _mapSize = size;
+}
+
 void arcadeSDLEvent::cleanup() {
 }
 
 arcadeSDLEvent::arcadeSDLEvent(IWindow &window) : _window(window) {
+    _mousePos = std::make_pair(0, 0);
+    _mapSize = std::make_pair(0, 0);
 }

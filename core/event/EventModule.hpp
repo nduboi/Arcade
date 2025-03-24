@@ -36,6 +36,8 @@ public:
 
 	std::pair<int, int> getMousePos() override;
 
+	void setMapSize(std::pair<int, int> size) override;
+
 	void cleanup() override;
 	/**
 	 * @brief Constructor for the EventModule class.

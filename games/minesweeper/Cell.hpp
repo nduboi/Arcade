@@ -17,7 +17,7 @@ class Cell : public AEntity {
         ~Cell() = default;
 
         // Method
-        gameState_t onClick(grid_t &grid, clickType_t type) override;
+        gameState_t onClick(IGameModule &gameModule, clickType_t type) override;
         bool isRevealed() const;
         bool isFlagged() const;
         bool isMine() const;
