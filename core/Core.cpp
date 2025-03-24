@@ -214,7 +214,6 @@ void Core::loadDisplayModule(const std::string &path)
 	this->event.reset();
 	this->display.reset();
 	this->_displayLoader.closeLib();
-	sleep(1);
 	this->_displayLoader.openLib(path);
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
 		throw CoreException("Error the library loaded is not a Display Module");
