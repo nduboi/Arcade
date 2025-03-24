@@ -20,6 +20,8 @@ class arcadeNcursesEvent : public IEvent {
 		IEvent::event_t pollEvents(std::pair<int, int> gridSize) override;
 		void cleanup() override;
 
+		void setMapSize(std::pair<int, int> size) override;
+
 		// Getter
 		std::pair<int, int> getMousePos() override;
 

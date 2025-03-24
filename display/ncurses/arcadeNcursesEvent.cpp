@@ -26,6 +26,9 @@ IEvent::event_t arcadeNcursesEvent::pollEvents(std::pair<int, int> gridSize)
         case KEY_DOWN: return IEvent::DOWN;
         case KEY_LEFT: return IEvent::LEFT;
         case KEY_RIGHT: return IEvent::RIGHT;
+        case 'n' : return IEvent::NEXTGRAPHIC;
+        case 'g' : return IEvent::NEXTGAME;
+        case 'r' : return IEvent::REFRESH;
         case 'q': return IEvent::CLOSE;
         default: return IEvent::NOTHING;
     }
@@ -40,4 +43,7 @@ std::pair<int, int> arcadeNcursesEvent::getMousePos()
 void arcadeNcursesEvent::cleanup()
 {
 
+}
+
+void arcadeNcursesEvent::setMapSize(std::pair<int, int> size) {
 }

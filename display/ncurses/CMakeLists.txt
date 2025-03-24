@@ -4,8 +4,6 @@ add_library(arcade_ncurses SHARED
     arcadeNcurses.hpp
     arcadeNcursesEvent.cpp
     arcadeNcursesEvent.hpp
-    arcadeNcursesWrapper.cpp
-    arcadeNcursesWrapper.hpp
 )
 
 target_link_libraries(arcade_ncurses ncurses)

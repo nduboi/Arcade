@@ -128,11 +128,10 @@ void Core::_compute() {
 				}
 			}
 		}
-		this->_computeGameDisplay();
 	}
 }
 
-void Core::_computeGameDisplay() {
+void Core::_displayGame() {
 	grid_t grid = this->game.get()->getEntities();
 	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
 
@@ -146,6 +145,12 @@ void Core::_computeGameDisplay() {
 			}
 		}
 	}
+}
+
+void Core::_display() {
+	this->display->clear();
+	this->_displayGame();
+	this->display->display();
 }
 
 void Core::_refreshLibList() {
@@ -208,16 +213,22 @@ void Core::displayAllLib()
 
 void Core::loadDisplayModule(const std::string &path)
 {
-	this->display.reset();
+	if (this->display) {
+		this->display->closeWindow();
+		this->display.reset();
+	}
 	this->event.reset();
 	this->_displayLoader.closeLib();
 	this->_displayLoader.openLib(path);
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
-		throw CoreException("Error the library loaded is not a Display Module");
+		throw CoreException("Error: The loaded library is not a Display Module");
 	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPointDisplay());
 	auto &displayObject = this->display->getObject();
 	this->event = std::make_unique<EventModule>(this->_displayLoader.initEntryPointEvent(displayObject));
+	this->display->initWindow();
+	this->event->init();
 }
+
 
 void Core::loadGameModule(const std::string &path) {
 	this->game.reset();
@@ -240,13 +251,9 @@ void Core::loadMenuModule(const std::string &path) {
 }
 
 void Core::loop() {
-	this->display->initWindow();
-	this->event->init();
-
 	while (this->display->isOpen()) {
-		this->display->clear();
 		this->_analyze();
-		if (this->display.get()->isOpen() == false)
+		if (this->display->isOpen() == false)
 			break;
 		this->_compute();
 		this->display->display();

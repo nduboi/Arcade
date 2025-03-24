@@ -42,11 +42,11 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::SPACE;
                 case SDLK_RETURN:
                     return IEvent::ENTER;
-                case SDLK_F4:
+                case SDLK_g:
                     return IEvent::NEXTGAME;
-                case SDLK_F5:
+                case SDLK_r:
                     return IEvent::REFRESH;
-                case SDLK_F6:
+                case SDLK_n:
                     return IEvent::NEXTGRAPHIC;
             }
         }
