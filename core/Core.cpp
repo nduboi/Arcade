@@ -97,9 +97,9 @@ std::pair<int, int> Core::_getEventDirection() const {
 	std::pair<int, int> direction = {0, 0};
 
 	if (this->_lastEvent == IEvent::event_t::UP)
-		direction = {0, 1};
-	if (this->_lastEvent == IEvent::event_t::DOWN)
 		direction = {0, -1};
+	if (this->_lastEvent == IEvent::event_t::DOWN)
+		direction = {0, 1};
 	if (this->_lastEvent == IEvent::event_t::LEFT)
 		direction = {-1, 0};
 	if (this->_lastEvent == IEvent::event_t::RIGHT)
@@ -117,6 +117,8 @@ void Core::_compute() {
 			for (int x = 0; x < gridSize.second; x++) {
 				for (int z = 0; z < grid[y][x].size(); z++) {
 					IEntity *entity = grid[y][x][z].get();
+					if (entity == nullptr)
+						continue;
 
 					if (entity->isMovable()) {
 						if (entity->isControlable()) {
