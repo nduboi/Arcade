@@ -21,8 +21,9 @@ Cell::Cell(size_t x, size_t y)
     this->_hasCollisions = false;
 }
 
-gameState_t Cell::onClick(grid_t &grid, clickType_t type)
+gameState_t Cell::onClick(IGameModule &gameModule, clickType_t type)
 {
+    (void)gameModule;
     if (type == LEFT_CLICK) {
         return PLAYING;
     } else if (type == RIGHT_CLICK) {

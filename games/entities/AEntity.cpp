@@ -7,28 +7,29 @@
 
 #include "AEntity.hpp"
 
-gameState_t AEntity::onClick(grid_t &grid, clickType_t type)
+gameState_t AEntity::onClick(IGameModule &gameModule, clickType_t type)
 {
-    (void)grid;
+    (void)gameModule;
+    (void)type;
     return gameState_t::PLAYING;
 }
 
-gameState_t AEntity::moveEntity(grid_t &grid)
+gameState_t AEntity::moveEntity(IGameModule &gameModule)
 {
-    (void)grid;
+    (void)gameModule;
     return gameState_t::PLAYING;
 }
 
-gameState_t AEntity::moveEntity(grid_t &grid, std::pair<int, int> direction)
+gameState_t AEntity::moveEntity(IGameModule &gameModule, std::pair<int, int> direction)
 {
-    (void)grid;
+    (void)gameModule;
     (void)direction;
     return gameState_t::PLAYING;
 }
 
-gameState_t AEntity::onInteract(grid_t &grid)
+gameState_t AEntity::onInteract(IGameModule &gameModule)
 {
-    (void)grid;
+    (void)gameModule;
     return gameState_t::PLAYING;
 }
 

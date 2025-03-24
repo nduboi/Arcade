@@ -109,8 +109,9 @@ std::pair<int, int> Core::_getEventDirection() const {
 
 void Core::_compute() {
 	if (this->_moduleLoaded == GAME) {
-		grid_t grid = this->game.get()->getEntities();
-		std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+		IGameModule &gameModule = *(this->game.get());
+		grid_t grid = gameModule.getEntities();
+		std::pair<size_t, size_t> gridSize = gameModule.getGridSize();
 
 		for (int y = 0; y < gridSize.first; y++) {
 			for (int x = 0; x < gridSize.second; x++) {
@@ -119,9 +120,9 @@ void Core::_compute() {
 
 					if (entity->isMovable()) {
 						if (entity->isControlable()) {
-							entity->moveEntity(grid, this->_getEventDirection());
+							entity->moveEntity(gameModule, this->_getEventDirection());
 						} else {
-							entity->moveEntity(grid);
+							entity->moveEntity(gameModule);
 						}
 					}
 				}

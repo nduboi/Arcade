@@ -14,6 +14,7 @@
 #include <memory>
 
 class IEntity;
+class IGameModule;
 
 typedef std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> grid_t;
 
@@ -33,10 +34,10 @@ class IEntity {
     public:
         virtual ~IEntity() = default;
 
-        virtual gameState_t onClick(grid_t &grid, clickType_t type) = 0;
-        virtual gameState_t moveEntity(grid_t &grid) = 0;
-        virtual gameState_t moveEntity(grid_t &grid, std::pair<int, int> direction) = 0;
-        virtual gameState_t onInteract(grid_t &grid) = 0;
+        virtual gameState_t onClick(IGameModule &gameModule, clickType_t type) = 0;
+        virtual gameState_t moveEntity(IGameModule &gameModule) = 0;
+        virtual gameState_t moveEntity(IGameModule &gameModule, std::pair<int, int> direction) = 0;
+        virtual gameState_t onInteract(IGameModule &gameModule) = 0;
 
         virtual std::pair<size_t, size_t> getPosition() const = 0;
         virtual void setPosition(std::pair<size_t, size_t> position) = 0;
