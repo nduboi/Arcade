@@ -25,6 +25,12 @@ std::pair<int, int> EventModule::getMousePos() {
 	return this->_object->getMousePos();
 }
 
+void EventModule::setMapSize(std::pair<int, int> size) {
+	if (!this->_object)
+		throw EventModuleException("No lib loaded");
+	this->_object->setMapSize(size);
+}
+
 void EventModule::cleanup() {
 	if (!this->_object)
 		throw EventModuleException("No lib loaded");

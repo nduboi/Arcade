@@ -14,12 +14,16 @@
 class arcadeSFMLEvent : public IEvent {
 private:
 	IWindow &_window;
+	std::pair<int, int> _mapSize;
+	std::pair<int, int> _mousePos;
 public:
 	void init() override;
 
 	IEvent::event_t pollEvents(std::pair<int, int> gridSize) override;
 
 	std::pair<int, int> getMousePos() override;
+
+	void setMapSize(std::pair<int, int> size) override;
 
 	void cleanup() override;
 

@@ -70,11 +70,17 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
 }
 
 std::pair<int, int> arcadeSFMLEvent::getMousePos() {
-	return {};
+	return _mousePos;
+}
+
+void arcadeSFMLEvent::setMapSize(std::pair<int, int> size) {
+    _mapSize = size;
 }
 
 void arcadeSFMLEvent::cleanup() {
 }
 
 arcadeSFMLEvent::arcadeSFMLEvent(IWindow &window) : _window(window) { // Accept a reference and store as a raw pointer
+    _mousePos = std::make_pair(0, 0);
+    _mapSize = std::make_pair(0, 0);
 }
