@@ -32,6 +32,10 @@ private:
 
 	std::pair<int, int> _getEventDirection() const;
 
+	bool _isEventClick() const;
+
+	void _processClickEvent(int x, int y, int z);
+
 	void _analyze();
 
 	void _compute();

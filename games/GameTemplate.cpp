@@ -32,6 +32,11 @@ grid_t GameTemplate::getEntities() const
     return this->_entities;
 }
 
+void GameTemplate::setEntities(grid_t entities)
+{
+    this->_entities = entities;
+}
+
 std::pair<size_t, size_t> GameTemplate::getGridSize() const
 {
     grid_t grid = this->_entities;

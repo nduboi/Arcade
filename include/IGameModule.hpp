@@ -23,6 +23,7 @@ class IGameModule {
         virtual std::size_t getScore() const = 0;
         virtual void setScore(std::size_t score) = 0;
         virtual grid_t getEntities() const = 0;
+        virtual void setEntities(grid_t entities) = 0;
         virtual std::pair<size_t, size_t> getGridSize() const = 0;
         //maybe more ?
 };

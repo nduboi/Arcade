@@ -9,6 +9,7 @@
 #define SNAKEGAME_HPP_
 
 #include "GameTemplate.hpp"
+#include "SnakeHeadEntity.hpp"
 
 class SnakeGame : public GameTemplate {
     public:
@@ -17,6 +18,10 @@ class SnakeGame : public GameTemplate {
 
     protected:
     private:
+        void setLayerBackground();
+        void setLayerEntities();
+        void setSnakeBody();
+        void setLayerApple();
 };
 
 #endif /* !SNAKEGAME_HPP_ */

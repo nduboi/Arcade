@@ -35,6 +35,12 @@ grid_t GameModule::getEntities() const {
 	return this->_object->getEntities();
 }
 
+void GameModule::setEntities(grid_t entities) {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	this->_object->setEntities(entities);
+}
+
 std::pair<size_t, size_t> GameModule::getGridSize() const {
 	if (!this->_object)
 		throw GameModuleException("Error no lib Loaded");

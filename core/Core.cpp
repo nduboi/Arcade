@@ -97,14 +97,40 @@ std::pair<int, int> Core::_getEventDirection() const {
 	std::pair<int, int> direction = {0, 0};
 
 	if (this->_lastEvent == IEvent::event_t::UP)
-		direction = {0, 1};
-	if (this->_lastEvent == IEvent::event_t::DOWN)
 		direction = {0, -1};
+	if (this->_lastEvent == IEvent::event_t::DOWN)
+		direction = {0, 1};
 	if (this->_lastEvent == IEvent::event_t::LEFT)
 		direction = {-1, 0};
 	if (this->_lastEvent == IEvent::event_t::RIGHT)
 		direction = {1, 0};
 	return direction;
+}
+
+bool Core::_isEventClick() const {
+	return this->_lastEvent == IEvent::event_t::MOUSECLICK ||
+		this->_lastEvent == IEvent::event_t::MOUSELEFTCLICK ||
+		this->_lastEvent == IEvent::event_t::MOUSERIGHTCLICK;
+}
+
+void Core::_processClickEvent(int x, int y, int z) {
+	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+	this->event.get()->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
+
+	std::pair<int, int> pos = this->event.get()->getMousePos();
+
+	if (pos.first != x || pos.second != y)
+		return;
+
+	grid_t grid = this->game.get()->getEntities();
+	IEntity *entity = grid[y][x][z].get();
+
+	if (entity == nullptr)
+		return;
+
+	clickType_t state = (_lastEvent == IEvent::event_t::MOUSELEFTCLICK) ? LEFT_CLICK :
+		(_lastEvent == IEvent::event_t::MOUSERIGHTCLICK) ? RIGHT_CLICK : MIDDLE_CLICK;
+	entity->onClick(*this->game.get(), state);
 }
 
 void Core::_compute() {
@@ -117,6 +143,11 @@ void Core::_compute() {
 			for (int x = 0; x < gridSize.second; x++) {
 				for (int z = 0; z < grid[y][x].size(); z++) {
 					IEntity *entity = grid[y][x][z].get();
+					if (entity == nullptr)
+						continue;
+
+					if (this->_isEventClick())
+						this->_processClickEvent(x, y, z);
 
 					if (entity->isMovable()) {
 						if (entity->isControlable()) {
