@@ -37,10 +37,10 @@ void WindowModule::clear() {
 	this->_object->clear();
 }
 
-void WindowModule::drawSprite(std::string asset, int color, std::pair<size_t, size_t> position) {
+void WindowModule::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
 	if (!this->_object)
 		throw WindowException("Error no lib Loaded");
-	this->_object->drawSprite(asset, color, position);
+	this->_object->drawSprite(asset, color, text, position);
 }
 
 void WindowModule::drawRectangle(int color, std::pair<size_t, size_t> position) {
@@ -55,7 +55,7 @@ void WindowModule::drawText(std::string text, int color, std::pair<size_t, size_
 	this->_object->drawText(text, color, position);
 }
 
-void WindowModule::setMapSize(std::pair<int, int> size) {
+void WindowModule::setMapSize(std::pair<size_t, size_t> size) {
 	if (!this->_object)
 		throw WindowException("Error no lib Loaded");
 	this->_object->setMapSize(size);

@@ -25,7 +25,7 @@
  */
 class arcadeSFML : public IWindow {
 	std::string _libName = "Arcade SFML"; ///< The name of the library.
-	std::pair<int, int> _mapSize; ///< The size of the map.
+	std::pair<size_t, size_t> _mapSize; ///< The size of the map.
 private:
 	std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
 	void _resizeSprite(sf::Sprite &sprite, std::pair<int, int> position);
@@ -42,13 +42,13 @@ public:
 
 	void clear() override;
 
-	void drawSprite(std::string asset, int color, std::pair<size_t, size_t> position) override;
+	void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
 
 	void drawRectangle(int color, std::pair<size_t, size_t> position) override;
 
 	void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
 
-	void setMapSize(std::pair<int, int> size) override;
+	void setMapSize(std::pair<size_t, size_t> size) override;
 
 	arcadeSFML();
 

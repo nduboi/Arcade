@@ -36,12 +36,12 @@ std::pair<int, int> arcadeSFML::_getWindowPosition(std::pair<int, int> position)
 void arcadeSFML::_resizeSprite(sf::Sprite &sprite, std::pair<int, int> position) {
 	sf::Vector2u windowSize = this->window.getSize();
 	sf::Vector2u textureSize = sprite.getTexture()->getSize();
-	sf::Vector2u cellSize = {windowSize.x / this->_mapSize.first, windowSize.y / this->_mapSize.second};
+	sf::Vector2u cellSize = {windowSize.x / (int)this->_mapSize.first, windowSize.y / (int)this->_mapSize.second};
 
 	sprite.setScale((float)cellSize.x / textureSize.x + 0.1, (float)cellSize.y / textureSize.y + 0.1);
 }
 
-void arcadeSFML::drawSprite(std::string asset, int color, std::pair<size_t, size_t> position) {
+void arcadeSFML::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
 	sf::Texture texture;
 	sf::Sprite sprite;
 	std::pair<int, int> windowPosition = this->_getWindowPosition(position);
@@ -52,6 +52,7 @@ void arcadeSFML::drawSprite(std::string asset, int color, std::pair<size_t, size
 	sprite.setPosition(windowPosition.first, windowPosition.second);
 	this->_resizeSprite(sprite, position);
 	this->window.draw(sprite);
+	(void)text;
 }
 
 void arcadeSFML::drawRectangle(int color, std::pair<size_t, size_t> position) {
@@ -65,7 +66,7 @@ void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t>
 	(void)position;
 }
 
-void arcadeSFML::setMapSize(std::pair<int, int> size) {
+void arcadeSFML::setMapSize(std::pair<size_t, size_t> size) {
 	this->_mapSize = size;
 }
 
