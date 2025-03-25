@@ -20,6 +20,8 @@ class SnakeGame : public GameTemplate {
     private:
         void setLayerBackground();
         void setLayerEntities();
+        void setSnakeBody();
+        void setLayerApple();
 };
 
 #endif /* !SNAKEGAME_HPP_ */

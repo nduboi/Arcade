@@ -9,6 +9,7 @@
 #include "VoidEntity.hpp"
 #include "SnakeHeadEntity.hpp"
 #include "SnakeBodyEntity.hpp"
+#include "AppleEntity.hpp"
 
 const int MAP_HEIGHT = 17;
 const int MAP_WIDTH = 17;
@@ -53,17 +54,41 @@ void SnakeGame::setLayerEntities()
         }
     }
 
-    // Create snake head at position (8,8)
     this->_entities[8][8][1] = std::make_shared<SnakeHeadEntity>(1, "O", std::make_pair(8, 8));
+    this->setSnakeBody();
+    this->setLayerApple();
+}
+
+void SnakeGame::setSnakeBody()
+{
+    this->_entities[8][7][1] = std::make_shared<SnakeBodyEntity>(1, "=", std::make_pair(7, 8), 0);
+    this->_entities[8][6][1] = std::make_shared<SnakeBodyEntity>(1, "=", std::make_pair(6, 8), 1);
+    this->_entities[8][5][1] = std::make_shared<SnakeBodyEntity>(1, "=", std::make_pair(5, 8), 2);
+
+    auto body1 = std::dynamic_pointer_cast<SnakeBodyEntity>(this->_entities[8][7][1]);
+    auto body2 = std::dynamic_pointer_cast<SnakeBodyEntity>(this->_entities[8][6][1]);
+    auto body3 = std::dynamic_pointer_cast<SnakeBodyEntity>(this->_entities[8][5][1]);
+
+    if (body1) body1->updateDirection(std::make_pair(7, 8), std::make_pair(8, 8), std::make_pair(6, 8));
+    if (body2) body2->updateDirection(std::make_pair(6, 8), std::make_pair(7, 8), std::make_pair(5, 8));
+    if (body3) body3->updateDirection(std::make_pair(5, 8), std::make_pair(6, 8), std::make_pair(0, 0));
 
     auto head = std::dynamic_pointer_cast<SnakeHeadEntity>(this->_entities[8][8][1]);
     if (head) {
-        head->addBodyPart(*this);
-
-        head->moveEntity(*this, {1, 0});
-        head->moveEntity(*this, {1, 0});
-
-        head->addBodyPart(*this);
-        head->addBodyPart(*this);
+        head->initializePreviousPositions({std::make_pair(5, 8), std::make_pair(6, 8),
+                                        std::make_pair(7, 8), std::make_pair(8, 8)
+        });
     }
+}
+
+void SnakeGame::setLayerApple()
+{
+    // Create apple at random position
+    srand(time(NULL));
+    std::pair<size_t, size_t> newPos = {rand() % MAP_WIDTH, rand() % MAP_HEIGHT};
+    while (!std::dynamic_pointer_cast<VoidEntity>(this->_entities[newPos.second][newPos.first][1])) {
+        newPos = {rand() % MAP_WIDTH, rand() % MAP_HEIGHT};
+    }
+
+    this->_entities[newPos.second][newPos.first][1] = std::make_shared<AppleEntity>(newPos);
 }
