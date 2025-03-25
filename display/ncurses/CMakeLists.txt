@@ -6,7 +6,10 @@ add_library(arcade_ncurses SHARED
     arcadeNcursesEvent.hpp
 )
 
-target_link_libraries(arcade_ncurses ncurses)
+find_package(Curses REQUIRED)
+include_directories(${CURSES_INCLUDE_DIR})
+
+target_link_libraries(arcade_ncurses ${CURSES_LIBRARIES})
 
 add_custom_command(TARGET arcade_ncurses POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different

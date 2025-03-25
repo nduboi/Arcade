@@ -21,6 +21,8 @@ IEvent::event_t arcadeNcursesEvent::pollEvents(std::pair<int, int> gridSize)
 {
     int ch = getch();
 
+    if (ch == -1)
+        return IEvent::NOTHING;
     switch (ch) {
         case KEY_UP: return IEvent::UP;
         case KEY_DOWN: return IEvent::DOWN;

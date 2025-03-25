@@ -26,7 +26,7 @@
  */
 class WindowModule : public IWindow{
 private:
-	std::unique_ptr<IWindow> _object; /**< Reference to the library loader. */
+	std::unique_ptr<IWindow> _object = nullptr; /**< Reference to the library loader. */
 
 public:
 	IWindow &getObject() {return *this->_object;};

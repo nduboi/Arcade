@@ -21,7 +21,7 @@ void Core::_analyze() {
 	std::pair<size_t, size_t> gridSize {};
 
 	if (this->_moduleLoaded == GAME)
-		gridSize = this->game.get()->getGridSize();
+		gridSize = this->game->getGridSize();
 	IEvent::event_t event = this->event->pollEvents(gridSize);
 	this->_lastEvent = IEvent::event_t::NOTHING;
 
@@ -109,9 +109,8 @@ std::pair<int, int> Core::_getEventDirection() const {
 
 void Core::_compute() {
 	if (this->_moduleLoaded == GAME) {
-		IGameModule &gameModule = *(this->game.get());
-		grid_t grid = gameModule.getEntities();
-		std::pair<size_t, size_t> gridSize = gameModule.getGridSize();
+		grid_t grid = this->game->getEntities();
+		std::pair<size_t, size_t> gridSize = this->game->getGridSize();
 
 		for (int y = 0; y < gridSize.first; y++) {
 			for (int x = 0; x < gridSize.second; x++) {
@@ -120,9 +119,9 @@ void Core::_compute() {
 
 					if (entity->isMovable()) {
 						if (entity->isControlable()) {
-							entity->moveEntity(gameModule, this->_getEventDirection());
+							entity->moveEntity(*this->game, this->_getEventDirection());
 						} else {
-							entity->moveEntity(gameModule);
+							entity->moveEntity(*this->game);
 						}
 					}
 				}
@@ -131,26 +130,29 @@ void Core::_compute() {
 	}
 }
 
-void Core::_displayGame() {
-	grid_t grid = this->game.get()->getEntities();
-	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+void Core::_display() {
+	// this->display->clear();
+	this->_displayGame();
+	this->display->display();
+}
 
-	this->display.get()->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
-	for (int y = 0; y < gridSize.first; y++) {
-		for (int x = 0; x < gridSize.second; x++) {
-			for (int z = 0; z < grid[y][x].size(); z++) {
-				IEntity *entity = grid[y][x][z].get();
+void Core::_displayGame() const {
+	if (this->_moduleLoaded == GAME) {
+		grid_t grid = this->game->getEntities();
+		std::pair<size_t, size_t> gridSize = this->game->getGridSize();
 
-				this->display->drawSprite(entity->getSpriteName(), entity->getColor(), {x, y});
+		this->display->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
+		for (int y = 0; y < gridSize.first; y++) {
+			for (int x = 0; x < gridSize.second; x++) {
+				for (int z = 0; z < grid[y][x].size(); z++) {
+					IEntity *entity = grid[y][x][z].get();
+
+					this->display->drawSprite(entity->getSpriteName(), entity->getColor(), {x, y});
+					this->display->drawText(entity->getText(), entity->getColor(), {x, y});
+				}
 			}
 		}
 	}
-}
-
-void Core::_display() {
-	this->display->clear();
-	this->_displayGame();
-	this->display->display();
 }
 
 void Core::_refreshLibList() {
@@ -213,10 +215,7 @@ void Core::displayAllLib()
 
 void Core::loadDisplayModule(const std::string &path)
 {
-	if (this->display) {
-		this->display->closeWindow();
-		this->display.reset();
-	}
+	this->display.reset();
 	this->event.reset();
 	this->_displayLoader.closeLib();
 	this->_displayLoader.openLib(path);
@@ -256,6 +255,6 @@ void Core::loop() {
 		if (this->display->isOpen() == false)
 			break;
 		this->_compute();
-		this->display->display();
+		this->_displayGame();
 	}
 }

@@ -26,6 +26,13 @@ void arcadeNcurses::initWindow()
     this->_window = initscr();
     if (this->_window != stdscr)
         throw std::runtime_error("Failed to open window initscr()");
+    this->_window = initscr();
+    if (this->_window != stdscr)
+        throw std::runtime_error("Failed to open window initscr()");
+    noecho();
+    curs_set(0);
+    timeout(0);
+    keypad(this->_window, TRUE);
     noecho();
     curs_set(0);
     keypad(this->_window, TRUE);
@@ -34,16 +41,21 @@ void arcadeNcurses::initWindow()
 
 void arcadeNcurses::display()
 {
-    if (this->_window != stdscr) {
-        std::cerr << "The window is broken" << std::endl;
+    if (this->_window == nullptr || this->_window != stdscr) {
+        std::cerr << "The window is broken, reinitializing..." << std::endl;
         this->initWindow();
     }
-    refresh();
+    if (this->_window == stdscr) {
+        refresh();
+    }
 }
 
 void arcadeNcurses::closeWindow() {
     if (this->_isOpen) {
         endwin();
+        if (this->_window != stdscr && this->_window != nullptr) {
+            delwin(this->_window);
+        }
         this->_window = nullptr;
     }
     this->_isOpen = false;
@@ -62,9 +74,6 @@ void arcadeNcurses::clear()
 
 void arcadeNcurses::drawSprite(std::string asset, int color, std::pair<size_t, size_t> position)
 {
-    if (this->_window != stdscr)
-        return;
-    mvprintw(position.second, position.first, "%s", asset.c_str());
 }
 
 void arcadeNcurses::drawRectangle(int color, std::pair<size_t, size_t> position)

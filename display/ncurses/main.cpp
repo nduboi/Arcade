@@ -31,13 +31,13 @@ extern "C" {
 	__attribute__((constructor)) void construct()
 	{
 #ifdef _DEBUG
-		std::cout << "Loaded dynamic lib: Lib SDL" << std::endl;
+		std::cout << "Loaded dynamic lib: Lib NCURSES" << std::endl;
 #endif
 	}
 	__attribute__((destructor)) void deconstruct()
 	{
 #ifdef _DEBUG
-		std::cout << "Unloaded dynamic lib: Lib SDL" << std::endl;
+		std::cout << "Unloaded dynamic lib: Lib NCURSES" << std::endl;
 #endif
 	}
 }

@@ -36,9 +36,10 @@ private:
 
 	void _compute();
 
+	void _displayGame() const;
+
 	void _display();
 
-	void _displayGame();
 
 	void _refreshLibList();
 

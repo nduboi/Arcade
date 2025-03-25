@@ -9,7 +9,7 @@ grid_t Menu::getEntities() const {
 }
 
 std::pair<size_t, size_t> Menu::getGridSize() const {
-	return {};
+	return {0, 0};
 }
 
 std::size_t Menu::getHighScore() const {
