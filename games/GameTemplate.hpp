@@ -15,6 +15,9 @@ class GameTemplate : public IGameModule {
         std::size_t _highScore;
         std::size_t _score;
         grid_t _entities;
+        bool _isStarted;
+        gameState_t _gameState;
+        size_t _time;
 
     public:
         GameTemplate() = default;
@@ -27,6 +30,13 @@ class GameTemplate : public IGameModule {
         grid_t getEntities() const override;
         void setEntities(grid_t entities) override;
         std::pair<size_t, size_t> getGridSize() const override;
+        bool getIsStarted() const override;
+        void setIsStarted(bool isStarted) override;
+        gameState_t getGameState() const override;
+        void setGameState(gameState_t gameState) override;
+        std::vector<std::shared_ptr<IEntity>> getHUD() const override;
+        size_t getTime() const override;
+        void setTime(size_t time) override;
 };
 
 #endif /* !AGAMEMODULE_HPP_ */
