@@ -131,7 +131,7 @@ void Core::_compute() {
 }
 
 void Core::_display() {
-	// this->display->clear();
+	this->display->clear();
 	this->_displayGame();
 	this->display->display();
 }
@@ -255,6 +255,6 @@ void Core::loop() {
 		if (this->display->isOpen() == false)
 			break;
 		this->_compute();
-		this->_displayGame();
+		this->_display();
 	}
 }

@@ -13,14 +13,15 @@
  */
 
 #include <iostream>
+#include <memory>
 #include <unistd.h>
 #include "arcadeNcurses.hpp"
 #include "arcadeNcursesEvent.hpp"
 #include "LoaderType.hpp"
 
 extern "C" {
-	IWindow *createInstance(void) {
-		return new arcadeNcurses();
+	std::shared_ptr<IWindow> createInstance(void) {
+		return std::make_shared<IWindow> arcadeNcurses();
 	}
 	IEvent *createEvent(IWindow &Window) {
 		return new arcadeNcursesEvent(Window);
