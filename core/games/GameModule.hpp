@@ -22,6 +22,8 @@ public:
 
 	grid_t getEntities() const override;
 
+	void setEntities(grid_t entities) override;
+
 	std::pair<size_t, size_t> getGridSize() const override;
 
 	GameModule(IGameModule *);

@@ -25,6 +25,7 @@ class GameTemplate : public IGameModule {
         std::size_t getScore() const override;
         void setScore(std::size_t score) override;
         grid_t getEntities() const override;
+        void setEntities(grid_t entities) override;
         std::pair<size_t, size_t> getGridSize() const override;
 };
 
