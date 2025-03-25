@@ -6,6 +6,7 @@
 */
 
 #include "Cell.hpp"
+#include "MinesweeperGame.hpp"
 
 Cell::Cell(size_t x, size_t y)
 {
@@ -23,13 +24,20 @@ Cell::Cell(size_t x, size_t y)
 
 void Cell::onClick(IGameModule &gameModule, clickType_t type)
 {
-    (void)gameModule;
+    MinesweeperGame* minesweeperGame = dynamic_cast<MinesweeperGame*>(&gameModule);
+    if (!minesweeperGame)
+        return;
+
+    if (minesweeperGame->getGameState() != PLAYING)
+        return;
+
     if (type == LEFT_CLICK) {
-        return;
+        if (!_isFlagged)
+            minesweeperGame->revealCell(_position.first, _position.second);
     } else if (type == RIGHT_CLICK) {
-        return;
+        if (!_isRevealed)
+            minesweeperGame->flagCell(_position.first, _position.second);
     }
-    return;
 }
 
 std::string Cell::getSpriteName() const
