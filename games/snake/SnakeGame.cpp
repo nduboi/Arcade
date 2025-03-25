@@ -19,6 +19,9 @@ SnakeGame::SnakeGame()
 {
     this->_highScore = 0;
     this->_score = 0;
+    this->_isStarted = false;
+    this->_gameState = PLAYING;
+    this->_time = 0;
 
     this->_entities.resize(MAP_HEIGHT);
     for (int y = 0; y < MAP_HEIGHT; y++) {

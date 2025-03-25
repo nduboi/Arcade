@@ -36,10 +36,10 @@ public:
 	void closeWindow() override;
 	bool isOpen() override;
 	void clear() override;
-	void drawSprite(std::string asset, int color, std::pair<size_t, size_t> position) override;
+	void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
 	void drawRectangle(int color, std::pair<size_t, size_t> position) override;
 	void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
-	void setMapSize(std::pair<int, int> size) override;
+	void setMapSize(std::pair<size_t, size_t> size) override;
 
 	/**
 	 * @brief Constructor for the WidnowModule class.

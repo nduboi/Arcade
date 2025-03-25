@@ -173,7 +173,7 @@ void Core::_computeGameDisplay() {
 			for (int z = 0; z < grid[y][x].size(); z++) {
 				IEntity *entity = grid[y][x][z].get();
 
-				this->display->drawSprite(entity->getSpriteName(), entity->getColor(), {x, y});
+				this->display->drawSprite(entity->getSpriteName(), entity->getColor(), entity->getText(), {x, y});
 			}
 		}
 	}
