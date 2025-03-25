@@ -51,9 +51,31 @@ void MinesweeperGame::placeMines()
         size_t x = xDist(gen);
         size_t y = yDist(gen);
         auto cell = std::dynamic_pointer_cast<Cell>(_entities[0][y][x]);
-        if (!cell->isMine()) {
-            cell->setMine(true);
-            minesPlaced++;
+
+        if (!cell->isMine() && !cell->isRevealed()) {
+            bool isAdjacent = false;
+            static const std::pair<int, int> directions[] = {
+                {-1, -1}, {0, -1}, {1, -1},
+                {-1, 0},           {1, 0},
+                {-1, 1},  {0, 1},  {1, 1}
+            };
+
+            for (const auto& dir : directions) {
+                int nx = static_cast<int>(x) + dir.first;
+                int ny = static_cast<int>(y) + dir.second;
+                if (nx >= 0 && nx < static_cast<int>(_width) &&
+                    ny >= 0 && ny < static_cast<int>(_height)) {
+                    auto adjacentCell = std::dynamic_pointer_cast<Cell>(_entities[0][ny][nx]);
+                    if (adjacentCell->isRevealed()) {
+                        isAdjacent = true;
+                        break;
+                    }
+                }
+            }
+            if (!isAdjacent) {
+                cell->setMine(true);
+                minesPlaced++;
+            }
         }
     }
     calculateAdjacentMines();
@@ -73,22 +95,22 @@ void MinesweeperGame::calculateAdjacentMines()
 
 gameState_t MinesweeperGame::revealCell(size_t x, size_t y)
 {
-    if (!isValidPosition(x, y)) {
+    if (!isValidPosition(x, y))
         return _gameState;
-    }
-
     auto cell = std::dynamic_pointer_cast<Cell>(_entities[0][y][x]);
+
     if (_firstClick) {
         _firstClick = false;
-        cell->setRevealed(true);
         placeMines();
-        cell->setRevealed(false);
+        calculateAdjacentMines();
     }
-    if (cell->isRevealed() || cell->isFlagged()) {
+
+    if (cell->isRevealed() || cell->isFlagged())
         return _gameState;
-    }
+
     cell->setRevealed(true);
     _revealedCells++;
+
     if (cell->isMine()) {
         _gameState = LOSE;
         for (size_t cy = 0; cy < _height; ++cy) {
@@ -101,9 +123,8 @@ gameState_t MinesweeperGame::revealCell(size_t x, size_t y)
         }
         return _gameState;
     }
-    if (cell->getAdjacentMines() == 0) {
+    if (cell->getAdjacentMines() == 0)
         revealAdjacentCells(x, y);
-    }
     return checkWinCondition();
 }
 
