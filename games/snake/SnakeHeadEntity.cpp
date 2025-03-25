@@ -13,8 +13,11 @@
 #include "AppleEntity.hpp"
 #include <iostream>
 
+const double SNAKE_DELTATIME = 0.10;
+
 SnakeHeadEntity::SnakeHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position)
 {
+    this->_inputDirection = {1, 0};
     this->_direction = {1, 0};
     this->_spriteName = "assets/snake/head_right.png";
     this->_assetsName = {
@@ -41,7 +44,7 @@ void SnakeHeadEntity::setDirection(std::pair<int, int> direction)
         return;
     if (this->_direction.first == direction.first * -1 && this->_direction.second == direction.second * -1)
         return;
-    this->_direction = direction;
+    this->_inputDirection = direction;
 }
 
 void SnakeHeadEntity::moveEntities(IGameModule &gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2)
@@ -58,7 +61,7 @@ bool SnakeHeadEntity::lastTimePassed()
 {
     std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsedTime = currentTime - this->_lastTime;
-    if (elapsedTime.count() < 0.15)
+    if (elapsedTime.count() < SNAKE_DELTATIME)
         return false;
     this->_lastTime = currentTime;
     return true;
@@ -102,7 +105,6 @@ void SnakeHeadEntity::moveBodyParts(IGameModule &gameModule)
         return;
     }
 
-    // Save the last tail position before moving
     if (!bodyParts.empty()) {
         this->_lastTailPosition = bodyParts.back()->getPosition();
     }
@@ -232,22 +234,19 @@ bool SnakeHeadEntity::isValidPosition(const std::pair<size_t, size_t> &pos, cons
 
 void SnakeHeadEntity::addBodyPart(IGameModule &gameModule)
 {
-    // Just mark that we need to add a body part
     this->_pendingBodyPartAddition = true;
 }
 
 void SnakeHeadEntity::addPendingBodyPart(IGameModule &gameModule)
 {
-    if (!this->_pendingBodyPartAddition) {
+    if (!this->_pendingBodyPartAddition)
         return;
-    }
 
     grid_t grid = gameModule.getEntities();
     auto bodyParts = findAndSortBodyParts(grid);
     size_t index = bodyParts.empty() ? 0 : bodyParts.back()->getIndex() + 1;
 
     if (bodyParts.empty()) {
-        // For the first body part, add it behind the head
         int dx = -this->_direction.first;
         int dy = -this->_direction.second;
         std::pair<size_t, size_t> newPos = {
@@ -263,23 +262,17 @@ void SnakeHeadEntity::addPendingBodyPart(IGameModule &gameModule)
             this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
         }
     } else {
-        // Add new body part at the saved tail position
         if (isValidPosition(this->_lastTailPosition, grid)) {
             auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", this->_lastTailPosition, index);
 
-            // Determine the direction for the new tail
             std::pair<size_t, size_t> beforeTailPos;
-            if (bodyParts.size() > 1) {
+            if (bodyParts.size() > 1)
                 beforeTailPos = bodyParts[bodyParts.size() - 2]->getPosition();
-            } else {
+            else
                 beforeTailPos = this->_position;
-            }
-
             newBodyPart->updateDirection(this->_lastTailPosition, beforeTailPos, {0, 0});
             grid[this->_lastTailPosition.second][this->_lastTailPosition.first][1] = newBodyPart;
             gameModule.setEntities(grid);
-
-            // Keep the previous positions history intact for proper movement
             this->_previousPositions.insert(this->_previousPositions.begin(), this->_lastTailPosition);
         }
     }
@@ -319,6 +312,7 @@ gameState_t SnakeHeadEntity::moveEntity(IGameModule &gameModule, std::pair<int, 
 
     if (!this->lastTimePassed())
         return gameState_t::PLAYING;
+    this->_direction = this->_inputDirection;
 
     grid_t grid = gameModule.getEntities();
     std::pair<size_t, size_t> gridSize = gameModule.getGridSize();

@@ -19,6 +19,7 @@ class SnakeBodyEntity;
 class SnakeHeadEntity : public AEntity {
     private:
         std::chrono::time_point<std::chrono::steady_clock> _lastTime;
+        std::pair<int, int> _inputDirection;
         std::pair<int, int> _direction;
         std::map<std::pair<size_t, size_t>, std::string> _assetsName;
         std::vector<std::pair<size_t, size_t>> _previousPositions;
