@@ -69,8 +69,19 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
     return IEvent::NOTHING;
 }
 
-std::pair<int, int> arcadeSFMLEvent::getMousePos() {
-	return _mousePos;
+std::pair<int, int> arcadeSFMLEvent::getMousePos()
+{
+    auto &sfmlWindow = static_cast<arcadeSFML &>(_window);
+    sf::Vector2i mousePos = sf::Mouse::getPosition(sfmlWindow.window);
+
+    if (_mapSize.first > 0 && _mapSize.second > 0) {
+        sf::Vector2u winSize = sfmlWindow.window.getSize();
+        return {
+            (mousePos.x * _mapSize.first) / static_cast<int>(winSize.x),
+            (mousePos.y * _mapSize.second) / static_cast<int>(winSize.y)
+        };
+    }
+    return {mousePos.x, mousePos.y};
 }
 
 void arcadeSFMLEvent::setMapSize(std::pair<int, int> size) {
