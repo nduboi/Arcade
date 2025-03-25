@@ -305,13 +305,13 @@ void SnakeHeadEntity::ensurePreviousPositionsInitialized(IGameModule &gameModule
     }
 }
 
-gameState_t SnakeHeadEntity::moveEntity(IGameModule &gameModule, std::pair<int, int> direction)
+void SnakeHeadEntity::moveEntity(IGameModule &gameModule, std::pair<int, int> direction)
 {
     this->setDirection(direction);
     this->ensurePreviousPositionsInitialized(gameModule);
 
     if (!this->lastTimePassed())
-        return gameState_t::PLAYING;
+        return;
     this->_direction = this->_inputDirection;
 
     grid_t grid = gameModule.getEntities();
@@ -320,14 +320,14 @@ gameState_t SnakeHeadEntity::moveEntity(IGameModule &gameModule, std::pair<int, 
 
     if (nextPosition.first >= gridSize.first || nextPosition.second >= gridSize.second
         || nextPosition.first < 0 || nextPosition.second < 0)
-        return gameState_t::LOSE;
+        return;
 
     if (this->checkCollisionWithBody(nextPosition, gameModule))
-        return gameState_t::LOSE;
+        return;
 
     gameState_t state = this->appleCollision(gameModule, nextPosition);
     if (state != gameState_t::PLAYING)
-        return state;
+        return;
 
     this->_previousPositions.push_back(nextPosition);
     while (this->_previousPositions.size() > this->getBodySize() + 2) {
@@ -338,6 +338,4 @@ gameState_t SnakeHeadEntity::moveEntity(IGameModule &gameModule, std::pair<int, 
     this->moveBodyParts(gameModule);
     this->addPendingBodyPart(gameModule);
     this->updateBodyPartDirections(gameModule, findAndSortBodyParts(gameModule.getEntities()));
-
-    return gameState_t::PLAYING;
 }

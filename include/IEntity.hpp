@@ -25,10 +25,10 @@ class IEntity {
     public:
         virtual ~IEntity() = default;
 
-        virtual gameState_t onClick(IGameModule &gameModule, clickType_t type) = 0;
-        virtual gameState_t moveEntity(IGameModule &gameModule) = 0;
-        virtual gameState_t moveEntity(IGameModule &gameModule, std::pair<int, int> direction) = 0;
-        virtual gameState_t onInteract(IGameModule &gameModule) = 0;
+        virtual void onClick(IGameModule &gameModule, clickType_t type) = 0;
+        virtual void moveEntity(IGameModule &gameModule) = 0;
+        virtual void moveEntity(IGameModule &gameModule, std::pair<int, int> direction) = 0;
+        virtual void onInteract(IGameModule &gameModule) = 0;
 
         virtual std::pair<size_t, size_t> getPosition() const = 0;
         virtual void setPosition(std::pair<size_t, size_t> position) = 0;

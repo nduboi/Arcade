@@ -46,13 +46,13 @@ bool AppleEntity::isValidPosition(const std::pair<size_t, size_t> &pos, const gr
     return false;
 }
 
-gameState_t AppleEntity::onInteract(IGameModule &gameModule)
+void AppleEntity::onInteract(IGameModule &gameModule)
 {
     grid_t grid = gameModule.getEntities();
     int nbVoidEntities = getNbVoidEntities(grid);
 
     if (nbVoidEntities == 1)
-        return gameState_t::WIN;
+        return;
 
     srand(time(NULL));
     std::pair<size_t, size_t> newPos = {rand() % grid[0].size(), rand() % grid.size()};
@@ -62,5 +62,4 @@ gameState_t AppleEntity::onInteract(IGameModule &gameModule)
 
     grid[newPos.second][newPos.first][1] = std::make_shared<AppleEntity>(newPos);
     gameModule.setEntities(grid);
-    return gameState_t::PLAYING;
 }
