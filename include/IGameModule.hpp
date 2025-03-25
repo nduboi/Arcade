@@ -12,7 +12,15 @@
 #include <vector>
 #include <memory>
 
-#include "IEntity.hpp"
+class IEntity;
+
+typedef std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> grid_t;
+
+typedef enum gameState_e {
+    PLAYING,
+    WIN,
+    LOSE
+} gameState_t;
 
 class IGameModule {
     public:

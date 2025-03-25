@@ -13,22 +13,13 @@
 #include <vector>
 #include <memory>
 
-class IEntity;
-class IGameModule;
-
-typedef std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> grid_t;
+#include "IGameModule.hpp"
 
 typedef enum clickType_e {
     LEFT_CLICK,
     RIGHT_CLICK,
     MIDDLE_CLICK
 } clickType_t;
-
-typedef enum gameState_e {
-    PLAYING,
-    WIN,
-    LOSE
-} gameState_t;
 
 class IEntity {
     public:
@@ -48,5 +39,7 @@ class IEntity {
         virtual bool isControlable() const = 0;
         virtual bool hasCollisions() const = 0;
 };
+
+typedef std::vector<std::vector<std::vector<std::shared_ptr<IEntity>>>> grid_t;
 
 #endif /* !IENTITY_HPP_ */
