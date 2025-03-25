@@ -47,6 +47,48 @@ std::pair<size_t, size_t> GameModule::getGridSize() const {
 	return this->_object->getGridSize();
 }
 
+bool GameModule::getIsStarted() const {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	return this->_object->getIsStarted();
+}
+
+void GameModule::setIsStarted(bool isStarted) {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	this->_object->setIsStarted(isStarted);
+}
+
+gameState_t GameModule::getGameState() const {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	return this->_object->getGameState();
+}
+
+void GameModule::setGameState(gameState_t gameState) {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	this->_object->setGameState(gameState);
+}
+
+std::vector<std::shared_ptr<IEntity>> GameModule::getHUD() const {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	return this->_object->getHUD();
+}
+
+size_t GameModule::getTime() const {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	return this->_object->getTime();
+}
+
+void GameModule::setTime(size_t time) {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	this->_object->setTime(time);
+}
+
 GameModule::GameModule(IGameModule *mdl) {
 	this->_object.reset(mdl);
 }

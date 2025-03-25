@@ -26,6 +26,20 @@ public:
 
 	std::pair<size_t, size_t> getGridSize() const override;
 
+	bool getIsStarted() const override;
+
+	void setIsStarted(bool isStarted) override;
+
+	virtual gameState_t getGameState() const override;
+
+	void setGameState(gameState_t gameState) override;
+
+	std::vector<std::shared_ptr<IEntity>> getHUD() const override;
+
+	size_t getTime() const override;
+
+	void setTime(size_t time) override;
+
 	GameModule(IGameModule *);
 
 	~GameModule() = default;

@@ -19,12 +19,11 @@ class IWindow {
         virtual bool isOpen() = 0;
         virtual void clear() = 0;
 
-        // Display
-        virtual void drawSprite(std::string asset, int color, std::pair<size_t, size_t> position) = 0;
+        virtual void setMapSize(std::pair<size_t, size_t> size) = 0;
+
+        virtual void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) = 0;
         virtual void drawText(std::string text, int color, std::pair<size_t, size_t> position) = 0;
         virtual void drawRectangle(int color, std::pair<size_t, size_t> position) = 0;
-
-        virtual void setMapSize(std::pair<int, int> size) = 0;
 };
 
 // extern "C" IWindow* createInstance();

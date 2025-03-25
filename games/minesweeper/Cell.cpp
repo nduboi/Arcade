@@ -21,15 +21,15 @@ Cell::Cell(size_t x, size_t y)
     this->_hasCollisions = false;
 }
 
-gameState_t Cell::onClick(IGameModule &gameModule, clickType_t type)
+void Cell::onClick(IGameModule &gameModule, clickType_t type)
 {
     (void)gameModule;
     if (type == LEFT_CLICK) {
-        return PLAYING;
+        return;
     } else if (type == RIGHT_CLICK) {
-        return PLAYING;
+        return;
     }
-    return PLAYING;
+    return;
 }
 
 std::string Cell::getSpriteName() const

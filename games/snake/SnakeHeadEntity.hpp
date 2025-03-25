@@ -46,7 +46,7 @@ class SnakeHeadEntity : public AEntity {
         SnakeHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position);
         ~SnakeHeadEntity() = default;
 
-        gameState_t moveEntity(IGameModule &gameModule, std::pair<int, int> direction) override;
+        void moveEntity(IGameModule &gameModule, std::pair<int, int> direction) override;
         void addBodyPart(IGameModule &gameModule);
         std::string getSpriteName() const override;
         size_t getBodySize() const;

@@ -12,6 +12,11 @@
 
 MinesweeperGame::MinesweeperGame(size_t width, size_t height, size_t mineCount)
 {
+    this->_highScore = 0;
+    this->_score = 0;
+    this->_isStarted = false;
+    this->_gameState = PLAYING;
+    this->_time = 0;
     _width = width;
     _height = height;
     _mineCount = mineCount;

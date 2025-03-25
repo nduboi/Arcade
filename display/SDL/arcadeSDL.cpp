@@ -89,7 +89,7 @@ void arcadeSDL::_resizeTexture(SDL_Rect &rect, std::pair<int, int> position)
     rect.h = height / this->_mapSize.second + 0.1;
 }
 
-void arcadeSDL::drawSprite(std::string asset, int color, std::pair<size_t, size_t> position) {
+void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
     SDL_Surface *surface = IMG_Load(asset.c_str());
     if (!surface) {
         std::cerr << "Error loading image: " << IMG_GetError() << std::endl;
@@ -110,6 +110,7 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::pair<size_t, size_
 
     SDL_RenderCopy(this->_renderer, texture, NULL, &destRect);
     SDL_DestroyTexture(texture); // Always destroy the texture after use
+    (void)text;
 }
 
 void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position) {
@@ -123,7 +124,7 @@ void arcadeSDL::drawText(std::string text, int color, std::pair<size_t, size_t> 
     (void)position;
 }
 
-void arcadeSDL::setMapSize(std::pair<int, int> size) {
+void arcadeSDL::setMapSize(std::pair<size_t, size_t> size) {
     this->_mapSize = size;
 }
 

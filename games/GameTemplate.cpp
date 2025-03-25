@@ -43,3 +43,38 @@ std::pair<size_t, size_t> GameTemplate::getGridSize() const
 
     return std::make_pair(grid.size(), grid[0].size());
 }
+
+bool GameTemplate::getIsStarted() const
+{
+    return this->_isStarted;
+}
+
+void GameTemplate::setIsStarted(bool isStarted)
+{
+    this->_isStarted = isStarted;
+}
+
+gameState_t GameTemplate::getGameState() const
+{
+    return this->_gameState;
+}
+
+void GameTemplate::setGameState(gameState_t gameState)
+{
+    this->_gameState = gameState;
+}
+
+std::vector<std::shared_ptr<IEntity>> GameTemplate::getHUD() const
+{
+    return {};
+}
+
+size_t GameTemplate::getTime() const
+{
+    return this->_time;
+}
+
+void GameTemplate::setTime(size_t time)
+{
+    this->_time = time;
+}
