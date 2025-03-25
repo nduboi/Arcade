@@ -68,12 +68,10 @@ std::string SnakeHeadEntity::getSpriteName() const
     return this->_assetsName.at(this->_direction);
 }
 
-void SnakeHeadEntity::moveBodyParts(IGameModule &gameModule)
+std::vector<std::shared_ptr<SnakeBodyEntity>> SnakeHeadEntity::findAndSortBodyParts(const grid_t &grid) const
 {
-    grid_t grid = gameModule.getEntities();
-    std::vector<std::shared_ptr<AEntity>> bodyParts;
+    std::vector<std::shared_ptr<SnakeBodyEntity>> bodyParts;
 
-    // Find
     for (size_t y = 0; y < grid.size(); y++) {
         for (size_t x = 0; x < grid[y].size(); x++) {
             auto entity = grid[y][x][1];
@@ -84,44 +82,46 @@ void SnakeHeadEntity::moveBodyParts(IGameModule &gameModule)
         }
     }
 
-    // Sort
     std::sort(bodyParts.begin(), bodyParts.end(),
-              [](const std::shared_ptr<AEntity>& a, const std::shared_ptr<AEntity>& b) {
-                  return std::dynamic_pointer_cast<SnakeBodyEntity>(a)->getIndex() <
-                         std::dynamic_pointer_cast<SnakeBodyEntity>(b)->getIndex();
+              [](const std::shared_ptr<SnakeBodyEntity>& a, const std::shared_ptr<SnakeBodyEntity>& b) {
+                  return a->getIndex() < b->getIndex();
               });
 
-    // Check if we have enough positions stored
+    return bodyParts;
+}
+
+void SnakeHeadEntity::moveBodyParts(IGameModule &gameModule)
+{
+    grid_t grid = gameModule.getEntities();
+    auto bodyParts = findAndSortBodyParts(grid);
+
     if (this->_previousPositions.size() < bodyParts.size() + 1) {
         return;
     }
 
-    // Move
+    moveBodyPartsToNewPositions(gameModule, bodyParts);
+    updateBodyPartDirections(gameModule, bodyParts);
+}
+
+void SnakeHeadEntity::moveBodyPartsToNewPositions(IGameModule &gameModule, 
+    const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts)
+{
     for (size_t i = 0; i < bodyParts.size(); i++) {
-        auto bodyPart = std::dynamic_pointer_cast<SnakeBodyEntity>(bodyParts[i]);
+        auto bodyPart = bodyParts[i];
         auto currentPos = bodyPart->getPosition();
         auto newPos = this->_previousPositions[this->_previousPositions.size() - 2 - i];
 
-        std::pair<size_t, size_t> nextPos;
-        std::pair<size_t, size_t> prevPos = {0, 0};
-
-        if (i > 0) {
-            nextPos = bodyParts[i-1]->getPosition();
-        } else {
-            nextPos = this->_position;
-        }
-
-        if (i < bodyParts.size() - 1)
-            prevPos = bodyParts[i+1]->getPosition();
-
         this->moveEntities(gameModule, currentPos, newPos);
-        grid = gameModule.getEntities();
     }
+}
 
-    // Actualise Directions
+void SnakeHeadEntity::updateBodyPartDirections(IGameModule &gameModule, 
+    const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts)
+{
+    grid_t grid = gameModule.getEntities();
+
     for (size_t i = 0; i < bodyParts.size(); i++) {
         auto bodyPart = std::dynamic_pointer_cast<SnakeBodyEntity>(bodyParts[i]);
-        auto currentPos = bodyPart->getPosition();
         auto newPos = this->_previousPositions[this->_previousPositions.size() - 2 - i];
 
         std::pair<size_t, size_t> nextPos;
@@ -154,95 +154,78 @@ size_t SnakeHeadEntity::getBodySize() const
     return this->_previousPositions.size() - 1;
 }
 
+void SnakeHeadEntity::addFirstBodyPart(IGameModule &gameModule)
+{
+    grid_t grid = gameModule.getEntities();
+    int dx = -this->_direction.first;
+    int dy = -this->_direction.second;
+
+    if (this->_previousPositions.size() < 1)
+        this->_previousPositions.push_back(this->_position);
+
+    std::pair<size_t, size_t> newPos = {
+        this->_position.first + dx,
+        this->_position.second + dy
+    };
+
+    if (isValidPosition(newPos, grid)) {
+        auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, 0);
+        newBodyPart->updateDirection(newPos, this->_position, {0, 0});
+        grid[newPos.second][newPos.first][1] = newBodyPart;
+        gameModule.setEntities(grid);
+        this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
+    }
+}
+
+void SnakeHeadEntity::addBodyPartToTail(IGameModule &gameModule, size_t index, 
+    const std::pair<size_t, size_t> &lastBodyPos, const std::pair<size_t, size_t> &beforeLastPos)
+{
+    grid_t grid = gameModule.getEntities();
+    int dx = lastBodyPos.first - beforeLastPos.first;
+    int dy = lastBodyPos.second - beforeLastPos.second;
+
+    std::pair<size_t, size_t> newPos = {
+        lastBodyPos.first + dx,
+        lastBodyPos.second + dy
+    };
+
+    if (isValidPosition(newPos, grid)) {
+        auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, index);
+        newBodyPart->updateDirection(newPos, lastBodyPos, {0, 0});
+        grid[newPos.second][newPos.first][1] = newBodyPart;
+        gameModule.setEntities(grid);
+        this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
+
+        while (this->_previousPositions.size() > index + 2) {
+            this->_previousPositions.pop_back();
+        }
+    }
+}
+
+bool SnakeHeadEntity::isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const
+{
+    return pos.first < grid[0].size() && pos.second < grid.size() &&
+           pos.first >= 0 && pos.second >= 0;
+}
+
 void SnakeHeadEntity::addBodyPart(IGameModule &gameModule)
 {
     grid_t grid = gameModule.getEntities();
-    size_t index = 0;
-    std::pair<size_t, size_t> tailPosition;
+    auto bodyParts = findAndSortBodyParts(grid);
+    size_t index = bodyParts.empty() ? 0 : bodyParts.back()->getIndex() + 1;
 
-    for (size_t y = 0; y < grid.size(); y++) {
-        for (size_t x = 0; x < grid[y].size(); x++) {
-            auto entity = grid[y][x][1];
-            auto bodyPart = std::dynamic_pointer_cast<SnakeBodyEntity>(entity);
-            if (bodyPart) {
-                if (bodyPart->getIndex() >= index) {
-                    index = bodyPart->getIndex() + 1;
-                    tailPosition = bodyPart->getPosition();
-                }
-            }
-        }
-    }
-
-    if (index == 0) {
-        int dx = -this->_direction.first;
-        int dy = -this->_direction.second;
-
-        if (this->_previousPositions.size() < 1) {
-            this->_previousPositions.push_back(this->_position);
-        }
-
-        std::pair<size_t, size_t> newPos = {
-            this->_position.first + dx,
-            this->_position.second + dy
-        };
-
-        if (newPos.first < grid[0].size() && newPos.second < grid.size()) {
-            auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, 0);
-            newBodyPart->updateDirection(newPos, this->_position, {0, 0});
-            grid[newPos.second][newPos.first][1] = newBodyPart;
-            gameModule.setEntities(grid);
-            this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
-        }
+    if (bodyParts.empty()) {
+        addFirstBodyPart(gameModule);
     } else {
-        std::pair<size_t, size_t> lastBodyPos = tailPosition;
+        std::pair<size_t, size_t> lastBodyPos = bodyParts.back()->getPosition();
         std::pair<size_t, size_t> beforeLastPos;
 
-        std::vector<std::shared_ptr<SnakeBodyEntity>> bodyParts;
-        for (size_t y = 0; y < grid.size(); y++) {
-            for (size_t x = 0; x < grid[y].size(); x++) {
-                auto entity = grid[y][x][1];
-                auto bodyPart = std::dynamic_pointer_cast<SnakeBodyEntity>(entity);
-                if (bodyPart) {
-                    bodyParts.push_back(bodyPart);
-                }
-            }
-        }
-
-        std::sort(bodyParts.begin(), bodyParts.end(),
-            [](const std::shared_ptr<SnakeBodyEntity>& a, const std::shared_ptr<SnakeBodyEntity>& b) {
-                return a->getIndex() < b->getIndex();
-            });
-
-        if (bodyParts.size() >= 2) {
-            lastBodyPos = bodyParts.back()->getPosition();
+        if (bodyParts.size() >= 2)
             beforeLastPos = bodyParts[bodyParts.size() - 2]->getPosition();
-        } else if (bodyParts.size() == 1) {
-            lastBodyPos = bodyParts[0]->getPosition();
+        else
             beforeLastPos = this->_position;
-        } else {
-            return;
-        }
 
-        int dx = lastBodyPos.first - beforeLastPos.first;
-        int dy = lastBodyPos.second - beforeLastPos.second;
-
-        std::pair<size_t, size_t> newPos = {
-            lastBodyPos.first + dx,
-            lastBodyPos.second + dy
-        };
-
-        if (newPos.first < grid[0].size() && newPos.second < grid.size() &&
-            newPos.first >= 0 && newPos.second >= 0) {
-            auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, index);
-            newBodyPart->updateDirection(newPos, lastBodyPos, {0, 0});
-            grid[newPos.second][newPos.first][1] = newBodyPart;
-            gameModule.setEntities(grid);
-            this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
-
-            while (this->_previousPositions.size() > index + 2) {
-                this->_previousPositions.pop_back();
-            }
-        }
+        addBodyPartToTail(gameModule, index, lastBodyPos, beforeLastPos);
     }
 }
 

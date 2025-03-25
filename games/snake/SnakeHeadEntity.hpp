@@ -14,6 +14,8 @@
 
 #include "AEntity.hpp"
 
+class SnakeBodyEntity;
+
 class SnakeHeadEntity : public AEntity {
     private:
         std::chrono::time_point<std::chrono::steady_clock> _lastTime;
@@ -26,6 +28,13 @@ class SnakeHeadEntity : public AEntity {
         bool lastTimePassed();
         void moveBodyParts(IGameModule &gameModule);
         bool checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, IGameModule &gameModule) const;
+
+        std::vector<std::shared_ptr<SnakeBodyEntity>> findAndSortBodyParts(const grid_t &grid) const;
+        void moveBodyPartsToNewPositions(IGameModule &gameModule, const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts);
+        void updateBodyPartDirections(IGameModule &gameModule, const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts);
+        void addFirstBodyPart(IGameModule &gameModule);
+        void addBodyPartToTail(IGameModule &gameModule, size_t index, const std::pair<size_t, size_t> &lastBodyPos, const std::pair<size_t, size_t> &beforeLastPos);
+        bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;
 
     public:
         SnakeHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position);
