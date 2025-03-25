@@ -7,7 +7,7 @@
 #include "Menu.hpp"
 
 extern "C" {
-	IMenuModule *createMenu(void) {
+	IMenu *createMenu(void) {
 		return new Menu();
 	}
 	Loader::ModuleType_t getType(void) {

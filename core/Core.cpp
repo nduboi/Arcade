@@ -4,10 +4,10 @@
 
 #include <filesystem>
 #include <iostream>
+#include <cstring>
 #include <vector>
 #include "Core.hpp"
-
-#include <cstring>
+#include "IEntity.hpp"
 
 Core::Core() {
 	this->_refreshLibList();

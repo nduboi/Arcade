@@ -5,42 +5,37 @@
 #include "MenuModule.hpp"
 #include "Exception.hpp"
 
-std::size_t MenuModule::getHighScore() const {
-	if (!this->_object)
-		throw MenuModuleException("Error no lib Loaded");
-	return this->_object->getHighScore();
+std::vector<Boxes> MenuModule::getBoxPoses(std::shared_ptr<IWindow> window) {
+	if (!this->_object) {
+		throw MenuModuleException("Module not loaded");
+	}
+	return this->_object->getBoxPoses(window);
 }
 
-void MenuModule::setHighScore(std::size_t highScore) {
-	if (!this->_object)
-		throw MenuModuleException("Error no lib Loaded");
-	this->_object->setHighScore(highScore);
+std::string MenuModule::getUsername()
+{
+	if (!this->_object) {
+		throw MenuModuleException("Module not loaded");
+	}
+	return this->_object->getUsername();
 }
 
-std::size_t MenuModule::getScore() const {
-	if (!this->_object)
-		throw MenuModuleException("Error no lib Loaded");
-	return this->_object->getScore();
+void MenuModule::setUsername(std::string username) {
+	if (!this->_object) {
+		throw MenuModuleException("Module not loaded");
+	}
+	this->_object->setUsername(username);
 }
 
-void MenuModule::setScore(std::size_t score) {
-	if (!this->_object)
-		throw MenuModuleException("Error no lib Loaded");
-	this->_object->setScore(score);
+void MenuModule::displayMenu(std::shared_ptr<IWindow> window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
+	std::vector<std::string> games)
+{
+	if (!this->_object) {
+		throw MenuModuleException("Module not loaded");
+	}
+	this->_object->displayMenu(window, _boxes, libs, games);
 }
 
-grid_t MenuModule::getEntities() const {
-	if (!this->_object)
-		throw MenuModuleException("Error no lib Loaded");
-	return this->_object->getEntities();
-}
-
-std::pair<size_t, size_t> MenuModule::getGridSize() const {
-	if (!this->_object)
-		throw MenuModuleException("Error no lib Loaded");
-	return this->_object->getGridSize();
-}
-
-MenuModule::MenuModule(IMenuModule *mdl) {
+MenuModule::MenuModule(IMenu *mdl) {
 	this->_object.reset(mdl);
 }

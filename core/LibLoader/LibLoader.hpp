@@ -15,7 +15,7 @@
 
 #include <memory>
 #include "IGameModule.hpp"
-#include "IMenuModule.hpp"
+#include "IMenu.hpp"
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 #include "LoaderType.hpp"
@@ -72,7 +72,7 @@ namespace Loader
 
 		IGameModule *initEntryPointGame() const;
 
-		IMenuModule *initEntryPointMenu() const;
+		IMenu *initEntryPointMenu() const;
 
 		/**
 		 * @brief Closes the currently loaded library.
