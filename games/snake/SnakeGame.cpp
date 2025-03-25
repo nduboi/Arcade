@@ -8,6 +8,7 @@
 #include "SnakeGame.hpp"
 #include "VoidEntity.hpp"
 #include "SnakeHeadEntity.hpp"
+#include "SnakeBodyEntity.hpp"
 
 const int MAP_HEIGHT = 17;
 const int MAP_WIDTH = 17;
@@ -52,5 +53,17 @@ void SnakeGame::setLayerEntities()
         }
     }
 
+    // Create snake head at position (8,8)
     this->_entities[8][8][1] = std::make_shared<SnakeHeadEntity>(1, "O", std::make_pair(8, 8));
+
+    auto head = std::dynamic_pointer_cast<SnakeHeadEntity>(this->_entities[8][8][1]);
+    if (head) {
+        head->addBodyPart(*this);
+
+        head->moveEntity(*this, {1, 0});
+        head->moveEntity(*this, {1, 0});
+
+        head->addBodyPart(*this);
+        head->addBodyPart(*this);
+    }
 }
