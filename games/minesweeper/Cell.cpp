@@ -12,15 +12,15 @@
 
 Cell::Cell(size_t x, size_t y)
 {
-    _isRevealed = false;
-    _isFlagged = false;
-    _isMine = false;
-    _adjacentMines = 0;
-    _position = {x, y};
-    _spriteName = "./assets/minesweeper/hidden.png";
-    _color = 0xCCCCCC;
-    _text = "";
-    _firstClick = true;
+    this->_isRevealed = false;
+    this->_isFlagged = false;
+    this->_isMine = false;
+    this->_adjacentMines = 0;
+    this->_position = {x, y};
+    this->_spriteName = "./assets/minesweeper/hidden.png";
+    this->_color = 0xCCCCCC;
+    this->_text = "";
+    this->_firstClick = true;
 }
 
 void Cell::onClick(IGameModule &gameModule, clickType_t type)
@@ -28,8 +28,7 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
     grid_t grid = gameModule.getEntities();
 
     if (type == LEFT_CLICK) {
-        if (_firstClick) {
-            std::cout << "first click" << std::endl;
+        if (this->_firstClick) {
             std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
             for (size_t y = 0; y < mapSize.second; ++y) {
                 for (size_t x = 0; x < mapSize.first; ++x) {
@@ -38,21 +37,20 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
                 }
             }
             placeMines(gameModule);
-            std::cout << "mine placed" << std::endl;
-            _firstClick = false;
+            this->_firstClick = false;
         }
         if (!_isFlagged) {
-            setRevealed(true);
-            if (_isMine) {
+            this->setRevealed(true);
+            if (this->_isMine) {
                 gameModule.setGameState(LOSE);
             } else if (_adjacentMines == 0) {
-                revealAdjacentCells(_position.first, _position.second, grid);
+                this->revealAdjacentCells(this->_position.first, this->_position.second, grid);
             }
-            checkWinCondition(gameModule);
+            this->checkWinCondition(gameModule);
         }
     } else if (type == RIGHT_CLICK) {
-        if (!_isRevealed)
-            setFlagged(!_isFlagged);
+        if (!this->_isRevealed)
+            setFlagged(!this->_isFlagged);
     }
 }
 
@@ -94,7 +92,7 @@ void Cell::placeMines(IGameModule &gameModule)
             minesPlaced++;
         }
     }
-    calculateAdjacentMines(gameModule);
+    this->calculateAdjacentMines(gameModule);
 }
 
 gameState_t Cell::checkWinCondition(IGameModule &gameModule)
@@ -132,7 +130,7 @@ std::string Cell::getSpriteName() const
     } else if (this->_isMine) {
         return "./assets/minesweeper/mine.png";
     } else {
-        return "./assets/minesweeper/cell_" + std::to_string(_adjacentMines) + ".png";
+        return "./assets/minesweeper/cell_" + std::to_string(this->_adjacentMines) + ".png";
     }
 }
 
@@ -194,7 +192,7 @@ void Cell::revealAdjacentCells(size_t x, size_t y, grid_t& grid)
             if (!cell->isRevealed() && !cell->isFlagged()) {
                 cell->setRevealed(true);
                 if (cell->getAdjacentMines() == 0)
-                    revealAdjacentCells(nx, ny, grid);
+                    this->revealAdjacentCells(nx, ny, grid);
             }
         }
     }
@@ -218,7 +216,7 @@ std::size_t Cell::getColor() const
         0x000000,  // 7: Black
         0x808080   // 8: Grey
     };
-    return colors[std::min(_adjacentMines, static_cast<size_t>(8)) - 1];
+    return colors[std::min(this->_adjacentMines, static_cast<size_t>(8)) - 1];
 }
 
 std::string Cell::getText() const
@@ -267,7 +265,6 @@ void Cell::setRevealed(bool revealed)
         this->_color = 0xCCCCCC; // Light gray for hide cells
         this->_text = "";
     }
-    std::cout << "je ressors dans set reveal" << std::endl;
 }
 
 bool Cell::isRevealed() const

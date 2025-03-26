@@ -15,7 +15,7 @@
 class MinesweeperGame : public GameTemplate {
         public:
                 // Constructor
-                MinesweeperGame(size_t width = 9, size_t height = 9);
+                MinesweeperGame(size_t width = 16, size_t height = 16);
                 ~MinesweeperGame() = default;
 
                 // Method

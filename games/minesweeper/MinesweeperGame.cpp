@@ -10,8 +10,8 @@
 
 MinesweeperGame::MinesweeperGame(size_t width, size_t height)
 {
-    _width = width;
-    _height = height;
+    this->_width = width;
+    this->_height = height;
 
     initializeGrid();
 }
