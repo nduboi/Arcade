@@ -67,6 +67,33 @@ void arcadeSFML::drawRectangle(int color, std::pair<size_t, size_t> position) {
 	rect.setPosition({static_cast<float>(position.first), static_cast<float>(position.second)});
 	rect.setFillColor(sf::Color::Red);
 	this->_resizeData(rect, position);
+	this->window.draw(rect);
+}
+
+void arcadeSFML::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
+	//TODO: À implémenter
+}
+
+void arcadeSFML::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) {
+	//TODO: À implémenter
+}
+
+void arcadeSFML::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+	//TODO: À implémenter
+}
+
+void arcadeSFML::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+	//TODO: À implémenter
+}
+
+std::pair<int, int> arcadeSFML::getWindowSize() {
+	//TODO: À implémenter
+	return {0, 0};
+}
+
+bool arcadeSFML::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+	//TODO: À implémenter
+	return false;
 }
 
 void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
