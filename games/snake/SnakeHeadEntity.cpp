@@ -194,7 +194,7 @@ void SnakeHeadEntity::addFirstBodyPart(std::shared_ptr<IGameModule> gameModule)
     };
 
     if (isValidPosition(newPos, grid)) {
-        auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, 0);
+        auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "=", newPos, 0);
         newBodyPart->updateDirection(newPos, this->_position, {100, 100});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
@@ -215,7 +215,7 @@ void SnakeHeadEntity::addBodyPartToTail(std::shared_ptr<IGameModule> gameModule,
     };
 
     if (isValidPosition(newPos, grid)) {
-        auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, index);
+        auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "=", newPos, index);
         newBodyPart->updateDirection(newPos, lastBodyPos, {0, 0});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
@@ -256,7 +256,7 @@ void SnakeHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModule
         };
 
         if (isValidPosition(newPos, grid)) {
-            auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, 0);
+            auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "=", newPos, 0);
             newBodyPart->updateDirection(newPos, this->_position, {100, 100});
             grid[newPos.second][newPos.first][1] = newBodyPart;
             gameModule->setEntities(grid);
@@ -264,7 +264,7 @@ void SnakeHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModule
         }
     } else {
         if (isValidPosition(this->_lastTailPosition, grid)) {
-            auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", this->_lastTailPosition, index);
+            auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "=", this->_lastTailPosition, index);
 
             std::pair<size_t, size_t> beforeTailPos;
             if (bodyParts.size() > 1)

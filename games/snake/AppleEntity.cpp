@@ -13,7 +13,7 @@
 AppleEntity::AppleEntity(std::pair<size_t, size_t> position)
 {
     this->_spriteName = "assets/snake/apple.png";
-    this->_color = 1;
+    this->_color = 2;
     this->_text = "O";
     this->_position = position;
     this->_isMovable = false;
