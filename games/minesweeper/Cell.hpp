@@ -9,6 +9,7 @@
 #define CELL_HPP_
 
 #include "AEntity.hpp"
+#include <random>
 
 class Cell : public AEntity {
     public:
@@ -16,33 +17,39 @@ class Cell : public AEntity {
         Cell(size_t x, size_t y);
         ~Cell() = default;
 
-        // Method
+        // Overridden methods
         void onClick(IGameModule &gameModule, clickType_t type) override;
-        bool isRevealed() const;
-        bool isFlagged() const;
-        bool isMine() const;
-
-        // Getter
         std::string getSpriteName() const override;
         std::size_t getColor() const override;
         std::string getText() const override;
+
+        // Getters
+        bool isRevealed() const;
+        bool isFlagged() const;
+        bool isMine() const;
         size_t getAdjacentMines() const;
 
-        // Setter
+        // Setters
         void setRevealed(bool revealed);
         void setFlagged(bool flagged);
         void setMine(bool mine);
         void setAdjacentMines(size_t count);
 
-    protected:
-
     private:
-        // Variable
+        // Game state and grid information
         bool _isRevealed;
         bool _isFlagged;
         bool _isMine;
         size_t _adjacentMines;
+        bool _firstClick;
 
+        // Game logic methods
+        void placeMines(IGameModule &gameModule);
+        size_t createNumberMines(std::pair<size_t, size_t> map);
+        void calculateAdjacentMines(IGameModule &gameModule);
+        size_t countAdjacentMines(size_t x, size_t y, const grid_t& grid) const;
+        void revealAdjacentCells(size_t x, size_t y, grid_t& grid);
+        gameState_t checkWinCondition(IGameModule &gameModule);
 };
 
 #endif /* !CELL_HPP_ */
