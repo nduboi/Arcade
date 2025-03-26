@@ -7,6 +7,7 @@
 
 #include "Cell.hpp"
 #include "MinesweeperGame.hpp"
+#include "IGameModule.hpp"
 
 Cell::Cell(size_t x, size_t y)
 {
@@ -24,19 +25,14 @@ Cell::Cell(size_t x, size_t y)
 
 void Cell::onClick(IGameModule &gameModule, clickType_t type)
 {
-    MinesweeperGame* minesweeperGame = dynamic_cast<MinesweeperGame*>(&gameModule);
-    if (!minesweeperGame)
-        return;
-
-    if (minesweeperGame->getGameState() != PLAYING)
-        return;
-
     if (type == LEFT_CLICK) {
-        if (!_isFlagged)
-            minesweeperGame->revealCell(_position.first, _position.second);
+        if (!_isFlagged) {
+            auto minesweeper = std::dynamic_pointer_cast<MinesweeperGame>(gameModule);
+            setRevealed(true);
+        }
     } else if (type == RIGHT_CLICK) {
         if (!_isRevealed)
-            minesweeperGame->flagCell(_position.first, _position.second);
+            setFlagged(true);
     }
 }
 
@@ -90,6 +86,7 @@ std::string Cell::getText() const
 
 void Cell::setRevealed(bool revealed)
 {
+    std::cout << "j entre dans set reveal" << std::endl;
     this->_isRevealed = revealed;
     if (revealed) {
         if (this->_isMine) {
@@ -120,6 +117,7 @@ void Cell::setRevealed(bool revealed)
         this->_color = 0xCCCCCC; // Light gray for hide cells
         this->_text = "";
     }
+    std::cout << "je ressors dans set reveal" << std::endl;
 }
 
 bool Cell::isRevealed() const

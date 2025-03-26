@@ -41,6 +41,7 @@ void MinesweeperGame::initializeGrid()
 
 void MinesweeperGame::placeMines()
 {
+    std::cout << "place mine : " << std::endl;
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<size_t> xDist(0, _width - 1);
@@ -73,6 +74,7 @@ void MinesweeperGame::placeMines()
                 }
             }
             if (!isAdjacent) {
+                std::cout << "mine placé en x: " << x << " y: " << y << std::endl;
                 cell->setMine(true);
                 minesPlaced++;
             }
