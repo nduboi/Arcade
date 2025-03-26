@@ -42,6 +42,8 @@ class Cell : public AEntity {
         bool _isMine;
         size_t _adjacentMines;
         bool _firstClick;
+        int _gameState;
+        bool _clicked;
 
         // Game logic methods
         void placeMines(std::shared_ptr<IGameModule> gameModule);
