@@ -130,14 +130,15 @@ void Core::_processClickEvent(int x, int y, int z) {
 
 	clickType_t state = (_lastEvent == IEvent::event_t::MOUSELEFTCLICK) ? LEFT_CLICK :
 		(_lastEvent == IEvent::event_t::MOUSERIGHTCLICK) ? RIGHT_CLICK : MIDDLE_CLICK;
-	entity->onClick(*this->game.get(), state);
+	std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
+	entity->onClick(gameModule, state);
 }
 
 void Core::_compute() {
 	if (this->_moduleLoaded == GAME) {
-		IGameModule &gameModule = *(this->game.get());
-		grid_t grid = gameModule.getEntities();
-		std::pair<size_t, size_t> gridSize = gameModule.getGridSize();
+		std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
+		grid_t grid = gameModule->getEntities();
+		std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
 
 		for (int y = 0; y < gridSize.first; y++) {
 			for (int x = 0; x < gridSize.second; x++) {

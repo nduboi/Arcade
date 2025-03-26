@@ -18,7 +18,7 @@ class Cell : public AEntity {
         ~Cell() = default;
 
         // Overridden methods
-        void onClick(IGameModule &gameModule, clickType_t type) override;
+        void onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type) override;
         std::string getSpriteName() const override;
         std::size_t getColor() const override;
         std::string getText() const override;
@@ -46,13 +46,13 @@ class Cell : public AEntity {
         bool _clicked;
 
         // Game logic methods
-        void placeMines(IGameModule &gameModule);
+        void placeMines(std::shared_ptr<IGameModule> gameModule);
         size_t createNumberMines(std::pair<size_t, size_t> map);
-        void calculateAdjacentMines(IGameModule &gameModule);
+        void calculateAdjacentMines(std::shared_ptr<IGameModule> gameModule);
         size_t countAdjacentMines(size_t x, size_t y, const grid_t& grid) const;
         void revealAdjacentCells(size_t x, size_t y, grid_t& grid);
-        void revealAllMines(IGameModule &gameModule);
-        gameState_t checkWinCondition(IGameModule &gameModule);
+        void revealAllMines(std::shared_ptr<IGameModule> gameModule);
+        gameState_t checkWinCondition(std::shared_ptr<IGameModule> gameModule);
 };
 
 #endif /* !CELL_HPP_ */

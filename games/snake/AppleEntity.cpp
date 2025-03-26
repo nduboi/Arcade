@@ -46,13 +46,13 @@ bool AppleEntity::isValidPosition(const std::pair<size_t, size_t> &pos, const gr
     return false;
 }
 
-void AppleEntity::onInteract(IGameModule &gameModule)
+void AppleEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
 {
-    grid_t grid = gameModule.getEntities();
+    grid_t grid = gameModule->getEntities();
     int nbVoidEntities = getNbVoidEntities(grid);
 
     if (nbVoidEntities == 0) {
-        gameModule.setGameState(gameState_t::WIN);
+        gameModule->setGameState(gameState_t::WIN);
         return;
     }
 
@@ -63,5 +63,5 @@ void AppleEntity::onInteract(IGameModule &gameModule)
     }
 
     grid[newPos.second][newPos.first][1] = std::make_shared<AppleEntity>(newPos);
-    gameModule.setEntities(grid);
+    gameModule->setEntities(grid);
 }

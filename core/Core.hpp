@@ -53,7 +53,7 @@ private:
 public:
 	std::shared_ptr<WindowModule> display; ///< Unique pointer to the display WindowModule.
 	std::shared_ptr<EventModule> event; ///< Unique pointer to the display WindowModule.
-	std::unique_ptr<GameModule> game; ///< Unique pointer to the game GameModule.
+	std::shared_ptr<GameModule> game; ///< Shared pointer to the game GameModule.
 	std::unique_ptr<MenuModule> menu; ///< Unique pointer to the game GameModule.
 
 	std::shared_ptr<IWindow> displayPtr; ///< Unique pointer to the display IWindow.
