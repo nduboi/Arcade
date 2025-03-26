@@ -74,7 +74,7 @@ void SnakeGame::setSnakeBody()
 
     if (body1) body1->updateDirection(std::make_pair(7, 8), std::make_pair(8, 8), std::make_pair(6, 8));
     if (body2) body2->updateDirection(std::make_pair(6, 8), std::make_pair(7, 8), std::make_pair(5, 8));
-    if (body3) body3->updateDirection(std::make_pair(5, 8), std::make_pair(6, 8), std::make_pair(0, 0));
+    if (body3) body3->updateDirection(std::make_pair(5, 8), std::make_pair(6, 8), std::make_pair(100, 100));
 
     auto head = std::dynamic_pointer_cast<SnakeHeadEntity>(this->_entities[8][8][1]);
     if (head) {
