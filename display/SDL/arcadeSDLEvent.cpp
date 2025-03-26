@@ -82,11 +82,11 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
 
 std::pair<int, int> arcadeSDLEvent::getMousePos()
 {
-    auto &sdlWindow = static_cast<arcadeSDL &>(_window);
+    auto sdlWindow = std::dynamic_pointer_cast<arcadeSDL>(_window);
 
     if (_mapSize.first > 0 && _mapSize.second > 0) {
         int winWidth, winHeight;
-        SDL_GetWindowSize(sdlWindow._window, &winWidth, &winHeight);
+        SDL_GetWindowSize(sdlWindow->window, &winWidth, &winHeight);
         return {
             (this->_mousePos.first * _mapSize.first) / winWidth,
             (this->_mousePos.second * _mapSize.second) / winHeight
