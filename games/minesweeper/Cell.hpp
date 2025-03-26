@@ -49,6 +49,7 @@ class Cell : public AEntity {
         void calculateAdjacentMines(IGameModule &gameModule);
         size_t countAdjacentMines(size_t x, size_t y, const grid_t& grid) const;
         void revealAdjacentCells(size_t x, size_t y, grid_t& grid);
+        void revealAllMines(IGameModule &gameModule);
         gameState_t checkWinCondition(IGameModule &gameModule);
 };
 
