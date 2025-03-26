@@ -28,13 +28,15 @@ class arcadeSFML : public IWindow {
 	std::pair<size_t, size_t> _mapSize; ///< The size of the map.
 private:
 	std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
-	void _resizeSprite(sf::Sprite &sprite, std::pair<int, int> position);
+	void _resizeData(sf::Sprite &sprite, std::pair<int, int> position);
+	void _resizeData(sf::RectangleShape &sprite, std::pair<int, int> position);
+
 public:
 	sf::RenderWindow window;
 
-	void initWindow() override;
-
 	void display() override;
+
+	void initWindow() override {};
 
 	void closeWindow() override;
 
@@ -49,6 +51,8 @@ public:
 	void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
 
 	void setMapSize(std::pair<size_t, size_t> size) override;
+
+	void resizeWindow(size_t x, size_t y) override;
 
 	arcadeSFML();
 

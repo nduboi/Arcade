@@ -5,9 +5,6 @@
 #include <iostream>
 #include "arcadeSFML.hpp"
 
-void arcadeSFML::initWindow() {
-}
-
 void arcadeSFML::display() {
 	this->window.display();
 }
@@ -33,12 +30,20 @@ std::pair<int, int> arcadeSFML::_getWindowPosition(std::pair<int, int> position)
 	return windowPosition;
 }
 
-void arcadeSFML::_resizeSprite(sf::Sprite &sprite, std::pair<int, int> position) {
+void arcadeSFML::_resizeData(sf::Sprite &sprite, std::pair<int, int> position) {
 	sf::Vector2u windowSize = this->window.getSize();
 	sf::Vector2u textureSize = sprite.getTexture()->getSize();
 	sf::Vector2u cellSize = {windowSize.x / (int)this->_mapSize.first, windowSize.y / (int)this->_mapSize.second};
 
 	sprite.setScale((float)cellSize.x / textureSize.x + 0.1, (float)cellSize.y / textureSize.y + 0.1);
+}
+
+void arcadeSFML::_resizeData(sf::RectangleShape &rectangle, std::pair<int, int> position) {
+	sf::Vector2u windowSize = this->window.getSize();
+	sf::Vector2u textureSize = rectangle.getTexture()->getSize();
+	sf::Vector2u cellSize = {windowSize.x / (int)this->_mapSize.first, windowSize.y / (int)this->_mapSize.second};
+
+	rectangle.setScale((float)cellSize.x / textureSize.x + 0.1, (float)cellSize.y / textureSize.y + 0.1);
 }
 
 void arcadeSFML::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
@@ -50,7 +55,7 @@ void arcadeSFML::drawSprite(std::string asset, int color, std::string text, std:
 		std::cerr << "Error loading texture" << std::endl;
 	sprite.setTexture(texture);
 	sprite.setPosition(windowPosition.first, windowPosition.second);
-	this->_resizeSprite(sprite, position);
+	this->_resizeData(sprite, position);
 	this->window.draw(sprite);
 	(void)text;
 }
@@ -58,6 +63,10 @@ void arcadeSFML::drawSprite(std::string asset, int color, std::string text, std:
 void arcadeSFML::drawRectangle(int color, std::pair<size_t, size_t> position) {
 	(void)color;
 	(void)position;
+	sf::RectangleShape rect;
+	rect.setPosition({static_cast<float>(position.first), static_cast<float>(position.second)});
+	rect.setFillColor(sf::Color::Red);
+	this->_resizeData(rect, position);
 }
 
 void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
@@ -68,6 +77,10 @@ void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t>
 
 void arcadeSFML::setMapSize(std::pair<size_t, size_t> size) {
 	this->_mapSize = size;
+}
+
+void arcadeSFML::resizeWindow(size_t x, size_t y) {
+	this->window.setSize({static_cast<unsigned>(x), static_cast<unsigned>(y)});
 }
 
 arcadeSFML::arcadeSFML() :

@@ -31,11 +31,13 @@ private:
 	std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
 	void _resizeTexture(SDL_Rect &rect, std::pair<int, int> position);
 
-public:
-	SDL_Window* _window = nullptr;
-	SDL_Renderer* _renderer = nullptr;
+	void _initWindow();
 
-	void initWindow() override;
+public:
+	SDL_Window *window = nullptr;
+	SDL_Renderer *renderer = nullptr;
+
+	void initWindow() override {};
 
 	void display() override;
 
@@ -52,6 +54,8 @@ public:
 	void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
 
 	void setMapSize(std::pair<size_t, size_t> size) override;
+
+	void resizeWindow(size_t x, size_t y) override;
 
 	arcadeSDL();
 

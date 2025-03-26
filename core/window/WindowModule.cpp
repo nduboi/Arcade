@@ -7,16 +7,16 @@
 #include <iostream>
 #include <stdexcept>
 
-void WindowModule::initWindow() {
-	if (!this->_object)
-		throw WindowException("Error no lib Loaded");
-	this->_object->initWindow();
-}
-
 void WindowModule::display() {
 	if (!this->_object)
 		throw WindowException("Error no lib Loaded");
 	this->_object->display();
+}
+
+void WindowModule::initWindow() {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	this->_object->initWindow();
 }
 
 void WindowModule::closeWindow() {
@@ -61,9 +61,15 @@ void WindowModule::setMapSize(std::pair<size_t, size_t> size) {
 	this->_object->setMapSize(size);
 }
 
-WindowModule::WindowModule(IWindow *mdl)
+void WindowModule::resizeWindow(size_t x, size_t y) {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	this->_object->resizeWindow(x, y);
+}
+
+WindowModule::WindowModule(std::shared_ptr<IWindow> mdl)
 {
-	this->_object.reset(mdl);
+	this->_object = mdl;
 }
 
 WindowModule::~WindowModule()

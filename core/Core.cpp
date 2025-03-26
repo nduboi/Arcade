@@ -4,10 +4,10 @@
 
 #include <filesystem>
 #include <iostream>
+#include <cstring>
 #include <vector>
 #include "Core.hpp"
-
-#include <cstring>
+#include "IEntity.hpp"
 
 Core::Core() {
 	this->_refreshLibList();
@@ -21,7 +21,7 @@ void Core::_analyze() {
 	std::pair<size_t, size_t> gridSize {};
 
 	if (this->_moduleLoaded == GAME)
-		gridSize = this->game.get()->getGridSize();
+		gridSize = this->game->getGridSize();
 	IEvent::event_t event = this->event->pollEvents(gridSize);
 	this->_lastEvent = IEvent::event_t::NOTHING;
 
@@ -114,15 +114,15 @@ bool Core::_isEventClick() const {
 }
 
 void Core::_processClickEvent(int x, int y, int z) {
-	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
-	this->event.get()->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
+	std::pair<size_t, size_t> gridSize = this->game->getGridSize();
+	this->event->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
 
-	std::pair<int, int> pos = this->event.get()->getMousePos();
+	std::pair<int, int> pos = this->event->getMousePos();
 
 	if (pos.first != x || pos.second != y)
 		return;
 
-	grid_t grid = this->game.get()->getEntities();
+	grid_t grid = this->game->getEntities();
 	IEntity *entity = grid[y][x][z].get();
 
 	if (entity == nullptr)
@@ -159,21 +159,30 @@ void Core::_compute() {
 				}
 			}
 		}
-		this->_computeGameDisplay();
+		this->_displayGame();
 	}
 }
 
-void Core::_computeGameDisplay() {
-	grid_t grid = this->game.get()->getEntities();
-	std::pair<size_t, size_t> gridSize = this->game.get()->getGridSize();
+void Core::_display() {
+	this->display->clear();
+	this->_displayGame();
+	this->display->display();
+}
 
-	this->display.get()->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
-	for (int y = 0; y < gridSize.first; y++) {
-		for (int x = 0; x < gridSize.second; x++) {
-			for (int z = 0; z < grid[y][x].size(); z++) {
-				IEntity *entity = grid[y][x][z].get();
+void Core::_displayGame()
+{
+	if (this->_moduleLoaded == GAME) {
+		grid_t grid = this->game->getEntities();
+		std::pair<size_t, size_t> gridSize = this->game->getGridSize();
 
-				this->display->drawSprite(entity->getSpriteName(), entity->getColor(), entity->getText(), {x, y});
+		this->display->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
+		for (int y = 0; y < gridSize.first; y++) {
+			for (int x = 0; x < gridSize.second; x++) {
+				for (int z = 0; z < grid[y][x].size(); z++) {
+					IEntity *entity = grid[y][x][z].get();
+
+					this->display->drawSprite(entity->getSpriteName(), entity->getColor(), entity->getText(), {x, y});
+				}
 			}
 		}
 	}
@@ -239,15 +248,17 @@ void Core::displayAllLib()
 
 void Core::loadDisplayModule(const std::string &path)
 {
+	this->displayPtr.reset();
 	this->display.reset();
 	this->event.reset();
 	this->_displayLoader.closeLib();
 	this->_displayLoader.openLib(path);
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
 		throw CoreException("Error the library loaded is not a Display Module");
-	this->display = std::make_unique<WindowModule>(this->_displayLoader.initEntryPointDisplay());
-	auto &displayObject = this->display->getObject();
-	this->event = std::make_unique<EventModule>(this->_displayLoader.initEntryPointEvent(displayObject));
+	this->displayPtr = std::shared_ptr<IWindow>(this->_displayLoader.initEntryPointDisplay());
+	this->display = std::make_shared<WindowModule>(displayPtr);
+	this->event = std::make_shared<EventModule>(this->_displayLoader.initEntryPointEvent(this->displayPtr));
+	this->event->init();
 }
 
 void Core::loadGameModule(const std::string &path) {
@@ -271,15 +282,11 @@ void Core::loadMenuModule(const std::string &path) {
 }
 
 void Core::loop() {
-	this->display->initWindow();
-	this->event->init();
-
 	while (this->display->isOpen()) {
-		this->display->clear();
 		this->_analyze();
-		if (this->display.get()->isOpen() == false)
+		if (this->display->isOpen() == false)
 			break;
 		this->_compute();
-		this->display->display();
+		this->_display();
 	}
 }

@@ -5,26 +5,24 @@
 #ifndef MENUMODULE_HPP
 #define MENUMODULE_HPP
 
-#include "IMenuModule.hpp"
+#include <IGameModule.hpp>
+#include "IMenu.hpp"
 
 
-class MenuModule : public IMenuModule {
+class MenuModule : public IMenu {
 private:
-	std::unique_ptr<IMenuModule> _object; /**< Reference to the library loader. */
+	std::unique_ptr<IMenu> _object; /**< Reference to the library loader. */
 public:
-	std::size_t getHighScore() const override;
 
-	void setHighScore(std::size_t highScore) override;
+	std::vector<Boxes> getBoxPoses(std::shared_ptr<IWindow> window) override;
 
-	std::size_t getScore() const override;
+	std::string getUsername() override;
 
-	void setScore(std::size_t score) override;
+	void setUsername(std::string username) override;
 
-	grid_t getEntities() const override;
+	void displayMenu(std::shared_ptr<IWindow> window, std::vector<Boxes> _boxes, std::vector<std::string> libs, std::vector<std::string> games) override;
 
-	std::pair<size_t, size_t> getGridSize() const override;
-
-	MenuModule(IMenuModule *);
+	MenuModule(IMenu *);
 
 	~MenuModule() = default;
 };

@@ -12,6 +12,7 @@
 #include <stdbool.h>
 #include <vector>
 #include <memory>
+#include <utility>
 
 #include "IGameModule.hpp"
 
@@ -23,13 +24,13 @@ typedef enum clickType_e {
 
 class IEntity {
     public:
-        virtual ~IEntity() = default;
-
+        ~IEntity() = default;
+ 
         virtual void onClick(IGameModule &gameModule, clickType_t type) = 0;
         virtual void moveEntity(IGameModule &gameModule) = 0;
         virtual void moveEntity(IGameModule &gameModule, std::pair<int, int> direction) = 0;
         virtual void onInteract(IGameModule &gameModule) = 0;
-
+ 
         virtual std::pair<size_t, size_t> getPosition() const = 0;
         virtual void setPosition(std::pair<size_t, size_t> position) = 0;
         virtual std::string getSpriteName() const = 0;

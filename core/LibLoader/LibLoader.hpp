@@ -15,7 +15,7 @@
 
 #include <memory>
 #include "IGameModule.hpp"
-#include "IMenuModule.hpp"
+#include "IMenu.hpp"
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 #include "LoaderType.hpp"
@@ -68,11 +68,11 @@ namespace Loader
 		 */
 		IWindow *initEntryPointDisplay() const;
 
-		IEvent *initEntryPointEvent(IWindow &win) const;
+		IEvent *initEntryPointEvent(std::shared_ptr<IWindow> win) const;
 
 		IGameModule *initEntryPointGame() const;
 
-		IMenuModule *initEntryPointMenu() const;
+		IMenu *initEntryPointMenu() const;
 
 		/**
 		 * @brief Closes the currently loaded library.

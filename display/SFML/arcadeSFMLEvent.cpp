@@ -6,15 +6,16 @@
 
 #include <iostream>
 #include <memory>
+#include <utility>
 
 void arcadeSFMLEvent::init() {
 }
 
 IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
     sf::Event event{};
-    auto &sfmlWindow = static_cast<arcadeSFML &>(_window);
+    auto sfmlWindow = std::dynamic_pointer_cast<arcadeSFML>(_window);
 
-    if (sfmlWindow.window.pollEvent(event)) {
+    if (sfmlWindow->window .pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             return IEvent::CLOSE;
         if (event.type == sf::Event::KeyPressed) {
@@ -80,7 +81,7 @@ void arcadeSFMLEvent::setMapSize(std::pair<int, int> size) {
 void arcadeSFMLEvent::cleanup() {
 }
 
-arcadeSFMLEvent::arcadeSFMLEvent(IWindow &window) : _window(window) { // Accept a reference and store as a raw pointer
-    _mousePos = std::make_pair(0, 0);
-    _mapSize = std::make_pair(0, 0);
+arcadeSFMLEvent::arcadeSFMLEvent(std::shared_ptr<IWindow> window) : _window(window) {
+    this->_mousePos = std::make_pair(0, 0);
+    this->_mapSize = std::make_pair(0, 0);
 }

@@ -4,25 +4,22 @@
 
 #ifndef MENU_HPP
 #define MENU_HPP
-#include "IMenuModule.hpp"
+#include "IGameModule.hpp"
+#include "IMenu.hpp"
 
-class Menu : public IMenuModule {
+class Menu : public IMenu {
 private:
-	std::size_t _score;
-	std::size_t _highScore;
+	std::string _username;
 
 public:
-	grid_t getEntities() const override;
 
-	std::pair<size_t, size_t> getGridSize() const override;
+	void displayMenu(std::shared_ptr<IWindow> window, std::vector<Boxes> _boxes, std::vector<std::string> libs, std::vector<std::string> games) override;
 
-	std::size_t getHighScore() const override;
+	std::vector<Boxes> getBoxPoses(std::shared_ptr<IWindow> window) override;
 
-	std::size_t getScore() const override;
+	std::string getUsername() override {return this->_username;};
 
-	void setHighScore(std::size_t highScore) override;
-
-	void setScore(std::size_t score) override;
+	void setUsername(std::string username) override {this->_username = username;};
 
 	Menu();
 

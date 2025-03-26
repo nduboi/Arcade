@@ -4,27 +4,18 @@
 
 #include "Menu.hpp"
 
-grid_t Menu::getEntities() const {
+void Menu::displayMenu(std::shared_ptr<IWindow> window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
+	std::vector<std::string> games)
+{
+
+}
+
+std::vector<Boxes> Menu::getBoxPoses(std::shared_ptr<IWindow> window)
+{
 	return {};
 }
 
-std::pair<size_t, size_t> Menu::getGridSize() const {
-	return {};
-}
+Menu::Menu()
+{
 
-std::size_t Menu::getHighScore() const {
-	return 0;
-}
-
-std::size_t Menu::getScore() const {
-	return 0;
-}
-
-void Menu::setHighScore(std::size_t highScore) {
-}
-
-void Menu::setScore(std::size_t score) {
-}
-
-Menu::Menu() {
 }
