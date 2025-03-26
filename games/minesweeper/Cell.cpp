@@ -27,11 +27,15 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
 {
     grid_t grid = gameModule.getEntities();
 
+    if (gameModule.getGameState() == WIN || gameModule.getGameState() == LOSE)
+        return;
     if (type == LEFT_CLICK) {
         if (this->_firstClick) {
             std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
             for (size_t y = 0; y < mapSize.second; ++y) {
                 for (size_t x = 0; x < mapSize.first; ++x) {
+                    if (y >= grid.size() || x >= grid[y].size())
+                        continue;
                     auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
                     cell->_firstClick = false;
                 }
@@ -42,6 +46,7 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
         if (!_isFlagged) {
             this->setRevealed(true);
             if (this->_isMine) {
+                this->revealAllMines(gameModule);
                 gameModule.setGameState(LOSE);
             } else if (_adjacentMines == 0) {
                 this->revealAdjacentCells(this->_position.first, this->_position.second, grid);
@@ -64,8 +69,8 @@ size_t Cell::createNumberMines(std::pair<size_t, size_t> map)
         return 10;
     if (map.first == 16 && map.second == 16)
         return 40;
-    if (map.first == 30 && map.second == 16)
-        return 99;
+    if (map.first == 20 && map.second == 20)
+        return 120;
     return static_cast<size_t>(totalCells * 0.15);
 }
 
@@ -78,16 +83,28 @@ void Cell::placeMines(IGameModule &gameModule)
     std::mt19937 gen(rd());
     std::uniform_int_distribution<size_t> xDist(0, mapSize.first - 1);
     std::uniform_int_distribution<size_t> yDist(0, mapSize.second - 1);
-
     size_t mineCount = createNumberMines(mapSize);
     size_t minesPlaced = 0;
+
+    std::vector<std::pair<int, int>> forbiddenPositions;
+
+    for (int dy = -1; dy <= 1; ++dy) {
+        for (int dx = -1; dx <= 1; ++dx) {
+            int fx = static_cast<int>(this->_position.first) + dx;
+            int fy = static_cast<int>(this->_position.second) + dy;
+            if (fx >= 0 && fx < static_cast<int>(mapSize.first) &&
+                fy >= 0 && fy < static_cast<int>(mapSize.second)) {
+                forbiddenPositions.push_back({fx, fy});
+            }
+        }
+    }
 
     while (minesPlaced < mineCount) {
         size_t x = xDist(gen);
         size_t y = yDist(gen);
         auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
-
-        if (!cell->isMine() && !cell->isRevealed()) {
+        if (!cell->isMine() && !cell->isRevealed() &&
+            std::find(forbiddenPositions.begin(), forbiddenPositions.end(), std::make_pair(static_cast<int>(x), static_cast<int>(y))) == forbiddenPositions.end()) {
             cell->setMine(true);
             minesPlaced++;
         }
@@ -115,6 +132,7 @@ gameState_t Cell::checkWinCondition(IGameModule &gameModule)
 
     if (revealedCells + mineCount == mapSize.first * mapSize.second) {
         gameModule.setGameState(WIN);
+        this->revealAllMines(gameModule);
         gameModule.setScore(mapSize.first * mapSize.second * 10 - mineCount * 5);
     }
 
@@ -264,6 +282,21 @@ void Cell::setRevealed(bool revealed)
         this->_spriteName = "./assets/minesweeper/hidden.png";
         this->_color = 0xCCCCCC; // Light gray for hide cells
         this->_text = "";
+    }
+}
+
+void Cell::revealAllMines(IGameModule &gameModule)
+{
+    grid_t grid = gameModule.getEntities();
+    std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+
+    for (size_t y = 0; y < mapSize.second; ++y) {
+        for (size_t x = 0; x < mapSize.first; ++x) {
+            auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
+            if (cell->isMine()) {
+                cell->setRevealed(true);
+            }
+        }
     }
 }
 
