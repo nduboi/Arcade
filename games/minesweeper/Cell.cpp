@@ -21,6 +21,7 @@ Cell::Cell(size_t x, size_t y)
     this->_color = 0xCCCCCC;
     this->_text = "";
     this->_firstClick = true;
+    this->_gameState = 0;
 }
 
 void Cell::onClick(IGameModule &gameModule, clickType_t type)
@@ -46,6 +47,7 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
         if (!_isFlagged) {
             this->setRevealed(true);
             if (this->_isMine) {
+                this->_gameState = 1;
                 this->revealAllMines(gameModule);
                 gameModule.setGameState(LOSE);
             } else if (_adjacentMines == 0) {
@@ -131,7 +133,14 @@ gameState_t Cell::checkWinCondition(IGameModule &gameModule)
     }
 
     if (revealedCells + mineCount == mapSize.first * mapSize.second) {
+        this->_gameState = 2;
         gameModule.setGameState(WIN);
+        for (size_t y = 0; y < mapSize.second; ++y) {
+            for (size_t x = 0; x < mapSize.first; ++x) {
+                auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
+                cell->_gameState = 2;
+            }
+        }
         this->revealAllMines(gameModule);
         gameModule.setScore(mapSize.first * mapSize.second * 10 - mineCount * 5);
     }
@@ -142,14 +151,24 @@ gameState_t Cell::checkWinCondition(IGameModule &gameModule)
 std::string Cell::getSpriteName() const
 {
     if (this->_isFlagged) {
+        if (this->_gameState == 2 && this->_isMine)
+            return "./assets/minesweeper/mine_reveal.png";
         return "./assets/minesweeper/flag.png";
-    } else if (!this->_isRevealed) {
-        return "./assets/minesweeper/hidden.png";
-    } else if (this->_isMine) {
-        return "./assets/minesweeper/mine.png";
-    } else {
-        return "./assets/minesweeper/cell_" + std::to_string(this->_adjacentMines) + ".png";
     }
+    if (this->_isFlagged) {
+        return "./assets/minesweeper/flag.png";
+    }
+    if (!this->_isRevealed) {
+        return "./assets/minesweeper/hidden.png";
+    }
+    if (this->_isMine) {
+        if (this->_gameState == 1)
+            return "./assets/minesweeper/mine_explosed.png";
+        if (this->_gameState == 2)
+            return "./assets/minesweeper/mine_reveal.png";
+        return "./assets/minesweeper/mine.png";
+    }
+    return "./assets/minesweeper/cell_" + std::to_string(this->_adjacentMines) + ".png";
 }
 
 void Cell::calculateAdjacentMines(IGameModule &gameModule)
