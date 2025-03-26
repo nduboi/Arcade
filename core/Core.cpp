@@ -15,6 +15,9 @@ Core::Core() {
 }
 
 Core::~Core() {
+	this->event.reset();
+	this->display.reset();
+	this->displayPtr.reset();
 }
 
 void Core::_analyze() {
@@ -248,14 +251,14 @@ void Core::displayAllLib()
 
 void Core::loadDisplayModule(const std::string &path)
 {
-	this->displayPtr.reset();
-	this->display.reset();
 	this->event.reset();
+	this->display.reset();
+	this->displayPtr.reset();
 	this->_displayLoader.closeLib();
 	this->_displayLoader.openLib(path);
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
 		throw CoreException("Error the library loaded is not a Display Module");
-	this->displayPtr = std::shared_ptr<IWindow>(this->_displayLoader.initEntryPointDisplay());
+	this->displayPtr.reset(this->_displayLoader.initEntryPointDisplay());
 	this->display = std::make_shared<WindowModule>(displayPtr);
 	this->event = std::make_shared<EventModule>(this->_displayLoader.initEntryPointEvent(this->displayPtr));
 	this->event->init();

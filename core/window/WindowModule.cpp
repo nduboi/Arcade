@@ -13,12 +13,6 @@ void WindowModule::display() {
 	this->_object->display();
 }
 
-void WindowModule::initWindow() {
-	if (!this->_object)
-		throw WindowException("Error no lib Loaded");
-	this->_object->initWindow();
-}
-
 void WindowModule::closeWindow() {
 	if (!this->_object)
 		throw WindowException("Error no lib Loaded");
@@ -49,6 +43,43 @@ void WindowModule::drawRectangle(int color, std::pair<size_t, size_t> position) 
 	this->_object->drawRectangle(color, position);
 }
 
+void WindowModule::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color,
+	color_t outline, int thickness) {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	this->_object->drawRectangleMenu(size, position, color, outline, thickness);
+}
+
+void WindowModule::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	this->_object->drawSpriteMenu(size, asset, position);
+}
+
+void WindowModule::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	this->_object->drawThickRectangle(position, size, thickness);
+}
+
+void WindowModule::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	this->_object->drawTextMenu(text, position, color);
+}
+
+std::pair<int, int> WindowModule::getWindowSize() {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	return this->_object->getWindowSize();
+}
+
+bool WindowModule::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	return this->_object->isMouseOver(position, size);
+}
+
 void WindowModule::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
 	if (!this->_object)
 		throw WindowException("Error no lib Loaded");
@@ -74,4 +105,6 @@ WindowModule::WindowModule(std::shared_ptr<IWindow> mdl)
 
 WindowModule::~WindowModule()
 {
+	this->_object.reset();
 }
+

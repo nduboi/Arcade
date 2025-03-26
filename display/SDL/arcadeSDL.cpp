@@ -118,6 +118,32 @@ void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position) {
     (void)position;
 }
 
+void arcadeSDL::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
+    //TODO: À implémenter
+}
+
+void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) {
+    //TODO: À implémenter
+}
+
+void arcadeSDL::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+    //TODO: À implémenter
+}
+
+void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+    //TODO: À implémenter
+}
+
+std::pair<int, int> arcadeSDL::getWindowSize() {
+    //TODO: À implémenter
+	return {0, 0};
+}
+
+bool arcadeSDL::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+    //TODO: À implémenter
+    return false;
+}
+
 void arcadeSDL::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
     (void)text;
     (void)color;
