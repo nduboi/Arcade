@@ -23,15 +23,15 @@ Cell::Cell(size_t x, size_t y)
     this->_firstClick = true;
 }
 
-void Cell::onClick(IGameModule &gameModule, clickType_t type)
+void Cell::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
 {
-    grid_t grid = gameModule.getEntities();
+    grid_t grid = gameModule->getEntities();
 
-    if (gameModule.getGameState() == WIN || gameModule.getGameState() == LOSE)
+    if (gameModule->getGameState() == WIN || gameModule->getGameState() == LOSE)
         return;
     if (type == LEFT_CLICK) {
         if (this->_firstClick) {
-            std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+            std::pair<size_t, size_t> mapSize = gameModule->getGridSize();
             for (size_t y = 0; y < mapSize.second; ++y) {
                 for (size_t x = 0; x < mapSize.first; ++x) {
                     if (y >= grid.size() || x >= grid[y].size())
@@ -47,7 +47,7 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
             this->setRevealed(true);
             if (this->_isMine) {
                 this->revealAllMines(gameModule);
-                gameModule.setGameState(LOSE);
+                gameModule->setGameState(LOSE);
             } else if (_adjacentMines == 0) {
                 this->revealAdjacentCells(this->_position.first, this->_position.second, grid);
             }
@@ -74,10 +74,10 @@ size_t Cell::createNumberMines(std::pair<size_t, size_t> map)
     return static_cast<size_t>(totalCells * 0.15);
 }
 
-void Cell::placeMines(IGameModule &gameModule)
+void Cell::placeMines(std::shared_ptr<IGameModule> gameModule)
 {
-    grid_t grid = gameModule.getEntities();
-    std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+    grid_t grid = gameModule->getEntities();
+    std::pair<size_t, size_t> mapSize = gameModule->getGridSize();
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -112,10 +112,10 @@ void Cell::placeMines(IGameModule &gameModule)
     this->calculateAdjacentMines(gameModule);
 }
 
-gameState_t Cell::checkWinCondition(IGameModule &gameModule)
+gameState_t Cell::checkWinCondition(std::shared_ptr<IGameModule> gameModule)
 {
-    grid_t grid = gameModule.getEntities();
-    std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+    grid_t grid = gameModule->getEntities();
+    std::pair<size_t, size_t> mapSize = gameModule->getGridSize();
 
     size_t revealedCells = 0;
     size_t mineCount = 0;
@@ -131,12 +131,12 @@ gameState_t Cell::checkWinCondition(IGameModule &gameModule)
     }
 
     if (revealedCells + mineCount == mapSize.first * mapSize.second) {
-        gameModule.setGameState(WIN);
+        gameModule->setGameState(WIN);
         this->revealAllMines(gameModule);
-        gameModule.setScore(mapSize.first * mapSize.second * 10 - mineCount * 5);
+        gameModule->setScore(mapSize.first * mapSize.second * 10 - mineCount * 5);
     }
 
-    return gameModule.getGameState();
+    return gameModule->getGameState();
 }
 
 std::string Cell::getSpriteName() const
@@ -152,10 +152,10 @@ std::string Cell::getSpriteName() const
     }
 }
 
-void Cell::calculateAdjacentMines(IGameModule &gameModule)
+void Cell::calculateAdjacentMines(std::shared_ptr<IGameModule> gameModule)
 {
-    grid_t grid = gameModule.getEntities();
-    std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+    grid_t grid = gameModule->getEntities();
+    std::pair<size_t, size_t> mapSize = gameModule->getGridSize();
 
     for (size_t y = 0; y < mapSize.second; ++y) {
         for (size_t x = 0; x < mapSize.first; ++x) {
@@ -285,10 +285,10 @@ void Cell::setRevealed(bool revealed)
     }
 }
 
-void Cell::revealAllMines(IGameModule &gameModule)
+void Cell::revealAllMines(std::shared_ptr<IGameModule> gameModule)
 {
-    grid_t grid = gameModule.getEntities();
-    std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+    grid_t grid = gameModule->getEntities();
+    std::pair<size_t, size_t> mapSize = gameModule->getGridSize();
 
     for (size_t y = 0; y < mapSize.second; ++y) {
         for (size_t x = 0; x < mapSize.first; ++x) {

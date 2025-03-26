@@ -7,24 +7,24 @@
 
 #include "AEntity.hpp"
 
-void AEntity::onClick(IGameModule &gameModule, clickType_t type)
+void AEntity::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
 {
     (void)gameModule;
     (void)type;
 }
 
-void AEntity::moveEntity(IGameModule &gameModule)
+void AEntity::moveEntity(std::shared_ptr<IGameModule> gameModule)
 {
     (void)gameModule;
 }
 
-void AEntity::moveEntity(IGameModule &gameModule, std::pair<int, int> direction)
+void AEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::pair<int, int> direction)
 {
     (void)gameModule;
     (void)direction;
 }
 
-void AEntity::onInteract(IGameModule &gameModule)
+void AEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
 {
     (void)gameModule;
 }

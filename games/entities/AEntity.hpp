@@ -26,10 +26,10 @@ class AEntity : public IEntity {
         AEntity() = default;
         ~AEntity() = default;
 
-        void onClick(IGameModule &gameModule, clickType_t type) override;
-        void moveEntity(IGameModule &gameModule) override;
-        void moveEntity(IGameModule &gameModule, std::pair<int, int> direction) override;
-        void onInteract(IGameModule &gameModule) override;
+        void onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type) override;
+        void moveEntity(std::shared_ptr<IGameModule> gameModule) override;
+        void moveEntity(std::shared_ptr<IGameModule> gameModule, std::pair<int, int> direction) override;
+        void onInteract(std::shared_ptr<IGameModule> gameModule) override;
 
         std::pair<size_t, size_t> getPosition() const override;
         void setPosition(std::pair<size_t, size_t> position) override;
