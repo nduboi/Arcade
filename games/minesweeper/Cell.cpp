@@ -50,7 +50,7 @@ void Cell::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
             if (this->_isMine) {
                 this->_clicked = true;
                 this->_gameState = LOSE;
-                std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+                std::pair<size_t, size_t> mapSize = gameModule->getGridSize();
                 for (size_t y = 0; y < mapSize.second; ++y) {
                     for (size_t x = 0; x < mapSize.first; ++x) {
                         auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
@@ -174,7 +174,6 @@ std::string Cell::getSpriteName() const
         if (this->_gameState == LOSE) {
             if (this->_clicked == true)
                 return "./assets/minesweeper/mine_explosed.png";
-            std::cout << "je passe ici" << std::endl;
             return "./assets/minesweeper/mine.png";
         }
         if (this->_gameState == WIN)
