@@ -36,8 +36,6 @@ class IEvent {
         virtual void cleanup() = 0;
         virtual std::pair<int, int> getMousePos() = 0;
         virtual void setMapSize(std::pair<int, int> size) = 0;
-    protected:
-    private:
 };
 
 //extern "C" IEvent *creatEvent(IWindow &window);
