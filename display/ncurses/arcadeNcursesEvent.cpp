@@ -45,6 +45,7 @@ namespace Game {
 	}
 
 	std::pair<int, int> arcadeNcursesEvent::getMousePos() {
+		return {0, 0};
 	}
 
 	void arcadeNcursesEvent::setMapSize(std::pair<int, int> size) {

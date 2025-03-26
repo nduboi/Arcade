@@ -43,6 +43,28 @@ void WindowModule::drawRectangle(int color, std::pair<size_t, size_t> position) 
 	this->_object->drawRectangle(color, position);
 }
 
+void WindowModule::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
+	color_t color) {
+}
+
+void WindowModule::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+}
+
+void WindowModule::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+}
+
+std::pair<int, int> WindowModule::getWindowSize() {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	return this->_object->getWindowSize();
+}
+
+bool WindowModule::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+	if (!this->_object)
+		throw WindowException("Error no lib Loaded");
+	return this->_object->isMouseOver(position, size);
+}
+
 void WindowModule::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
 	if (!this->_object)
 		throw WindowException("Error no lib Loaded");
@@ -68,5 +90,6 @@ WindowModule::WindowModule(std::shared_ptr<IWindow> mdl)
 
 WindowModule::~WindowModule()
 {
+	this->_object.reset();
 }
 

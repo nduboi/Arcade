@@ -24,7 +24,13 @@ namespace Game {
 
 		void drawRectangle(int color, std::pair<size_t, size_t> position) override;
 
+		void drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) override;
+
+		void drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) override;
+
 		void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
+
+		void drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) override;
 
 		void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
 
@@ -32,7 +38,11 @@ namespace Game {
 
 		void resizeWindow(size_t x, size_t y) override;
 
-		arcadeNcurses() {};
+		std::pair<int, int> getWindowSize() override;
+
+		bool isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) override;
+
+		arcadeNcurses();
 
 		~arcadeNcurses() override = default;
 	};

@@ -25,7 +25,7 @@ void arcadeSDL::_initWindow()
         this->window = SDL_CreateWindow("Arcade - SDL2",
                                         SDL_WINDOWPOS_CENTERED,
                                         SDL_WINDOWPOS_CENTERED,
-                                        1620, 900,
+                                        800, 800,
                                         SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
         if (!this->window) {
             std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
@@ -116,6 +116,28 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::
 void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position) {
     (void)color;
     (void)position;
+}
+
+void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) {
+    //TODO: À implémenter
+}
+
+void arcadeSDL::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+    //TODO: À implémenter
+}
+
+void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+    //TODO: À implémenter
+}
+
+std::pair<int, int> arcadeSDL::getWindowSize() {
+    //TODO: À implémenter
+	return {0, 0};
+}
+
+bool arcadeSDL::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+    //TODO: À implémenter
+    return false;
 }
 
 void arcadeSDL::drawText(std::string text, int color, std::pair<size_t, size_t> position) {

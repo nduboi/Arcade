@@ -57,6 +57,7 @@ namespace Game {
 		if (this->_window == nullptr || this->_window != stdscr) {
 			throw NcursesException("Failed to initscr()");
 		}
+		nodelay(stdscr, TRUE);
 		//TODO : A modifier sur le header
 		this->_header = subwin(this->_window, 3, 80, 0, 0);
 		if (this->_header == nullptr)

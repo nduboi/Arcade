@@ -26,6 +26,32 @@ namespace Game {
 		// this->_ncurses.drawGame();
 	}
 
+	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
+		color_t color) {
+	}
+
+	void arcadeNcurses::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+		//TODO: À implémenter
+	}
+
+	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+		//TODO: À implémenter
+	}
+
+	std::pair<int, int> arcadeNcurses::getWindowSize() {
+		//TODO: À implémenter
+		return {0, 0};
+	}
+
+	bool arcadeNcurses::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+		//TODO: À implémenter
+		return false;
+	}
+
+	arcadeNcurses::arcadeNcurses() {
+		this->_ncurses.changeTitle("Arcade");
+	}
+
 	void arcadeNcurses::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
 		this->_ncurses.drawGame(text, {position.first, position.second});
 	}
