@@ -159,7 +159,6 @@ void Core::_compute() {
 				}
 			}
 		}
-		this->_displayGame();
 	}
 }
 
