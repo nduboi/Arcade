@@ -27,7 +27,6 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
 {
     if (type == LEFT_CLICK) {
         if (!_isFlagged) {
-            auto minesweeper = std::dynamic_pointer_cast<MinesweeperGame>(gameModule);
             setRevealed(true);
         }
     } else if (type == RIGHT_CLICK) {
