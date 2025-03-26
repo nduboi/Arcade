@@ -70,7 +70,11 @@ void arcadeSFML::drawRectangle(int color, std::pair<size_t, size_t> position) {
 	this->window.draw(rect);
 }
 
-void arcadeSFML::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) {
+void arcadeSFML::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
+	//TODO: À implémenter
+}
+
+void arcadeSFML::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) {
 	//TODO: À implémenter
 }
 

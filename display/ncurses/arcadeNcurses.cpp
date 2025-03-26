@@ -27,7 +27,9 @@ namespace Game {
 	}
 
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
-		color_t color) {
+		color_t color, color_t outline,  int thickness)
+	{
+		//TODO: À implémenter
 	}
 
 	void arcadeNcurses::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
@@ -57,6 +59,9 @@ namespace Game {
 	}
 
 	void arcadeNcurses::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
+	}
+
+	void arcadeNcurses::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
 	}
 
 	void arcadeNcurses::setMapSize(std::pair<size_t, size_t> size) {

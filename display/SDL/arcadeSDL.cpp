@@ -118,7 +118,11 @@ void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position) {
     (void)position;
 }
 
-void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) {
+void arcadeSDL::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
+    //TODO: À implémenter
+}
+
+void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) {
     //TODO: À implémenter
 }
 

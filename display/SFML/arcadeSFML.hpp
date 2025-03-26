@@ -42,11 +42,13 @@ public:
 
 	void clear() override;
 
+	void drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) override;
+
 	void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
 
 	void drawRectangle(int color, std::pair<size_t, size_t> position) override;
 
-	void drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) override;
+	void drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) override;
 
 	void drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) override;
 
