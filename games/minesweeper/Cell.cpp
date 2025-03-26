@@ -22,6 +22,7 @@ Cell::Cell(size_t x, size_t y)
     this->_text = "";
     this->_firstClick = true;
     this->_gameState = 0;
+    this->_clicked = false;
 }
 
 void Cell::onClick(IGameModule &gameModule, clickType_t type)
@@ -47,7 +48,15 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
         if (!_isFlagged) {
             this->setRevealed(true);
             if (this->_isMine) {
-                this->_gameState = 1;
+                this->_clicked = true;
+                this->_gameState = LOSE;
+                std::pair<size_t, size_t> mapSize = gameModule.getGridSize();
+                for (size_t y = 0; y < mapSize.second; ++y) {
+                    for (size_t x = 0; x < mapSize.first; ++x) {
+                        auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
+                        cell->_gameState = LOSE;
+                    }
+                }
                 this->revealAllMines(gameModule);
                 gameModule.setGameState(LOSE);
             } else if (_adjacentMines == 0) {
@@ -60,7 +69,6 @@ void Cell::onClick(IGameModule &gameModule, clickType_t type)
             setFlagged(!this->_isFlagged);
     }
 }
-
 
 size_t Cell::createNumberMines(std::pair<size_t, size_t> map)
 {
@@ -133,12 +141,12 @@ gameState_t Cell::checkWinCondition(IGameModule &gameModule)
     }
 
     if (revealedCells + mineCount == mapSize.first * mapSize.second) {
-        this->_gameState = 2;
+        this->_gameState = WIN;
         gameModule.setGameState(WIN);
         for (size_t y = 0; y < mapSize.second; ++y) {
             for (size_t x = 0; x < mapSize.first; ++x) {
                 auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
-                cell->_gameState = 2;
+                cell->_gameState = WIN;
             }
         }
         this->revealAllMines(gameModule);
@@ -151,20 +159,25 @@ gameState_t Cell::checkWinCondition(IGameModule &gameModule)
 std::string Cell::getSpriteName() const
 {
     if (this->_isFlagged) {
-        if (this->_gameState == 2 && this->_isMine)
+        if ((this->_gameState == WIN) && this->_isMine) {
             return "./assets/minesweeper/mine_reveal.png";
-        return "./assets/minesweeper/flag.png";
-    }
-    if (this->_isFlagged) {
+        }
+        if ((this->_gameState == LOSE) && this->_isMine) {
+            return "./assets/minesweeper/mine.png";
+        }
         return "./assets/minesweeper/flag.png";
     }
     if (!this->_isRevealed) {
         return "./assets/minesweeper/hidden.png";
     }
     if (this->_isMine) {
-        if (this->_gameState == 1)
-            return "./assets/minesweeper/mine_explosed.png";
-        if (this->_gameState == 2)
+        if (this->_gameState == LOSE) {
+            if (this->_clicked == true)
+                return "./assets/minesweeper/mine_explosed.png";
+            std::cout << "je passe ici" << std::endl;
+            return "./assets/minesweeper/mine.png";
+        }
+        if (this->_gameState == WIN)
             return "./assets/minesweeper/mine_reveal.png";
         return "./assets/minesweeper/mine.png";
     }
@@ -273,6 +286,7 @@ std::string Cell::getText() const
 void Cell::setRevealed(bool revealed)
 {
     this->_isRevealed = revealed;
+
     if (revealed) {
         if (this->_isMine) {
             this->_spriteName = "./assets/minesweeper/mine_reveal.png";
@@ -313,6 +327,9 @@ void Cell::revealAllMines(IGameModule &gameModule)
         for (size_t x = 0; x < mapSize.first; ++x) {
             auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
             if (cell->isMine()) {
+                if (cell->isFlagged()) {
+                    cell->_spriteName = "./assets/minesweeper/mine_flag.png";
+                }
                 cell->setRevealed(true);
             }
         }

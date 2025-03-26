@@ -43,6 +43,7 @@ class Cell : public AEntity {
         size_t _adjacentMines;
         bool _firstClick;
         int _gameState;
+        bool _clicked;
 
         // Game logic methods
         void placeMines(IGameModule &gameModule);
