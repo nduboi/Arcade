@@ -44,6 +44,7 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
             }
         }
         if (event.type == sf::Event::MouseButtonPressed) {
+            this->_mousePos = {event.mouseButton.x, event.mouseButton.y};
             if (event.mouseButton.button == sf::Mouse::Button::Right)
                 return MOUSERIGHTCLICK;
             if (event.mouseButton.button == sf::Mouse::Button::Left)
@@ -71,17 +72,16 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
 
 std::pair<int, int> arcadeSFMLEvent::getMousePos()
 {
-    auto &sfmlWindow = static_cast<arcadeSFML &>(_window);
-    sf::Vector2i mousePos = sf::Mouse::getPosition(sfmlWindow.window);
+    auto &sfmlWindow = static_cast<arcadeSFML &>(this->_window);
 
-    if (_mapSize.first > 0 && _mapSize.second > 0) {
+    if (this->_mapSize.first > 0 && this->_mapSize.second > 0) {
         sf::Vector2u winSize = sfmlWindow.window.getSize();
         return {
-            (mousePos.x * _mapSize.first) / static_cast<int>(winSize.x),
-            (mousePos.y * _mapSize.second) / static_cast<int>(winSize.y)
+            (this->_mousePos.first * this->_mapSize.first) / static_cast<int>(winSize.x),
+            (this->_mousePos.second * this->_mapSize.second) / static_cast<int>(winSize.y)
         };
     }
-    return {mousePos.x, mousePos.y};
+    return this->_mousePos;
 }
 
 void arcadeSFMLEvent::setMapSize(std::pair<int, int> size) {

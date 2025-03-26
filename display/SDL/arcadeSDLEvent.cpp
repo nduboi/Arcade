@@ -51,6 +51,7 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
             }
         }
         if (event.type == SDL_MOUSEBUTTONDOWN) {
+            SDL_GetMouseState(&this->_mousePos.first, &this->_mousePos.second);
             switch (event.button.button) {
                 case SDL_BUTTON_LEFT:
                     return IEvent::MOUSELEFTCLICK;
@@ -83,18 +84,16 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
 std::pair<int, int> arcadeSDLEvent::getMousePos()
 {
     auto &sdlWindow = static_cast<arcadeSDL &>(_window);
-    int mouseX, mouseY;
-    SDL_GetMouseState(&mouseX, &mouseY);
 
     if (_mapSize.first > 0 && _mapSize.second > 0) {
         int winWidth, winHeight;
         SDL_GetWindowSize(sdlWindow._window, &winWidth, &winHeight);
         return {
-            (mouseX * _mapSize.first) / winWidth,
-            (mouseY * _mapSize.second) / winHeight
+            (this->_mousePos.first * _mapSize.first) / winWidth,
+            (this->_mousePos.second * _mapSize.second) / winHeight
         };
     }
-    return {mouseX, mouseY};
+    return this->_mousePos;
 }
 
 void arcadeSDLEvent::setMapSize(std::pair<int, int> size) {
