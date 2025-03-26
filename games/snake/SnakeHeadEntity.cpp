@@ -38,10 +38,11 @@ SnakeHeadEntity::SnakeHeadEntity(std::size_t color, std::string text, std::pair<
     this->_lastTailPosition = {0, 0};
 }
 
-void SnakeHeadEntity::setDirection(std::pair<int, int> direction)
+void SnakeHeadEntity::setDirection(std::pair<int, int> direction, IGameModule &gameModule)
 {
     if (direction.first == 0 && direction.second == 0)
         return;
+    gameModule.setIsStarted(true);
     if (this->_direction.first == direction.first * -1 && this->_direction.second == direction.second * -1)
         return;
     this->_inputDirection = direction;
@@ -134,7 +135,7 @@ void SnakeHeadEntity::updateBodyPartDirections(IGameModule &gameModule,
         auto newPos = this->_previousPositions[this->_previousPositions.size() - 2 - i];
 
         std::pair<size_t, size_t> nextPos;
-        std::pair<size_t, size_t> prevPos = {0, 0};
+        std::pair<size_t, size_t> prevPos = {100, 100};
 
         if (i > 0) {
             nextPos = bodyParts[i-1]->getPosition();
@@ -194,7 +195,7 @@ void SnakeHeadEntity::addFirstBodyPart(IGameModule &gameModule)
 
     if (isValidPosition(newPos, grid)) {
         auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, 0);
-        newBodyPart->updateDirection(newPos, this->_position, {0, 0});
+        newBodyPart->updateDirection(newPos, this->_position, {100, 100});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule.setEntities(grid);
         this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -256,7 +257,7 @@ void SnakeHeadEntity::addPendingBodyPart(IGameModule &gameModule)
 
         if (isValidPosition(newPos, grid)) {
             auto newBodyPart = std::make_shared<SnakeBodyEntity>(1, "=", newPos, 0);
-            newBodyPart->updateDirection(newPos, this->_position, {0, 0});
+            newBodyPart->updateDirection(newPos, this->_position, {100, 100});
             grid[newPos.second][newPos.first][1] = newBodyPart;
             gameModule.setEntities(grid);
             this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -270,7 +271,7 @@ void SnakeHeadEntity::addPendingBodyPart(IGameModule &gameModule)
                 beforeTailPos = bodyParts[bodyParts.size() - 2]->getPosition();
             else
                 beforeTailPos = this->_position;
-            newBodyPart->updateDirection(this->_lastTailPosition, beforeTailPos, {0, 0});
+            newBodyPart->updateDirection(this->_lastTailPosition, beforeTailPos, {100, 100});
             grid[this->_lastTailPosition.second][this->_lastTailPosition.first][1] = newBodyPart;
             gameModule.setEntities(grid);
             this->_previousPositions.insert(this->_previousPositions.begin(), this->_lastTailPosition);
@@ -307,10 +308,12 @@ void SnakeHeadEntity::ensurePreviousPositionsInitialized(IGameModule &gameModule
 
 void SnakeHeadEntity::moveEntity(IGameModule &gameModule, std::pair<int, int> direction)
 {
-    this->setDirection(direction);
+    this->setDirection(direction, gameModule);
     this->ensurePreviousPositionsInitialized(gameModule);
 
-    if (!this->lastTimePassed())
+    if (gameModule.getGameState() != gameState_t::PLAYING)
+        return;
+    if (!this->lastTimePassed() || !gameModule.getIsStarted())
         return;
     this->_direction = this->_inputDirection;
 
@@ -319,11 +322,15 @@ void SnakeHeadEntity::moveEntity(IGameModule &gameModule, std::pair<int, int> di
     std::pair<size_t, size_t> nextPosition = {this->_position.first + this->_direction.first, this->_position.second + this->_direction.second};
 
     if (nextPosition.first >= gridSize.first || nextPosition.second >= gridSize.second
-        || nextPosition.first < 0 || nextPosition.second < 0)
+        || nextPosition.first < 0 || nextPosition.second < 0) {
+        gameModule.setGameState(gameState_t::LOSE);
         return;
+    }
 
-    if (this->checkCollisionWithBody(nextPosition, gameModule))
+    if (this->checkCollisionWithBody(nextPosition, gameModule)) {
+        gameModule.setGameState(gameState_t::LOSE);
         return;
+    }
 
     gameState_t state = this->appleCollision(gameModule, nextPosition);
     if (state != gameState_t::PLAYING)

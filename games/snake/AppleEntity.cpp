@@ -51,8 +51,10 @@ void AppleEntity::onInteract(IGameModule &gameModule)
     grid_t grid = gameModule.getEntities();
     int nbVoidEntities = getNbVoidEntities(grid);
 
-    if (nbVoidEntities == 1)
+    if (nbVoidEntities == 0) {
+        gameModule.setGameState(gameState_t::WIN);
         return;
+    }
 
     srand(time(NULL));
     std::pair<size_t, size_t> newPos = {rand() % grid[0].size(), rand() % grid.size()};

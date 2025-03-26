@@ -26,7 +26,7 @@ class SnakeHeadEntity : public AEntity {
         bool _pendingBodyPartAddition;
         std::pair<size_t, size_t> _lastTailPosition;
 
-        void setDirection(std::pair<int, int> direction);
+        void setDirection(std::pair<int, int> direction, IGameModule &gameModule);
         void moveEntities(IGameModule &gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2);
         bool lastTimePassed();
         void moveBodyParts(IGameModule &gameModule);

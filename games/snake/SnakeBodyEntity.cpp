@@ -42,7 +42,7 @@ int SnakeBodyEntity::getIndex() const
 void SnakeBodyEntity::updateDirection(std::pair<size_t, size_t> current, std::pair<size_t, size_t> next, std::pair<size_t, size_t> prev)
 {
     // Tail
-    if (prev.first == 0 && prev.second == 0) {
+    if (prev.first == 100 && prev.second == 100) {
         if (next.first > current.first)
             this->_spriteName = this->_assetsName["tail_left"];
         else if (next.first < current.first)
