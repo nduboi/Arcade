@@ -19,7 +19,7 @@ class AppleEntity : public AEntity {
         AppleEntity(std::pair<size_t, size_t> position);
         ~AppleEntity() = default;
 
-        void onInteract(IGameModule &gameModule) override;
+        void onInteract(std::shared_ptr<IGameModule> gameModule) override;
 };
 
 #endif /* !APPLEENTITY_HPP_ */

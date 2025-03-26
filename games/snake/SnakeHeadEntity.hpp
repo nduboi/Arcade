@@ -26,28 +26,28 @@ class SnakeHeadEntity : public AEntity {
         bool _pendingBodyPartAddition;
         std::pair<size_t, size_t> _lastTailPosition;
 
-        void setDirection(std::pair<int, int> direction, IGameModule &gameModule);
-        void moveEntities(IGameModule &gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2);
+        void setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule);
+        void moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2);
         bool lastTimePassed();
-        void moveBodyParts(IGameModule &gameModule);
-        bool checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, IGameModule &gameModule) const;
-        gameState_t appleCollision(IGameModule &gameModule, std::pair<size_t, size_t> nextPosition);
+        void moveBodyParts(std::shared_ptr<IGameModule> gameModule);
+        bool checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const;
+        gameState_t appleCollision(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> nextPosition);
 
         std::vector<std::shared_ptr<SnakeBodyEntity>> findAndSortBodyParts(const grid_t &grid) const;
-        void moveBodyPartsToNewPositions(IGameModule &gameModule, const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts);
-        void updateBodyPartDirections(IGameModule &gameModule, const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts);
-        void addFirstBodyPart(IGameModule &gameModule);
-        void addBodyPartToTail(IGameModule &gameModule, size_t index, const std::pair<size_t, size_t> &lastBodyPos, const std::pair<size_t, size_t> &beforeLastPos);
+        void moveBodyPartsToNewPositions(std::shared_ptr<IGameModule> gameModule, const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts);
+        void updateBodyPartDirections(std::shared_ptr<IGameModule> gameModule, const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts);
+        void addFirstBodyPart(std::shared_ptr<IGameModule> gameModule);
+        void addBodyPartToTail(std::shared_ptr<IGameModule> gameModule, size_t index, const std::pair<size_t, size_t> &lastBodyPos, const std::pair<size_t, size_t> &beforeLastPos);
         bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;
-        void addPendingBodyPart(IGameModule &gameModule);
-        void ensurePreviousPositionsInitialized(IGameModule &gameModule);
+        void addPendingBodyPart(std::shared_ptr<IGameModule> gameModule);
+        void ensurePreviousPositionsInitialized(std::shared_ptr<IGameModule> gameModule);
 
     public:
         SnakeHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position);
         ~SnakeHeadEntity() = default;
 
-        void moveEntity(IGameModule &gameModule, std::pair<int, int> direction) override;
-        void addBodyPart(IGameModule &gameModule);
+        void moveEntity(std::shared_ptr<IGameModule> gameModule, std::pair<int, int> direction) override;
+        void addBodyPart(std::shared_ptr<IGameModule> gameModule);
         std::string getSpriteName() const override;
         size_t getBodySize() const;
         void initializePreviousPositions(const std::vector<std::pair<size_t, size_t>>& positions);
