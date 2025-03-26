@@ -6,3 +6,5 @@ arcade
 cmake-build-debug
 *build*
 doc
+include/libDoofCard
+include/libJENESAISPAS

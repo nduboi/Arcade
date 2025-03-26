@@ -31,8 +31,8 @@ extern "C" {
 	IWindow *createInstance(void) {
 		return new arcadeSFML();
 	}
-	IEvent *createEvent(IWindow &Window) {
-		return new arcadeSFMLEvent(static_cast<arcadeSFML &>(Window));
+	IEvent *createEvent(std::shared_ptr<IWindow> Window) {
+		return new arcadeSFMLEvent(Window);
 	}
 	Loader::ModuleType_t getType(void) {
 		return Loader::ModuleType_t::DISPLAY_MODULE;

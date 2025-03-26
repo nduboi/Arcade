@@ -9,7 +9,7 @@
 #include "arcadeSDL.hpp"
 #include <SDL2/SDL_image.h>
 
-void arcadeSDL::initWindow()
+void arcadeSDL::_initWindow()
 {
     if (SDL_WasInit(SDL_INIT_VIDEO) == 0) {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) < 0) {
@@ -21,51 +21,51 @@ void arcadeSDL::initWindow()
         SDL_JoystickOpen(0);
     }
 
-    if (this->_window == nullptr || this->_renderer == nullptr) {
-        this->_window = SDL_CreateWindow("Arcade - SDL2",
+    if (this->window == nullptr || this->renderer == nullptr) {
+        this->window = SDL_CreateWindow("Arcade - SDL2",
                                         SDL_WINDOWPOS_CENTERED,
                                         SDL_WINDOWPOS_CENTERED,
-                                        800, 800,
+                                        1620, 900,
                                         SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
-        if (!this->_window) {
+        if (!this->window) {
             std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
             SDL_Quit();
             return;
         }
 
-        this->_renderer = SDL_CreateRenderer(this->_window, -1,
+        this->renderer = SDL_CreateRenderer(this->window, -1,
                                             SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-        if (!this->_renderer) {
+        if (!this->renderer) {
             std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
-            SDL_DestroyWindow(this->_window);
+            SDL_DestroyWindow(this->window);
             SDL_Quit();
             return;
         }
-        SDL_SetRenderDrawColor(this->_renderer, 0, 0, 0, 255);
-        SDL_RenderClear(this->_renderer);
-        SDL_RenderPresent(this->_renderer);
+        SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+        SDL_RenderClear(this->renderer);
+        SDL_RenderPresent(this->renderer);
     }
 }
 
 void arcadeSDL::display() {
-    SDL_RenderPresent(this->_renderer);
+    SDL_RenderPresent(this->renderer);
 }
 
 void arcadeSDL::closeWindow() {
-    SDL_DestroyRenderer(this->_renderer);
-    SDL_DestroyWindow(this->_window);
+    SDL_DestroyRenderer(this->renderer);
+    SDL_DestroyWindow(this->window);
     SDL_Quit();
-	this->_window = nullptr;
-	this->_renderer = nullptr;
+	this->window = nullptr;
+	this->renderer = nullptr;
 }
 
 bool arcadeSDL::isOpen() {
-    return (this->_window != nullptr && this->_renderer != nullptr);
+    return (this->window != nullptr && this->renderer != nullptr);
 }
 
 void arcadeSDL::clear() {
-    SDL_SetRenderDrawColor(this->_renderer, 0, 0, 0, 255);
-    SDL_RenderClear(this->_renderer);
+    SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+    SDL_RenderClear(this->renderer);
 }
 
 std::pair<int, int> arcadeSDL::_getWindowPosition(std::pair<int, int> position)
@@ -73,7 +73,7 @@ std::pair<int, int> arcadeSDL::_getWindowPosition(std::pair<int, int> position)
     std::pair<int, int> windowPosition;
     int width, height;
 
-    SDL_GetWindowSize(this->_window, &width, &height);
+    SDL_GetWindowSize(this->window, &width, &height);
     windowPosition.first = (position.first * width) / this->_mapSize.first;
     windowPosition.second = (position.second * height) / this->_mapSize.second;
 
@@ -84,7 +84,7 @@ void arcadeSDL::_resizeTexture(SDL_Rect &rect, std::pair<int, int> position)
 {
     int width, height;
 
-    SDL_GetWindowSize(this->_window, &width, &height);
+    SDL_GetWindowSize(this->window, &width, &height);
     rect.w = width / this->_mapSize.first + 0.1;
     rect.h = height / this->_mapSize.second + 0.1;
 }
@@ -96,7 +96,7 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::
         return;
     }
 
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(this->_renderer, surface);
+    SDL_Texture *texture = SDL_CreateTextureFromSurface(this->renderer, surface);
     SDL_FreeSurface(surface); // Free the surface right after creating the texture
 
     if (!texture) {
@@ -108,7 +108,7 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::
     SDL_Rect destRect = {windowPosition.first, windowPosition.second, 0, 0};
     this->_resizeTexture(destRect, position);
 
-    SDL_RenderCopy(this->_renderer, texture, NULL, &destRect);
+    SDL_RenderCopy(this->renderer, texture, NULL, &destRect);
     SDL_DestroyTexture(texture); // Always destroy the texture after use
     (void)text;
 }
@@ -128,19 +128,22 @@ void arcadeSDL::setMapSize(std::pair<size_t, size_t> size) {
     this->_mapSize = size;
 }
 
-arcadeSDL::arcadeSDL() : _window(nullptr), _renderer(nullptr)
+void arcadeSDL::resizeWindow(size_t x, size_t y) {
+}
+
+arcadeSDL::arcadeSDL() : window(nullptr), renderer(nullptr)
 {
     if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0) {
         std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
     }
-    this->arcadeSDL::initWindow();
+    this->arcadeSDL::_initWindow();
     this->_mapSize = {0, 0};
 }
 
 arcadeSDL::~arcadeSDL() {
     if (this->isOpen()) {
-        SDL_DestroyRenderer(this->_renderer);
-        SDL_DestroyWindow(this->_window);
+        SDL_DestroyRenderer(this->renderer);
+        SDL_DestroyWindow(this->window);
         IMG_Quit();
         SDL_Quit();
     }

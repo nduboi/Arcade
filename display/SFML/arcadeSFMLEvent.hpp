@@ -13,7 +13,7 @@
 
 class arcadeSFMLEvent : public IEvent {
 private:
-	IWindow &_window;
+	std::shared_ptr<IWindow> _window;
 	std::pair<int, int> _mapSize;
 	std::pair<int, int> _mousePos;
 public:
@@ -27,7 +27,7 @@ public:
 
 	void cleanup() override;
 
-	arcadeSFMLEvent(IWindow &window);
+	arcadeSFMLEvent(std::shared_ptr<IWindow> window);
 
 	~arcadeSFMLEvent() = default;
 };

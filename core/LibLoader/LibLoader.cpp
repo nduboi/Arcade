@@ -32,8 +32,8 @@ namespace Loader {
 		return (*create)();
 	}
 
-	IEvent * LibLoader::initEntryPointEvent(IWindow &win) const {
-		IEvent *(*create)(IWindow &) = reinterpret_cast<IEvent *(*)(IWindow &)>(getFunctionDynamicLib(this->_moduleHandle, "createEvent"));
+	IEvent * LibLoader::initEntryPointEvent(std::shared_ptr<IWindow> win) const {
+		IEvent *(*create)(std::shared_ptr<IWindow>  &) = reinterpret_cast<IEvent *(*)(std::shared_ptr<IWindow>  &)>(getFunctionDynamicLib(this->_moduleHandle, "createEvent"));
 		if (!create)
 			throw DllException("Error cannot createEvent function");
 		return (*create)(win);

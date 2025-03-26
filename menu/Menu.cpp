@@ -12,7 +12,7 @@ void Menu::displayMenu(std::shared_ptr<IWindow> window, std::vector<Boxes> _boxe
 
 std::vector<Boxes> Menu::getBoxPoses(std::shared_ptr<IWindow> window)
 {
-
+	return {};
 }
 
 Menu::Menu()

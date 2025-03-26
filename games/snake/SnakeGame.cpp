@@ -53,7 +53,7 @@ void SnakeGame::setLayerEntities()
 {
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
-            this->_entities[y][x][1] = std::make_shared<VoidEntity>(this->_entities[y][x][0].get()->getSpriteName(), 0, "", std::make_pair(x, y));
+            this->_entities[y][x][1] = std::make_shared<VoidEntity>(this->_entities[y][x][0]->getSpriteName(), 0, "", std::make_pair(x, y));
         }
     }
 

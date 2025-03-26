@@ -26,13 +26,14 @@
  */
 class WindowModule : public IWindow{
 private:
-	std::unique_ptr<IWindow> _object; /**< Reference to the library loader. */
+	std::shared_ptr<IWindow> _object; /**< Reference to the library loader. */
 
 public:
-	IWindow &getObject() {return *this->_object;};
+	IWindow *getObject() {return this->_object.get();};
 
-	void initWindow() override;
 	void display() override;
+	void initWindow() override;
+
 	void closeWindow() override;
 	bool isOpen() override;
 	void clear() override;
@@ -40,6 +41,7 @@ public:
 	void drawRectangle(int color, std::pair<size_t, size_t> position) override;
 	void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
 	void setMapSize(std::pair<size_t, size_t> size) override;
+	void resizeWindow(size_t x, size_t y) override;
 
 	/**
 	 * @brief Constructor for the WidnowModule class.
@@ -47,7 +49,7 @@ public:
 	 * @param WindowModule A pointer to an object implementing the IWindow interface.
 	 *                      This parameter is used to initialize the WidnowModule instance.
 	 */
-	WindowModule(IWindow *);
+	WindowModule(std::shared_ptr<IWindow>);
 	/**
 	 * @brief Destructor for the WidnowModule class.
 	 */

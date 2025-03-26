@@ -68,7 +68,7 @@ namespace Loader
 		 */
 		IWindow *initEntryPointDisplay() const;
 
-		IEvent *initEntryPointEvent(IWindow &win) const;
+		IEvent *initEntryPointEvent(std::shared_ptr<IWindow> win) const;
 
 		IGameModule *initEntryPointGame() const;
 

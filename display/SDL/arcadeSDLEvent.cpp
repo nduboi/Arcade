@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <memory>
+#include <utility>
 
 void arcadeSDLEvent::init() {
     if (SDL_WasInit(SDL_INIT_JOYSTICK) == 0) {
@@ -21,8 +22,6 @@ void arcadeSDLEvent::init() {
 
 IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
     SDL_Event event;
-    auto &sdlWindow = static_cast<arcadeSDL &>(_window);
-
     if (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT)
             return IEvent::CLOSE;
@@ -93,7 +92,7 @@ void arcadeSDLEvent::setMapSize(std::pair<int, int> size) {
 void arcadeSDLEvent::cleanup() {
 }
 
-arcadeSDLEvent::arcadeSDLEvent(IWindow &window) : _window(window) {
+arcadeSDLEvent::arcadeSDLEvent(std::shared_ptr<IWindow> window) : _window(window) {
     _mousePos = std::make_pair(0, 0);
     _mapSize = std::make_pair(0, 0);
 }

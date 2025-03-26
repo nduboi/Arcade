@@ -52,8 +52,8 @@ void SnakeHeadEntity::moveEntities(IGameModule &gameModule, std::pair<size_t, si
     grid_t grid = gameModule.getEntities();
 
     grid[pos2.second][pos2.first][1] = grid[pos1.second][pos1.first][1];
-    grid[pos1.second][pos1.first][1] = std::make_shared<VoidEntity>(grid[pos1.second][pos1.first][0].get()->getSpriteName(), 0, "", pos1);
-    grid[pos2.second][pos2.first][1].get()->setPosition(pos2);
+    grid[pos1.second][pos1.first][1] = std::make_shared<VoidEntity>(grid[pos1.second][pos1.first][0]->getSpriteName(), 0, "", pos1);
+    grid[pos2.second][pos2.first][1]->setPosition(pos2);
     gameModule.setEntities(grid);
 }
 
