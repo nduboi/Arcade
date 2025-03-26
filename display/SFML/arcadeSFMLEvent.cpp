@@ -1,6 +1,6 @@
 //
 // Created by roussierenoa on 3/20/25.
-//strcpy
+//
 
 #include "arcadeSFMLEvent.hpp"
 
