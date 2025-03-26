@@ -37,8 +37,6 @@ public:
 	SDL_Window *window = nullptr;
 	SDL_Renderer *renderer = nullptr;
 
-	void initWindow() override {};
-
 	void display() override;
 
 	void closeWindow() override;

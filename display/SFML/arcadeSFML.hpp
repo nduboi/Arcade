@@ -36,8 +36,6 @@ public:
 
 	void display() override;
 
-	void initWindow() override {};
-
 	void closeWindow() override;
 
 	bool isOpen() override;

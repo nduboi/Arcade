@@ -32,7 +32,6 @@ public:
 	IWindow *getObject() {return this->_object.get();};
 
 	void display() override;
-	void initWindow() override;
 
 	void closeWindow() override;
 	bool isOpen() override;

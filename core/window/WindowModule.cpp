@@ -13,12 +13,6 @@ void WindowModule::display() {
 	this->_object->display();
 }
 
-void WindowModule::initWindow() {
-	if (!this->_object)
-		throw WindowException("Error no lib Loaded");
-	this->_object->initWindow();
-}
-
 void WindowModule::closeWindow() {
 	if (!this->_object)
 		throw WindowException("Error no lib Loaded");
@@ -75,3 +69,4 @@ WindowModule::WindowModule(std::shared_ptr<IWindow> mdl)
 WindowModule::~WindowModule()
 {
 }
+
