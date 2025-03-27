@@ -11,10 +11,11 @@
 #ifndef arcadeSDL_HPP
 #define arcadeSDL_HPP
 
-#include "IWindow.hpp"
-#include "IEvent.hpp"
 #include <string>
 #include <SDL2/SDL.h>
+#include "IWindow.hpp"
+#include "IEvent.hpp"
+#include "SDLEncapsulation.hpp"
 
 /**
  * @class arcadeSDL
@@ -24,19 +25,15 @@
  * including methods for initialization, stopping, and retrieving the module name.
  */
 class arcadeSDL : public IWindow {
+private:
 	std::string _libName = "Arcade SDL2"; ///< The name of the library.
 	std::pair<size_t, size_t> _mapSize; ///< The size of the map.
 
-private:
 	std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
 	void _resizeTexture(SDL_Rect &rect, std::pair<int, int> position);
 
-	void _initWindow();
-
 public:
-	SDL_Window *window = nullptr;
-	SDL_Renderer *renderer = nullptr;
-
+	std::unique_ptr<Display::SDLEncapsulation> sdl;
 	void display() override;
 
 	void closeWindow() override;

@@ -8,10 +8,10 @@
 #include <IWindow.hpp>
 #include "NcursesEncapsulation.hpp"
 
-namespace Game {
+namespace Display {
 	class arcadeNcurses : public IWindow {
 	private:
-		Game::NcursesEncapsulation _ncurses;
+		Display::NcursesEncapsulation _ncurses;
 	public:
 
 		void display() override;

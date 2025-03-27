@@ -5,7 +5,7 @@
 #include "arcadeNcursesEvent.hpp"
 
 
-namespace Game {
+namespace Display {
 	void arcadeNcursesEvent::init() {
 	}
 
