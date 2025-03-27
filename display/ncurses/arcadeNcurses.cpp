@@ -22,7 +22,7 @@ namespace Game {
 	}
 
 	void arcadeNcurses::drawRectangle(int color, std::pair<size_t, size_t> position) {
-        this->_ncurses.drawRectangle({static_cast<int>(position.first), static_cast<int>(position.second)}, {1, 1}, color);
+        this->_ncurses.drawRectangle({static_cast<int>(position.first ), static_cast<int>(position.second * 2)}, {2, 1}, color);
 	}
 
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
@@ -37,7 +37,7 @@ namespace Game {
 	}
 
 	std::pair<int, int> arcadeNcurses::getWindowSize() {
-        return {COLS, LINES - 4};
+        return {COLS / 2, LINES - 4};
 	}
 
 	bool arcadeNcurses::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
@@ -49,13 +49,11 @@ namespace Game {
 	}
 
 	void arcadeNcurses::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
-        // Pass color directly without modifying it
-		this->_ncurses.drawText(text, {static_cast<int>(position.first), static_cast<int>(position.second)}, color);
+		this->_ncurses.drawText(text, {static_cast<int>(position.first), static_cast<int>(position.second * 2)}, color);
 	}
 
 	void arcadeNcurses::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
-        // Since ncurses can't display sprites, represent them with colored rectangles using the same color code
-        this->_ncurses.drawRectangle({static_cast<int>(position.first), static_cast<int>(position.second)}, {1, 1}, color);
+        this->_ncurses.drawRectangle({static_cast<int>(position.first), static_cast<int>(position.second * 2)}, {2, 1}, color);
 	}
 
 	void arcadeNcurses::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
