@@ -40,10 +40,13 @@ void arcadeSFML::_resizeData(sf::Sprite &sprite, std::pair<int, int> position) {
 
 void arcadeSFML::_resizeData(sf::RectangleShape &rectangle, std::pair<int, int> position) {
 	sf::Vector2u windowSize = this->window.getSize();
-	sf::Vector2u textureSize = rectangle.getTexture()->getSize();
-	sf::Vector2u cellSize = {windowSize.x / (int)this->_mapSize.first, windowSize.y / (int)this->_mapSize.second};
+	sf::Vector2f rectangleSize = rectangle.getSize();
+	sf::Vector2f cellSize = {
+		static_cast<float>(windowSize.x) / static_cast<float>(this->_mapSize.first),
+		static_cast<float>(windowSize.y) / static_cast<float>(this->_mapSize.second)
+	};
 
-	rectangle.setScale((float)cellSize.x / textureSize.x + 0.1, (float)cellSize.y / textureSize.y + 0.1);
+	rectangle.setSize({cellSize.x, cellSize.y});
 }
 
 void arcadeSFML::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
@@ -51,8 +54,13 @@ void arcadeSFML::drawSprite(std::string asset, int color, std::string text, std:
 	sf::Sprite sprite;
 	std::pair<int, int> windowPosition = this->_getWindowPosition(position);
 
-	if (!texture.loadFromFile(asset))
-		std::cerr << "Error loading texture" << std::endl;
+	sf::err().rdbuf(nullptr);
+	if (!texture.loadFromFile(asset)) {
+		sf::err().rdbuf(std::cerr.rdbuf());
+		this->drawRectangle(color, windowPosition);
+		return;
+	}
+	sf::err().rdbuf(std::cerr.rdbuf());
 	sprite.setTexture(texture);
 	sprite.setPosition(windowPosition.first, windowPosition.second);
 	this->_resizeData(sprite, position);
@@ -61,11 +69,18 @@ void arcadeSFML::drawSprite(std::string asset, int color, std::string text, std:
 }
 
 void arcadeSFML::drawRectangle(int color, std::pair<size_t, size_t> position) {
-	(void)color;
-	(void)position;
 	sf::RectangleShape rect;
-	rect.setPosition({static_cast<float>(position.first), static_cast<float>(position.second)});
-	rect.setFillColor(sf::Color::Red);
+
+	rect.setPosition(position.first, position.second);
+	switch (color)
+	{
+		case 0: rect.setFillColor(sf::Color::Black); break;
+		case 1: rect.setFillColor(sf::Color::White); break;
+		case 2: rect.setFillColor(sf::Color::Red); break;
+		case 3: rect.setFillColor(sf::Color::Green); break;
+		case 4: rect.setFillColor(sf::Color::Blue); break;
+		default: rect.setFillColor(sf::Color::Black); break;
+	}
 	this->_resizeData(rect, position);
 	this->window.draw(rect);
 }

@@ -57,16 +57,16 @@ void SnakeGame::setLayerEntities()
         }
     }
 
-    this->_entities[8][8][1] = std::make_shared<SnakeHeadEntity>(1, "O", std::make_pair(8, 8));
+    this->_entities[8][8][1] = std::make_shared<SnakeHeadEntity>(4, "O", std::make_pair(8, 8));
     this->setSnakeBody();
     this->setLayerApple();
 }
 
 void SnakeGame::setSnakeBody()
 {
-    this->_entities[8][7][1] = std::make_shared<SnakeBodyEntity>(1, "=", std::make_pair(7, 8), 0);
-    this->_entities[8][6][1] = std::make_shared<SnakeBodyEntity>(1, "=", std::make_pair(6, 8), 1);
-    this->_entities[8][5][1] = std::make_shared<SnakeBodyEntity>(1, "=", std::make_pair(5, 8), 2);
+    this->_entities[8][7][1] = std::make_shared<SnakeBodyEntity>(3, "=", std::make_pair(7, 8), 0);
+    this->_entities[8][6][1] = std::make_shared<SnakeBodyEntity>(3, "=", std::make_pair(6, 8), 1);
+    this->_entities[8][5][1] = std::make_shared<SnakeBodyEntity>(3, "=", std::make_pair(5, 8), 2);
 
     auto body1 = std::dynamic_pointer_cast<SnakeBodyEntity>(this->_entities[8][7][1]);
     auto body2 = std::dynamic_pointer_cast<SnakeBodyEntity>(this->_entities[8][6][1]);

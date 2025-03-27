@@ -92,7 +92,7 @@ void arcadeSDL::_resizeTexture(SDL_Rect &rect, std::pair<int, int> position)
 void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
     SDL_Surface *surface = IMG_Load(asset.c_str());
     if (!surface) {
-        std::cerr << "Error loading image: " << IMG_GetError() << std::endl;
+        this->drawRectangle(color, position);
         return;
     }
 
@@ -114,8 +114,22 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::
 }
 
 void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position) {
-    (void)color;
-    (void)position;
+    std::pair<int, int> windowPosition = this->_getWindowPosition(position);
+    SDL_Rect rect = {windowPosition.first, windowPosition.second, 0, 0};
+    this->_resizeTexture(rect, position);
+    
+    // Set color based on parameter
+    switch (color) {
+        case 0: SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255); break;      // Black
+        case 1: SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255); break; // White
+        case 2: SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255); break;    // Red
+        case 3: SDL_SetRenderDrawColor(this->renderer, 0, 255, 0, 255); break;    // Green
+        case 4: SDL_SetRenderDrawColor(this->renderer, 0, 0, 255, 255); break;    // Blue
+        default: SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255); break;     // Default Black
+    }
+    
+    // Draw the filled rectangle
+    SDL_RenderFillRect(this->renderer, &rect);
 }
 
 void arcadeSDL::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
