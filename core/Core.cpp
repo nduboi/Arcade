@@ -169,11 +169,18 @@ void Core::_compute() {
 void Core::_display() {
 	this->display->clear();
 	this->_displayGame();
+	this->_displayHUD();
 	this->display->display();
 }
 
 void Core::_displayGame()
 {
+	static std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
+	std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last;
+	if (elapsed_seconds.count() < 0.1)
+		return;
+
 	if (this->_moduleLoaded == GAME) {
 		grid_t grid = this->game->getEntities();
 		std::pair<size_t, size_t> gridSize = this->game->getGridSize();
@@ -187,6 +194,23 @@ void Core::_displayGame()
 					this->display->drawSprite(entity->getSpriteName(), entity->getColor(), entity->getText(), {x, y});
 				}
 			}
+		}
+	}
+}
+
+void Core::_displayHUD() {
+	static std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
+	std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last;
+	if (elapsed_seconds.count() < 0.5)
+		return;
+
+	if (this->_moduleLoaded == GAME) {
+		std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
+		std::vector<std::shared_ptr<IEntity>> hud = gameModule->getHUD();
+
+		for (auto &entity : hud) {
+			std::cout << "HUD: " << entity->getText() << std::endl;
 		}
 	}
 }
