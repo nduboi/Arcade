@@ -203,7 +203,7 @@ void Core::_displayGame()
 void Core::_displayMenu()
 {
 	if (this->_moduleLoaded == MENU) {
-		this->_menu.displayMenu(this->_menu.getBoxPoses(), this->_displayLibPath, this->_gameLibPath);
+		this->_menu.displayMenu(this->displayPtr, this->_menu.getBoxPoses(), this->_displayLibPath, this->_gameLibPath);
 	}
 }
 
