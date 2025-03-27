@@ -162,7 +162,7 @@ void arcadeSDL::drawSpriteMenu(std::pair<float, float> size, std::string asset, 
 
 void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color)
 {
-    SDL_Color sdlColor = {color.r, color.g, color.b, 255};
+    SDL_Color sdlColor = {static_cast<Uint8>(color.r), static_cast<Uint8>(color.g), static_cast<Uint8>(color.b), 255};
 
     SDL_SetRenderDrawColor(this->renderer, sdlColor.r, sdlColor.g, sdlColor.b, sdlColor.a);
 
@@ -205,7 +205,7 @@ void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> positio
         return;
     }
 
-    SDL_Color sdlColor = {color.r, color.g, color.b, 255};
+    SDL_Color sdlColor = {static_cast<Uint8>(color.r), static_cast<Uint8>(color.g), static_cast<Uint8>(color.b), 255};
 
     SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), sdlColor);
     if (!surface) {
