@@ -18,8 +18,8 @@ Cell::Cell(size_t x, size_t y)
     this->_adjacentMines = 0;
     this->_position = {x, y};
     this->_spriteName = "./assets/minesweeper/hidden.png";
-    this->_color = 0xCCCCCC;
-    this->_text = "";
+    this->_color = 1;
+    this->_text = "D";
     this->_firstClick = true;
     this->_gameState = 0;
     this->_clicked = false;
@@ -28,7 +28,6 @@ Cell::Cell(size_t x, size_t y)
 void Cell::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
 {
     grid_t grid = gameModule->getEntities();
-
     if (gameModule->getGameState() == WIN || gameModule->getGameState() == LOSE)
         return;
     if (type == LEFT_CLICK) {
@@ -250,22 +249,14 @@ void Cell::revealAdjacentCells(size_t x, size_t y, grid_t& grid)
 std::size_t Cell::getColor() const
 {
     if (!this->_isRevealed)
-        return 0xCCCCCC;  // Light gray for hide cells
+        return 1;
     if (this->_isMine)
-        return 0xFF0000;  // Red for mines
+        return 2;
     if (this->_adjacentMines == 0)
-        return 0xFFFFFF;  // White for empty cells
-    static const std::size_t colors[] = {
-        0x0000FF,  // 1: Blue
-        0x008000,  // 2: Green
-        0xFA8072,  // 3: Light red
-        0x000080,  // 4: Dark blue
-        0x800000,  // 5: Brown
-        0x008080,  // 6: Cyan
-        0x000000,  // 7: Black
-        0x808080   // 8: Grey
-    };
-    return colors[std::min(this->_adjacentMines, static_cast<size_t>(8)) - 1];
+        return 0;
+    if (this->_isFlagged)
+        return 4;
+    return -1;
 }
 
 std::string Cell::getText() const
@@ -273,12 +264,12 @@ std::string Cell::getText() const
     if (this->_isFlagged)
         return "F";
     if (!this->_isRevealed)
-        return "";
+        return " ";
     if (this->_isMine)
         return "#";
     if (this->_adjacentMines > 0)
         return std::to_string(this->_adjacentMines);
-    return "";
+    return "D";
 }
 
 
@@ -289,31 +280,21 @@ void Cell::setRevealed(bool revealed)
     if (revealed) {
         if (this->_isMine) {
             this->_spriteName = "./assets/minesweeper/mine_reveal.png";
-            this->_color = 0xFF0000; // Red for mines
-            this->_text = "*";
+            this->_color = 3;
+            this->_text = "@";
         } else if (this->_adjacentMines > 0) {
             this->_spriteName = "./assets/minesweeper/cell_" + std::to_string(this->_adjacentMines) + ".png";
-            static const std::size_t colors[] = {
-                0x0000FF,  // 1: Blue
-                0x008000,  // 2: Green
-                0xFA8072,  // 3: Light red
-                0x000080,  // 4: Dark blue
-                0x800000,  // 5: Brown
-                0x008080,  // 6: Cyan
-                0x000000,  // 7: Black
-                0x808080   // 8: Grey
-            };
-            this->_color = colors[std::min(this->_adjacentMines, static_cast<size_t>(8)) - 1];
+            this->_color = -1;
             this->_text = std::to_string(this->_adjacentMines);
         } else {
             this->_spriteName = "./assets/minesweeper/cell_0.png";
-            this->_color = 0xFFFFFF; // White for empty cells
-            this->_text = "";
+            this->_color = 0;
+            this->_text = " ";
         }
     } else {
         this->_spriteName = "./assets/minesweeper/hidden.png";
-        this->_color = 0xCCCCCC; // Light gray for hide cells
-        this->_text = "";
+        this->_color = 1;
+        this->_text = "D";
     }
 }
 
@@ -348,7 +329,7 @@ void Cell::setFlagged(bool flagged)
         this->_text = "F";
     } else if (!_isRevealed) {
         this->_spriteName = "./assets/minesweeper/hidden.png";
-        this->_text = "";
+        this->_text = "D";
     }
 }
 
