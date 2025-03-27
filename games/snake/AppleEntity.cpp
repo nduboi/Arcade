@@ -53,6 +53,7 @@ void AppleEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
 
     if (nbVoidEntities == 0) {
         gameModule->setGameState(gameState_t::WIN);
+        gameModule->setScore(gameModule->getScore() + 100);
         return;
     }
 
@@ -64,4 +65,5 @@ void AppleEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
 
     grid[newPos.second][newPos.first][1] = std::make_shared<AppleEntity>(newPos);
     gameModule->setEntities(grid);
+    gameModule->setScore(gameModule->getScore() + 10);
 }

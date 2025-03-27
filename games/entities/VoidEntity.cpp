@@ -15,4 +15,5 @@ VoidEntity::VoidEntity(std::string sprite, std::size_t color, std::string text, 
     this->_position = position;
     this->_isMovable = false;
     this->_hasCollisions = false;
+    this->_isControlable = false;
 }
