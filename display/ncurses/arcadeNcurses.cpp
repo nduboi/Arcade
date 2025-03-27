@@ -28,12 +28,23 @@ namespace Display {
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
 		color_t color, color_t outline,  int thickness)
 	{
+		(void) size;
+		(void) position;
+		(void) color;
+		(void) outline;
+		(void) thickness;
 	}
 
 	void arcadeNcurses::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+		(void) position;
+		(void) size;
+		(void) thickness;
 	}
 
 	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+		(void) text;
+		(void) position;
+		(void) color;
 	}
 
 	std::pair<int, int> arcadeNcurses::getWindowSize() {
@@ -41,6 +52,8 @@ namespace Display {
 	}
 
 	bool arcadeNcurses::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+		(void) position;
+		(void) size;
         return false;
 	}
 
@@ -49,13 +62,21 @@ namespace Display {
 	}
 
 	void arcadeNcurses::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
+		(void)text;
+		(void)color;
+		(void)position;
 	}
 
 	void arcadeNcurses::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
+		(void) asset;
+		(void) text;
         this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, color);
 	}
 
 	void arcadeNcurses::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
+		(void) size;
+		(void) asset;
+		(void) position;
 	}
 
 	void arcadeNcurses::setMapSize(std::pair<size_t, size_t> size) {
@@ -63,5 +84,7 @@ namespace Display {
 	}
 
 	void arcadeNcurses::resizeWindow(size_t x, size_t y) {
+		(void) x;
+		(void) y;
 	}
 }

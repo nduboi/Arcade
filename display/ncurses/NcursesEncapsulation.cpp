@@ -5,6 +5,9 @@
 #include "NcursesEncapsulation.hpp"
 
 #include <iostream>
+#include <ncurses.h>
+#include <ncurses.h>
+#include <unistd.h>
 
 namespace Display {
 	bool NcursesEncapsulation::isOpen() const {
@@ -21,23 +24,26 @@ namespace Display {
 		if (this->_game)
 			werase(this->_game);
 		if (this->_window)
-			erase();
+			werase(this->_window);
 	}
 
 	void NcursesEncapsulation::display() const {
 		this->_drawHeader();
-		if (this->_header)
-			wrefresh(this->_header);
-		if (this->_game)
-			wrefresh(this->_game);
-		if (this->_window)
-			refresh();
+		if (this->_header && is_wintouched(this->_header))
+			wnoutrefresh(this->_header);
+		if (this->_game && is_wintouched(this->_game))
+			wnoutrefresh(this->_game);
+		doupdate();
 	}
 
 	void NcursesEncapsulation::_drawHeader() const
 	{
+		int row, col;
+		(void)row;
+		getmaxyx(stdscr, row, col);
+		int xPos = std::max(0, (col - static_cast<int>(this->_appTitle.size())) / 2);
+		mvwprintw(this->_header, 1, xPos, "%s", this->_appTitle.c_str());
 		box(this->_header, 0, 0);
-		mvwprintw(this->_header, 1, static_cast<int>(COLS - this->_appTitle.size()) / 2, "%s", this->_appTitle.c_str());
 	}
 
 	void NcursesEncapsulation::drawGame(const std::string &text, const std::pair<int, int> &pos) const
@@ -73,10 +79,17 @@ namespace Display {
 
 	void NcursesEncapsulation::drawThickRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size, int thickness, int color) const
 	{
+		(void)size;
+		(void)pos;
+		(void)color;
+		(void)thickness;
 	}
 
 	void NcursesEncapsulation::drawText(const std::string &text, const std::pair<int, int> &pos, int color) const
 	{
+		(void)text;
+		(void)pos;
+		(void)color;
 	}
 
 	void NcursesEncapsulation::changeTitle(const std::string &title)
@@ -84,15 +97,23 @@ namespace Display {
 		this->_appTitle = title;
 	}
 
-	NcursesEncapsulation::NcursesEncapsulation()
-	{
-		this->_appTitle =  "Arcade Ncurses";
+	NcursesEncapsulation::NcursesEncapsulation() {
 		this->_isOpen = false;
-		this->_window = initscr();
-		if (this->_window == nullptr || this->_window != stdscr) {
-			throw NcursesException("Failed to initscr()");
-			}
 
+		this->term_out = fopen("/dev/tty", "w");
+		this->term_in = fopen("/dev/tty", "r");
+		if (!this->term_out || !this->term_in) {
+			throw NcursesException("Failed to open /dev/tty");
+		}
+		this->screen = newterm(nullptr, this->term_out, this->term_in);
+		if (!this->screen) {
+			throw NcursesException("Failed to create new Ncurses screen");
+		}
+		set_term(this->screen);
+		this->_window = newwin(LINES, COLS, 0, 0);
+		if (!this->_window) {
+			throw NcursesException("Failed to create main window");
+		}
 		start_color();
 		cbreak();
 		keypad(stdscr, TRUE);
@@ -100,26 +121,52 @@ namespace Display {
 		curs_set(0);
 		nodelay(stdscr, TRUE);
 		timeout(0);
-
-		this->_header = subwin(this->_window, 3, COLS, 0, 0);
-		if (this->_header == nullptr)
+		int row, col;
+		(void) row;
+		getmaxyx(this->_window, row, col);
+		this->_header = subwin(this->_window, 3, col, 0, 0);
+		if (!this->_header)
 			throw NcursesException("Failed to create header window");
-
-		this->_game = subwin(this->_window, 20, COLS, 4, 0);
-		if (this->_game == nullptr)
+		this->_game = subwin(this->_window, 20, col, 4, 0);
+		if (!this->_game)
 			throw NcursesException("Failed to create game window");
-
 		box(this->_header, 0, 0);
 		box(this->_game, 0, 0);
+		touchwin(this->_header);
+		touchwin(this->_game);
+		wnoutrefresh(this->_header);
+		wnoutrefresh(this->_game);
+		doupdate();
 		this->_isOpen = true;
 	}
 
 	NcursesEncapsulation::~NcursesEncapsulation() {
-		delwin(this->_header);
-		delwin(this->_game);
-		endwin();
-		this->_header = nullptr;
-		this->_game = nullptr;
-		this->_window = nullptr;
+		if (this->_header) {
+			delwin(this->_header);
+			this->_header = nullptr;
+		}
+		if (this->_game) {
+			delwin(this->_game);
+			this->_game = nullptr;
+		}
+		if (this->_window) {
+			delwin(this->_window);
+			this->_window = nullptr;
+		}
+
+		if (this->screen) {
+			endwin();
+			delscreen(this->screen);
+			this->screen = nullptr;
+		}
+
+		if (this->term_out) {
+			fclose(this->term_out);
+			this->term_out = nullptr;
+		}
+		if (this->term_in) {
+			fclose(this->term_in);
+			this->term_in = nullptr;
+		}
 	}
 } // game

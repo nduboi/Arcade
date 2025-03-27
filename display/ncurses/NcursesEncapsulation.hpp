@@ -12,10 +12,13 @@ namespace Display {
 
 	class NcursesEncapsulation {
 	private:
+		SCREEN *screen = nullptr;
 		WINDOW *_window = nullptr;
 		WINDOW *_header = nullptr;
 		WINDOW *_game = nullptr;
 		bool _isOpen;
+		FILE *term_out;
+		FILE *term_in;
 		std::string _appTitle;
 
 		void _drawHeader() const;
