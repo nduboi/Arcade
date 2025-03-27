@@ -33,6 +33,8 @@ namespace Display {
 				return IEvent::DOWN;
 			case KEY_LEFT:
 				return IEvent::LEFT;
+			case KEY_RIGHT:
+				return IEvent::RIGHT;
 			case BUTTON1_CLICKED:
 				return IEvent::MOUSELEFTCLICK;
 			case BUTTON2_CLICKED:

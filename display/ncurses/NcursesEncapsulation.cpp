@@ -29,19 +29,54 @@ namespace Display {
 		if (this->_header)
 			wrefresh(this->_header);
 		if (this->_game)
-			wrefresh(this->_header);
+			wrefresh(this->_game);
 		if (this->_window)
 			refresh();
 	}
 
 	void NcursesEncapsulation::_drawHeader() const
 	{
+		box(this->_header, 0, 0);
 		mvwprintw(this->_header, 1, static_cast<int>(COLS - this->_appTitle.size()) / 2, "%s", this->_appTitle.c_str());
 	}
 
 	void NcursesEncapsulation::drawGame(const std::string &text, const std::pair<int, int> &pos) const
 	{
 		mvwprintw(this->_game, pos.first, pos.second, "%s", text.c_str());
+	}
+
+	void NcursesEncapsulation::drawRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size, int color) const
+	{
+		short ncursesColor;
+		switch (color) {
+			case 0: ncursesColor = COLOR_BLACK; break;
+			case 1: ncursesColor = COLOR_WHITE; break;
+			case 2: ncursesColor = COLOR_RED; break;
+			case 3: ncursesColor = COLOR_GREEN; break;
+			case 4: ncursesColor = COLOR_BLUE; break;
+			default: ncursesColor = COLOR_BLACK; break;
+		}
+
+		if (color > 0) {
+			init_pair(color, ncursesColor, COLOR_BLACK);
+			wattron(this->_game, COLOR_PAIR(color));
+		}
+		for (int y = 0; y < size.first; y++) {
+			for (int x = 0; x < size.second; x++) {
+				mvwaddch(this->_game, pos.second + x, pos.first + y, ' ' | A_REVERSE);
+			}
+		}
+		if (color > 0) {
+			wattroff(this->_game, COLOR_PAIR(color));
+		}
+	}
+
+	void NcursesEncapsulation::drawThickRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size, int thickness, int color) const
+	{
+	}
+
+	void NcursesEncapsulation::drawText(const std::string &text, const std::pair<int, int> &pos, int color) const
+	{
 	}
 
 	void NcursesEncapsulation::changeTitle(const std::string &title)
@@ -56,16 +91,26 @@ namespace Display {
 		this->_window = initscr();
 		if (this->_window == nullptr || this->_window != stdscr) {
 			throw NcursesException("Failed to initscr()");
-		}
+			}
+
+		start_color();
+		cbreak();
+		keypad(stdscr, TRUE);
+		noecho();
+		curs_set(0);
 		nodelay(stdscr, TRUE);
-		//TODO : A modifier sur le header
-		this->_header = subwin(this->_window, 3, 80, 0, 0);
+		timeout(0);
+
+		this->_header = subwin(this->_window, 3, COLS, 0, 0);
 		if (this->_header == nullptr)
-			throw NcursesException("Failed to subWin the header()");
-		//TODO : A modifier sur le game
-		this->_game = subwin(this->_window, 20, 80, 4, 0);
+			throw NcursesException("Failed to create header window");
+
+		this->_game = subwin(this->_window, 20, COLS, 4, 0);
 		if (this->_game == nullptr)
-			throw NcursesException("Failed to subWin the header()");
+			throw NcursesException("Failed to create game window");
+
+		box(this->_header, 0, 0);
+		box(this->_game, 0, 0);
 		this->_isOpen = true;
 	}
 
