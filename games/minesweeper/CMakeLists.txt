@@ -4,7 +4,9 @@ add_library(arcade_minesweeper SHARED
     MinesweeperGame.cpp
     ../GameTemplate.cpp
     ../entities/AEntity.cpp
-    ../entities/VoidEntity.cpp
+    ../entities/ScoreEntityHUD.cpp
+    ../entities/TimerEntityHUD.cpp
+    ../entities/TextEntityHUD.cpp
 )
 
 add_custom_command(TARGET arcade_minesweeper POST_BUILD
