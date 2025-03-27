@@ -89,8 +89,9 @@ void arcadeSFML::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<siz
 	//TODO: À implémenter
 }
 
-void arcadeSFML::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) {
-	//TODO: À implémenter
+void arcadeSFML::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize)
+{
+	
 }
 
 void arcadeSFML::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
