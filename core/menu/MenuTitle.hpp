@@ -17,11 +17,11 @@ class MenuTitle {
         std::shared_ptr<IWindow> _window;
     public:
         // Constructor
-        MenuTitle(std::shared_ptr<IWindow> window, const std::string& title = "Arcade Menu",
+        MenuTitle(const std::shared_ptr<IWindow> &window, const std::string& title = "Arcade Menu",
             const std::pair<int, int>& position = {100, 50}, int fontSize = 24);
 
         // Method
-        void draw();
+        void draw(const std::shared_ptr<IWindow> &window);
 
         // Getter
         std::string getTitle() const;

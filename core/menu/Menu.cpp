@@ -7,20 +7,19 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(std::shared_ptr<IWindow> window) : _menuTitle(window, "Arcade Games", {200, 50}, 36)
+Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {200, 50}, 36)
 {
 
 }
 
-void Menu::displayMenu(std::vector<Boxes> _boxes, std::vector<std::string> libs,
+void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
     std::vector<std::string> games)
 {
-    if (!this->_window)
+    if (!window)
         return;
-
-    this->_window->clear();
-    _menuTitle.draw();
-    this->_window->display();
+    window->clear();
+    _menuTitle.draw(window);
+    window->display();
 }
 
 std::vector<Boxes> Menu::getBoxPoses()

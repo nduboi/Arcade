@@ -6,8 +6,8 @@
 */
 
 #include "MenuTitle.hpp"
-
-MenuTitle::MenuTitle(std::shared_ptr<IWindow> window, const std::string& title,
+#include <iostream>
+MenuTitle::MenuTitle(const std::shared_ptr<IWindow> &window, const std::string& title,
     const std::pair<int, int>& position, int fontSize) : _window(window)
 {
     this->_title = title;
@@ -15,10 +15,10 @@ MenuTitle::MenuTitle(std::shared_ptr<IWindow> window, const std::string& title,
     this->_fontSize = fontSize;
 }
 
-void MenuTitle::draw()
+void MenuTitle::draw(const std::shared_ptr<IWindow> &window)
 {
-    if (this->_window) {
-        this->_window->drawTextMenu(this->_title, this->_position, {255,0,0}, this->_fontSize);
+    if (window) {
+        window->drawTextMenu(this->_title, this->_position, {255,0,0}, this->_fontSize);
     }
 }
 

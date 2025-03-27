@@ -21,10 +21,10 @@ class Menu : public IMenu {
 		MenuTitle _menuTitle;
 	public:
 		// Constructor
-		Menu(std::shared_ptr<IWindow> window);
+		Menu(const std::shared_ptr<IWindow> &window);
 
 		// Method
-		void displayMenu(std::vector<Boxes> _boxes, std::vector<std::string> libs,
+		void displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
 			std::vector<std::string> games) override;
 
 		// Getter
