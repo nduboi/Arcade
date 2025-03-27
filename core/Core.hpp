@@ -7,7 +7,7 @@
 #include "EventModule.hpp"
 #include "WindowModule.hpp"
 #include "GameModule.hpp"
-#include "MenuModule.hpp"
+#include "Menu.hpp"
 
 class Core {
 private:
@@ -16,6 +16,7 @@ private:
 		MENU,
 		TYPE_COUNT,
 	} LogicModule_t;
+
 
 	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
 	Loader::LibLoader _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
@@ -43,6 +44,8 @@ private:
 
 	void _displayGame();
 
+	void _displayMenu();
+
 	void _refreshLibList();
 
 	void _loadNextGame();
@@ -55,6 +58,7 @@ public:
 	std::shared_ptr<EventModule> event; ///< Unique pointer to the display WindowModule.
 	std::shared_ptr<GameModule> game; ///< Shared pointer to the game GameModule.
 
+	Menu _menu;
 
 	void displayAllLib();
 
