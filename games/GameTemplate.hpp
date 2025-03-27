@@ -9,6 +9,7 @@
 #define GameTemplate_HPP_
 
 #include "IGameModule.hpp"
+#include <chrono>
 
 class GameTemplate : public IGameModule {
     protected:
@@ -17,7 +18,7 @@ class GameTemplate : public IGameModule {
         grid_t _entities;
         bool _isStarted;
         gameState_t _gameState;
-        size_t _time;
+        std::chrono::time_point<std::chrono::steady_clock> _time;
 
     public:
         GameTemplate() = default;

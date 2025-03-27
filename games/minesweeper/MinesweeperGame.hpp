@@ -21,6 +21,8 @@ class MinesweeperGame : public GameTemplate {
                 // Method
                 void initializeGrid();
 
+                std::vector<std::shared_ptr<IEntity>> getHUD() const override;
+
         private:
                 // Variable
                 size_t _width;

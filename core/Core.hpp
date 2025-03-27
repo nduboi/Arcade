@@ -46,6 +46,8 @@ private:
 
 	void _displayMenu();
 
+	void _displayHUD();
+
 	void _refreshLibList();
 
 	void _loadNextGame();

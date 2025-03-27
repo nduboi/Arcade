@@ -25,6 +25,8 @@ std::size_t GameTemplate::getScore() const
 void GameTemplate::setScore(std::size_t score)
 {
     this->_score = score;
+    if (this->_score > this->_highScore)
+        this->_highScore = this->_score;
 }
 
 grid_t GameTemplate::getEntities() const
@@ -71,10 +73,18 @@ std::vector<std::shared_ptr<IEntity>> GameTemplate::getHUD() const
 
 size_t GameTemplate::getTime() const
 {
-    return this->_time;
+    auto currentTime = std::chrono::steady_clock::now();
+    auto elapsedSeconds = std::chrono::duration_cast<std::chrono::seconds>(
+        currentTime - this->_time).count();
+    return static_cast<size_t>(elapsedSeconds);
 }
 
 void GameTemplate::setTime(size_t time)
 {
-    this->_time = time;
+    if (time == 0) {
+        this->_time = std::chrono::steady_clock::now();
+    } else {
+        auto newTime = std::chrono::steady_clock::now() - std::chrono::seconds(time);
+        this->_time = newTime;
+    }
 }

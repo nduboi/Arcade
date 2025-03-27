@@ -7,11 +7,19 @@
 
 #include "MinesweeperGame.hpp"
 #include "Cell.hpp"
+#include "ScoreEntityHUD.hpp"
+#include "TimerEntityHUD.hpp"
+#include "TextEntityHUD.hpp"
 
 MinesweeperGame::MinesweeperGame(size_t width, size_t height)
 {
     this->_width = width;
     this->_height = height;
+    this->_highScore = 0;
+    this->_score = 0;
+    this->_isStarted = false;
+    this->_gameState = PLAYING;
+    this->_time = std::chrono::steady_clock::now(); // Initialize with current time
 
     initializeGrid();
 }
@@ -26,4 +34,24 @@ void MinesweeperGame::initializeGrid()
             _entities[y][x][0] = std::make_shared<Cell>(x, y);
         }
     }
+}
+
+std::vector<std::shared_ptr<IEntity>> MinesweeperGame::getHUD() const
+{
+    std::vector<std::shared_ptr<IEntity>> hud;
+
+    hud.push_back(std::make_shared<ScoreEntityHUD>(this->getScore()));
+
+    std::size_t secondsElapsed = this->getTime();
+    hud.push_back(std::make_shared<TimerEntityHUD>(secondsElapsed, 100));
+
+    std::string difficulty = "Difficulty: ";
+    if (this->_width == 9 && this->_height == 9)
+        difficulty += "Easy";
+    else if (this->_width == 16 && this->_height == 16)
+        difficulty += "Medium";
+    else
+        difficulty += "Hard";
+    hud.push_back(std::make_shared<TextEntityHUD>(difficulty));
+    return hud;
 }
