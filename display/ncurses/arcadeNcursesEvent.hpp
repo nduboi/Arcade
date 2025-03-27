@@ -10,7 +10,7 @@
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 
-namespace Game {
+namespace Display {
 
 	class arcadeNcursesEvent : public IEvent {
 	private:

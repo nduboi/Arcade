@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-namespace Game {
+namespace Display {
 	bool NcursesEncapsulation::isOpen() const {
 		return this->_isOpen;
 	}
