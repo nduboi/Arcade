@@ -24,14 +24,16 @@ void arcadeSFML::clear() {
 std::pair<int, int> arcadeSFML::_getWindowPosition(std::pair<int, int> position) {
 	std::pair<int, int> windowPosition;
 	sf::Vector2u windowSize = this->window.getSize();
+	const int hudOffset = 100; // HUD offset of 100 pixels at the top
 
 	windowPosition.first = (position.first * windowSize.x) / this->_mapSize.first;
-	windowPosition.second = (position.second * windowSize.y) / this->_mapSize.second;
+	windowPosition.second = hudOffset + (position.second * (windowSize.y - hudOffset)) / this->_mapSize.second;
 	return windowPosition;
 }
 
 void arcadeSFML::_resizeData(sf::Sprite &sprite, std::pair<int, int> position) {
 	sf::Vector2u windowSize = this->window.getSize();
+	windowSize.y -= 100;
 	sf::Vector2u textureSize = sprite.getTexture()->getSize();
 	sf::Vector2u cellSize = {windowSize.x / (int)this->_mapSize.first, windowSize.y / (int)this->_mapSize.second};
 
@@ -40,6 +42,7 @@ void arcadeSFML::_resizeData(sf::Sprite &sprite, std::pair<int, int> position) {
 
 void arcadeSFML::_resizeData(sf::RectangleShape &rectangle, std::pair<int, int> position) {
 	sf::Vector2u windowSize = this->window.getSize();
+	windowSize.y -= 100;
 	sf::Vector2f rectangleSize = rectangle.getSize();
 	sf::Vector2f cellSize = {
 		static_cast<float>(windowSize.x) / static_cast<float>(this->_mapSize.first),
@@ -102,8 +105,8 @@ void arcadeSFML::drawTextMenu(std::string text, std::pair<size_t, size_t> positi
 }
 
 std::pair<int, int> arcadeSFML::getWindowSize() {
-	//TODO: À implémenter
-	return {0, 0};
+	sf::Vector2u size = this->window.getSize();
+	return {static_cast<int>(size.x), static_cast<int>(size.y)};
 }
 
 bool arcadeSFML::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
@@ -126,7 +129,7 @@ void arcadeSFML::resizeWindow(size_t x, size_t y) {
 }
 
 arcadeSFML::arcadeSFML() :
-	window(sf::VideoMode(800, 800), "SFML window", sf::Style::Titlebar | sf::Style::Close)
+	window(sf::VideoMode(800, 900), "SFML window", sf::Style::Titlebar | sf::Style::Close)
 {
 	this->_mapSize = {0, 0};
 }
