@@ -9,7 +9,7 @@
 #include "Core.hpp"
 #include "IEntity.hpp"
 
-Core::Core() {
+Core::Core() : _menu(this->display) {
 	this->_refreshLibList();
 	this->_lastEvent = IEvent::event_t::NOTHING;
 	this->_moduleLoaded = MENU;
@@ -170,6 +170,7 @@ void Core::_compute() {
 void Core::_display() {
 	this->display->clear();
 	this->_displayGame();
+	this->_displayMenu();
 	this->display->display();
 }
 
@@ -189,6 +190,13 @@ void Core::_displayGame()
 				}
 			}
 		}
+	}
+}
+
+void Core::_displayMenu()
+{
+	if (this->_moduleLoaded == MENU) {
+		this->_menu.displayMenu(this->_menu.getBoxPoses(), this->_displayLibPath, this->_gameLibPath);
 	}
 }
 
