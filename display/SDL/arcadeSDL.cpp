@@ -136,7 +136,7 @@ void arcadeSDL::drawSpriteMenu(std::pair<float, float> size, std::string asset, 
     //TODO: À implémenter
 }
 
-void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) {
+void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) {
     //TODO: À implémenter
 }
 
@@ -144,7 +144,7 @@ void arcadeSDL::drawThickRectangle(std::pair<int, int> position, std::pair<int, 
     //TODO: À implémenter
 }
 
-void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) {
     //TODO: À implémenter
 }
 
