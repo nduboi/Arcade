@@ -11,6 +11,7 @@
 namespace Game {
 	class arcadeNcurses : public IWindow {
 	private:
+		std::pair<size_t, size_t> _mapSize;
 		Game::NcursesEncapsulation _ncurses;
 	public:
 
