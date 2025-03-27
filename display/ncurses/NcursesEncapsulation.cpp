@@ -61,9 +61,9 @@ namespace Game {
 			init_pair(color, ncursesColor, COLOR_BLACK);
 			wattron(this->_game, COLOR_PAIR(color));
 		}
-		for (int y = 0; y < size.second; y++) {
-			for (int x = 0; x < size.first; x++) {
-				mvwaddch(this->_game, pos.first + y, pos.second + x, ' ' | A_REVERSE);
+		for (int y = 0; y < size.first; y++) {
+			for (int x = 0; x < size.second; x++) {
+				mvwaddch(this->_game, pos.second + x, pos.first + y, ' ' | A_REVERSE);
 			}
 		}
 		if (color > 0) {
@@ -73,56 +73,10 @@ namespace Game {
 
 	void NcursesEncapsulation::drawThickRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size, int thickness, int color) const
 	{
-		short ncursesColor;
-		switch (color) {
-			case 0: ncursesColor = COLOR_BLACK; break;
-			case 1: ncursesColor = COLOR_WHITE; break;
-			case 2: ncursesColor = COLOR_RED; break;
-			case 3: ncursesColor = COLOR_GREEN; break;
-			case 4: ncursesColor = COLOR_BLUE; break;
-			default: ncursesColor = COLOR_BLACK; break;
-		}
-
-		if (color > 0) {
-			init_pair(color, ncursesColor, COLOR_BLACK);
-			wattron(this->_game, COLOR_PAIR(color));
-		}
-		for (int t = 0; t < thickness; t++) {
-			for (int x = t; x < size.first - t; x++) {
-				mvwaddch(this->_game, pos.first + t, pos.second + x, ' ' | A_REVERSE);
-				mvwaddch(this->_game, pos.first + size.second - t - 1, pos.second + x, ' ' | A_REVERSE);
-			}
-			for (int y = t; y < size.second - t; y++) {
-				mvwaddch(this->_game, pos.first + y, pos.second + t, ' ' | A_REVERSE);
-				mvwaddch(this->_game, pos.first + y, pos.second + size.first - t - 1, ' ' | A_REVERSE);
-			}
-		}
-		if (color > 0) {
-			wattroff(this->_game, COLOR_PAIR(color));
-		}
 	}
 
 	void NcursesEncapsulation::drawText(const std::string &text, const std::pair<int, int> &pos, int color) const
 	{
-		// Map color codes to match SFML: 0=Black, 1=White, 2=Red, 3=Green, 4=Blue
-		short ncursesColor;
-		switch (color) {
-			case 0: ncursesColor = COLOR_BLACK; break;
-			case 1: ncursesColor = COLOR_WHITE; break;
-			case 2: ncursesColor = COLOR_RED; break;
-			case 3: ncursesColor = COLOR_GREEN; break;
-			case 4: ncursesColor = COLOR_BLUE; break;
-			default: ncursesColor = COLOR_WHITE; break; // Default to white for visibility
-		}
-		
-		if (color > 0) {
-			init_pair(color, ncursesColor, COLOR_BLACK);
-			wattron(this->_game, COLOR_PAIR(color));
-		}
-		mvwprintw(this->_game, pos.first, pos.second, "%s", text.c_str());
-		if (color > 0) {
-			wattroff(this->_game, COLOR_PAIR(color));
-		}
 	}
 
 	void NcursesEncapsulation::changeTitle(const std::string &title)

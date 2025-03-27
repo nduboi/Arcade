@@ -28,13 +28,13 @@ namespace Game {
 			case 0x1B:
 				return IEvent::ESCAPE;
 			case KEY_UP:
-				return IEvent::LEFT;
-			case KEY_DOWN:
-				return IEvent::RIGHT;
-			case KEY_LEFT:
 				return IEvent::UP;
-			case KEY_RIGHT:
+			case KEY_DOWN:
 				return IEvent::DOWN;
+			case KEY_LEFT:
+				return IEvent::LEFT;
+			case KEY_RIGHT:
+				return IEvent::RIGHT;
 			case BUTTON1_CLICKED:
 				return IEvent::MOUSELEFTCLICK;
 			case BUTTON2_CLICKED:

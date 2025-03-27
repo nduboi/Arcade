@@ -22,7 +22,7 @@ namespace Game {
 	}
 
 	void arcadeNcurses::drawRectangle(int color, std::pair<size_t, size_t> position) {
-        this->_ncurses.drawRectangle({static_cast<int>(position.first ), static_cast<int>(position.second * 2)}, {2, 1}, color);
+        this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, color);
 	}
 
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
@@ -49,11 +49,10 @@ namespace Game {
 	}
 
 	void arcadeNcurses::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
-		this->_ncurses.drawText(text, {static_cast<int>(position.first), static_cast<int>(position.second * 2)}, color);
 	}
 
 	void arcadeNcurses::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
-        this->_ncurses.drawRectangle({static_cast<int>(position.first), static_cast<int>(position.second * 2)}, {2, 1}, color);
+        this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, color);
 	}
 
 	void arcadeNcurses::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
