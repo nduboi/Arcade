@@ -271,4 +271,32 @@ public:
     ~NcursesException() = default;
 };
 
+/**
+ * @class SDLException
+ * @brief Exception class for handling DLL-related errors.
+ *
+ * The SDLException class is used to handle errors related to the program
+ * core
+ */
+class SDLException : public std::exception {
+private:
+    std::string _msg; ///< Error message.
+
+public:
+    /**
+     * @brief Returns the error message.
+     * @return The error message.
+     */
+    const char *what() const noexcept override { return this->_msg.c_str(); }
+    /**
+     * @brief Constructor for SDLException.
+     * @param msg The error message.
+     */
+    SDLException(const std::string &msg) : _msg(msg) {}
+    /**
+     * @brief Destructor for SDLException.
+     */
+    ~SDLException() = default;
+};
+
 #endif /* !Exception_HPP_ */

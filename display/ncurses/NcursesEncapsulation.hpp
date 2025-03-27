@@ -8,7 +8,7 @@
 #include "ncurses.h"
 #include "Exception.hpp"
 
-namespace Game {
+namespace Display {
 
 	class NcursesEncapsulation {
 	private:

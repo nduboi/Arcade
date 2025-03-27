@@ -4,6 +4,8 @@ add_library(arcade_sdl2 SHARED
     arcadeSDL.hpp
     arcadeSDLEvent.cpp
     arcadeSDLEvent.hpp
+    SDLEncapsulation.cpp
+    SDLEncapsulation.hpp
 )
 
 target_link_libraries(arcade_sdl2 SDL2 SDL2_image)
