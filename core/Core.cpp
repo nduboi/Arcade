@@ -214,14 +214,14 @@ void Core::_displayHUD() {
 	if (elapsed_seconds.count() < 0.5)
 		return;
 
-	if (this->_moduleLoaded == GAME) {
-		std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
-		std::vector<std::shared_ptr<IEntity>> hud = gameModule->getHUD();
+	// if (this->_moduleLoaded == GAME) {
+	// 	std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
+	// 	std::vector<std::shared_ptr<IEntity>> hud = gameModule->getHUD();
 
-		for (auto &entity : hud) {
-			std::cout << "HUD: " << entity->getText() << std::endl;
-		}
-	}
+	// 	for (auto &entity : hud) {
+	// 		std::cout << "HUD: " << entity->getText() << std::endl;
+	// 	}
+	// }
 }
 
 void Core::_refreshLibList() {

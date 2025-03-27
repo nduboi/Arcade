@@ -11,6 +11,7 @@
 namespace Display {
 	class arcadeNcurses : public IWindow {
 	private:
+		std::pair<size_t, size_t> _mapSize;
 		Display::NcursesEncapsulation _ncurses;
 	public:
 
