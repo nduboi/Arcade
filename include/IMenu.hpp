@@ -29,7 +29,7 @@ struct Boxes {
 class IMenu {
     public:
         virtual ~IMenu() {}; // Declare the destructor
-        virtual void displayMenu(std::vector<Boxes> _boxes,
+        virtual void displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes,
             std::vector<std::string> libs, std::vector<std::string> games) = 0;
         virtual std::vector<Boxes> getBoxPoses() = 0;
         virtual std::string getUsername() = 0;
