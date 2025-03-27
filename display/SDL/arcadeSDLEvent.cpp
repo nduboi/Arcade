@@ -84,25 +84,24 @@ std::pair<int, int> arcadeSDLEvent::getMousePos()
 {
     auto sdlWindow = std::dynamic_pointer_cast<arcadeSDL>(_window);
 
-    if (_mapSize.first > 0 && _mapSize.second > 0) {
-        int winWidth, winHeight;
-        SDL_GetWindowSize(sdlWindow->window, &winWidth, &winHeight);
+    if (this->_mapSize.first > 0 && this->_mapSize.second > 0) {
+        auto WinSize = sdlWindow->sdl->getWindowSize();
         return {
-            (this->_mousePos.first * _mapSize.first) / winWidth,
-            (this->_mousePos.second * _mapSize.second) / winHeight
+            (this->_mousePos.first * this->_mapSize.first) / WinSize.first,
+            (this->_mousePos.second * this->_mapSize.second) / WinSize.second
         };
     }
     return this->_mousePos;
 }
 
 void arcadeSDLEvent::setMapSize(std::pair<int, int> size) {
-    _mapSize = size;
+    this->_mapSize = size;
 }
 
 void arcadeSDLEvent::cleanup() {
 }
 
 arcadeSDLEvent::arcadeSDLEvent(std::shared_ptr<IWindow> window) : _window(window) {
-    _mousePos = std::make_pair(0, 0);
-    _mapSize = std::make_pair(0, 0);
+    this->_mousePos = std::make_pair(0, 0);
+    this->_mapSize = std::make_pair(0, 0);
 }
