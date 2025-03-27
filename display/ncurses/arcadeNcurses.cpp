@@ -27,7 +27,7 @@ namespace Game {
 	}
 
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
-		color_t color, color_t outline,  int thickness)
+	color_t color)
 	{
 		//TODO: À implémenter
 	}
@@ -36,7 +36,10 @@ namespace Game {
 		//TODO: À implémenter
 	}
 
-	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+
+	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color,
+		int charSize)
+	{
 		//TODO: À implémenter
 	}
 
