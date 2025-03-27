@@ -8,7 +8,7 @@ add_library(arcade_sdl2 SHARED
     SDLEncapsulation.hpp
 )
 
-target_link_libraries(arcade_sdl2 SDL2 SDL2_image)
+target_link_libraries(arcade_sdl2 SDL2 SDL2_image SDL2_ttf)
 
 add_custom_command(TARGET arcade_sdl2 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different

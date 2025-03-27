@@ -34,7 +34,7 @@ namespace Display {
 	}
 
 
-	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) {
 	}
 
 	std::pair<int, int> arcadeNcurses::getWindowSize() {
