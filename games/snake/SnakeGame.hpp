@@ -16,6 +16,8 @@ class SnakeGame : public GameTemplate {
         SnakeGame();
         ~SnakeGame() = default;
 
+        std::vector<std::shared_ptr<IEntity>> getHUD() const override;
+
     protected:
     private:
         void setLayerBackground();
