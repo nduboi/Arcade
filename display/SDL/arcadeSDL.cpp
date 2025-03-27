@@ -171,7 +171,7 @@ void arcadeSDL::setMapSize(std::pair<size_t, size_t> size) {
 void arcadeSDL::resizeWindow(size_t x, size_t y) {
 }
 
-arcadeSDL::arcadeSDL() : window(nullptr), renderer(nullptr)
+arcadeSDL::arcadeSDL()
 {
     if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0) {
         std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
