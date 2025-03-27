@@ -104,7 +104,7 @@ void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> positio
 
 std::pair<int, int> arcadeSDL::getWindowSize()
 {
-    this->sdl->getWindowSize();
+    return this->sdl->getWindowSize();
 }
 
 bool arcadeSDL::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size)
