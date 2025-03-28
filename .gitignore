@@ -6,3 +6,4 @@ arcade
 cmake-build-debug
 *build*
 doc
+savefile.json

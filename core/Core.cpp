@@ -9,13 +9,15 @@
 #include "Core.hpp"
 #include "IEntity.hpp"
 
-Core::Core() : _menu(this->display) {
+Core::Core() : _menu(this->display), _saver("savefile.json") {
 	this->_refreshLibList();
 	this->_lastEvent = IEvent::event_t::NOTHING;
 	this->_moduleLoaded = MENU;
 }
 
 Core::~Core() {
+	if (this->game)
+		this->_saveScore();
 	if (this->display)
 		this->display->closeWindow();
 	this->event.reset();
@@ -170,6 +172,13 @@ void Core::_compute() {
 }
 
 void Core::_display() {
+	static std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
+	std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last;
+	if (elapsed_seconds.count() < 0.1)
+		return;
+	last = now;
+
 	this->display->clear();
 	this->_displayGame();
 	this->_displayMenu();
@@ -179,12 +188,6 @@ void Core::_display() {
 
 void Core::_displayGame()
 {
-	static std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
-	std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsed_seconds = now - last;
-	if (elapsed_seconds.count() < 0.1)
-		return;
-
 	if (this->_moduleLoaded == GAME) {
 		grid_t grid = this->game->getEntities();
 		std::pair<size_t, size_t> gridSize = this->game->getGridSize();
@@ -210,12 +213,6 @@ void Core::_displayMenu()
 }
 
 void Core::_displayHUD() {
-	static std::chrono::time_point<std::chrono::system_clock> last = std::chrono::system_clock::now();
-	std::chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
-	std::chrono::duration<double> elapsed_seconds = now - last;
-	if (elapsed_seconds.count() < 0.5)
-		return;
-
 	// if (this->_moduleLoaded == GAME) {
 	// 	std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
 	// 	std::vector<std::shared_ptr<IEntity>> hud = gameModule->getHUD();
@@ -253,12 +250,14 @@ void Core::_refreshLibList() {
 void Core::_loadNextGame() {
 	if (this->_gameLibPath.size() == 1 && this->_moduleLoaded == GAME)
 		return;
+	this->_saveScore();
 	this->_gameLibIndex++;
 	if (this->_gameLibIndex >= this->_gameLibPath.size())
 		this->_gameLibIndex = 0;
 	if (strcmp(this->_gameLoader.getModulePath(), "") != 0 && std::filesystem::canonical(this->_gameLibPath.at(this->_gameLibIndex)) == std::filesystem::canonical(this->_gameLoader.getModulePath()))
 		return this->_loadNextGame();
 	this->loadGameModule(this->_gameLibPath.at(this->_gameLibIndex));
+	this->_setHighScore();
 }
 
 void Core::_loadNextGraphic() {
@@ -309,6 +308,27 @@ void Core::loadGameModule(const std::string &path) {
 		throw CoreException("Error the library loaded is not a Game Module");
 	this->_moduleLoaded = GAME;
 	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
+}
+
+void Core::_saveScore() {
+	if (this->_moduleLoaded != GAME)
+		return;
+
+	std::size_t highScore = this->game->getHighScore();
+	std::string username = "default";
+	std::string game = this->_gameLibPath.at(this->_gameLibIndex);
+
+	this->_saver.saveScore(highScore, username, game);
+}
+
+void Core::_setHighScore() {
+	if (this->_moduleLoaded != GAME)
+		return;
+
+	std::string username = "default";
+	std::string game = this->_gameLibPath.at(this->_gameLibIndex);
+
+	this->game->setHighScore(this->_saver.getHighScore(username, game));
 }
 
 void Core::loop() {

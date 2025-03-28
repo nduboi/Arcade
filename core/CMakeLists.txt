@@ -2,6 +2,8 @@ add_executable(arcade
         main.cpp
         Core.cpp
         Core.hpp
+        Saver.cpp
+        Saver.hpp
 )
 
 add_custom_command(TARGET arcade POST_BUILD
