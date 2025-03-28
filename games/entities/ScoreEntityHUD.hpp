@@ -12,7 +12,7 @@
 
 class ScoreEntityHUD : public AEntity {
     public:
-        ScoreEntityHUD(std::size_t score);
+        ScoreEntityHUD(std::size_t score, std::pair<std::size_t, std::size_t> position);
         ~ScoreEntityHUD() = default;
 };
 

@@ -12,7 +12,7 @@
 
 class TimeEntityHUD : public AEntity {
     public:
-        TimeEntityHUD(std::size_t time);
+        TimeEntityHUD(std::size_t time, std::pair<size_t, size_t> position);
         ~TimeEntityHUD() = default;
 
     protected:

@@ -7,11 +7,11 @@
 
 #include "TimeEntityHUD.hpp"
 
-TimeEntityHUD::TimeEntityHUD(std::size_t time)
+TimeEntityHUD::TimeEntityHUD(std::size_t time, std::pair<size_t, size_t> position)
 {
     this->_color = 1;
     this->_text = "Time: " + std::to_string(time) + "s";
-    this->_position = {0, 1};
+    this->_position = position;
     this->_isMovable = false;
     this->_hasCollisions = false;
     this->_isControlable = false;

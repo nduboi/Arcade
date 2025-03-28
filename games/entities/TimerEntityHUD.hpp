@@ -12,7 +12,7 @@
 
 class TimerEntityHUD : public AEntity {
     public:
-        TimerEntityHUD(std::size_t time, std::size_t limit);
+        TimerEntityHUD(std::size_t time, std::size_t limit, std::pair<std::size_t, std::size_t> position);
         ~TimerEntityHUD() = default;
 };
 
