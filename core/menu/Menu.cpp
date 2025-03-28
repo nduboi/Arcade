@@ -7,8 +7,10 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {170, 25}, 72)
+Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {170, 25}, 72),
+    _libraryTitle(window, "Graphic", {100, 175}, 36), _gameTitle(window, "Game", {600, 175}, 36)
 {
+
 }
 
 void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes,
@@ -24,6 +26,32 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
         "assets/background/background_menu.jpg", {0, 0});
 
     _menuTitle.draw(window);
+    _libraryTitle.draw(window);
+    _gameTitle.draw(window);
+
+    std::vector<Boxes> boxes = getBoxPoses();
+
+    for (const auto& box : boxes) {
+        std::cout << "je suis ici" << std::endl;
+        std::vector<int> boxColor = box.selected ?
+            std::vector<int>{100, 200, 100} :
+            std::vector<int>{200, 200, 200};
+
+        std::pair<size_t, size_t> boxSize = {
+            static_cast<size_t>(box.posBottom.first - box.posTop.first),
+            static_cast<size_t>(box.posBottom.second - box.posTop.second)
+        };
+
+        window->drawRectangleMenu(
+            boxSize,
+            {static_cast<size_t>(box.posTop.first), static_cast<size_t>(box.posTop.second)},
+            {boxColor[0], boxColor[1], boxColor[2]}
+        );
+
+        window->drawTextMenu(
+            box._nameBoxes, {(box.posTop.first + box.posBottom.first) / 2 - box._nameBoxes.length() * 5,
+            box.posBottom.second + 10}, {255, 255, 255}, 20);
+    }
 }
 
 std::vector<Boxes> Menu::getBoxPoses()

@@ -7,6 +7,7 @@
 
 #include "MenuTitle.hpp"
 #include <iostream>
+
 MenuTitle::MenuTitle(const std::shared_ptr<IWindow> &window, const std::string& title,
     const std::pair<int, int>& position, int fontSize) : _window(window)
 {

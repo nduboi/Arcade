@@ -19,6 +19,8 @@ class Menu : public IMenu {
 	private:
 		std::shared_ptr<IWindow> _window;
 		MenuTitle _menuTitle;
+		MenuTitle _libraryTitle;
+		MenuTitle _gameTitle;
 	public:
 		// Constructor
 		Menu(const std::shared_ptr<IWindow> &window);
