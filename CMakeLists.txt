@@ -7,7 +7,6 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 add_compile_options("-fno-gnu-unique")
 
 add_subdirectory(display)
-add_subdirectory(menu)
 add_subdirectory(games)
 add_subdirectory(core)
 
@@ -23,4 +22,3 @@ target_include_directories(arcade_sfml PRIVATE include)
 target_include_directories(arcade_sdl2 PRIVATE include)
 target_include_directories(arcade_ncurses PRIVATE include)
 #target_include_directories(arcade_caca PRIVATE include)
-target_include_directories(arcade_menu PRIVATE include)

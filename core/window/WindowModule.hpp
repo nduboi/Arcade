@@ -38,11 +38,11 @@ public:
 	void clear() override;
 	void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
 	void drawRectangle(int color, std::pair<size_t, size_t> position) override;
-	void drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline, int thickness) override;
+	void drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) override;
 	void drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) override;
 	void drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) override;
 	void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
-	void drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) override;
+	void drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) override;
 	void setMapSize(std::pair<size_t, size_t> size) override;
 	std::pair<int, int> getWindowSize() override;
 	bool isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) override;
