@@ -40,6 +40,8 @@ private:
 
 	void _compute();
 
+	void _saveScore();
+
 	void _display();
 
 	void _displayGame();
