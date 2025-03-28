@@ -187,10 +187,11 @@ void arcadeSFML::setMapSize(std::pair<size_t, size_t> size) {
 
 void arcadeSFML::resizeWindow(size_t x, size_t y) {
 	this->window.setSize({static_cast<unsigned>(x), static_cast<unsigned>(y)});
+	this->window.setView(sf::View(sf::FloatRect(0, 0, x, y)));
 }
 
 arcadeSFML::arcadeSFML() :
-	window(sf::VideoMode(800, 900), "SFML window", sf::Style::Titlebar | sf::Style::Close)
+	window(sf::VideoMode(1620, 900), "SFML window", sf::Style::Titlebar | sf::Style::Close)
 {
 	this->_mapSize = {0, 0};
 }

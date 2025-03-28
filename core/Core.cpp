@@ -258,6 +258,7 @@ void Core::_loadNextGame() {
 		return this->_loadNextGame();
 	this->loadGameModule(this->_gameLibPath.at(this->_gameLibIndex));
 	this->_setHighScore();
+	this->display->resizeWindow(800, 900);
 }
 
 void Core::_loadNextGraphic() {
