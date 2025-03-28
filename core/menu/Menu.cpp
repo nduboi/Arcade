@@ -7,17 +7,24 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {200, 50}, 36)
+Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {170, 25}, 72)
 {
-
 }
 
-void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
-    std::vector<std::string> games)
+void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes,
+    std::vector<std::string> libs, std::vector<std::string> games)
 {
     if (!window)
         return;
+
+    std::pair<int, int> windowSize = window->getWindowSize();
+
     window->clear();
+
+    window->drawSpriteMenu(
+        {static_cast<float>(windowSize.first), static_cast<float>(windowSize.second)},
+        "assets/background/background_menu.jpg", {0, 0});
+
     _menuTitle.draw(window);
     window->display();
 }
