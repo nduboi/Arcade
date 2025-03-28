@@ -249,15 +249,15 @@ void Cell::revealAdjacentCells(size_t x, size_t y, grid_t& grid)
 
 std::size_t Cell::getColor() const
 {
+    if (this->_isFlagged)
+        return 4;
     if (!this->_isRevealed)
         return 1;
     if (this->_isMine)
         return 2;
     if (this->_adjacentMines == 0)
         return 0;
-    if (this->_isFlagged)
-        return 4;
-    return -1;
+    return 1;
 }
 
 std::string Cell::getText() const
@@ -270,7 +270,7 @@ std::string Cell::getText() const
         return "#";
     if (this->_adjacentMines > 0)
         return std::to_string(this->_adjacentMines);
-    return "D";
+    return "";
 }
 
 

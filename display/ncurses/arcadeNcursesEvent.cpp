@@ -3,6 +3,7 @@
 //
 
 #include "arcadeNcursesEvent.hpp"
+#include <iostream>
 
 
 namespace Display {
@@ -12,6 +13,18 @@ namespace Display {
 	IEvent::event_t arcadeNcursesEvent::pollEvents(std::pair<int, int> gridSize) {
 		int ch = wgetch(stdscr);
 		(void)gridSize;
+
+		MEVENT event;
+		if (ch == KEY_MOUSE) {
+			if (getmouse(&event) == OK) {
+				_mousePos = {event.x, event.y};
+
+				if (event.bstate & BUTTON1_PRESSED)
+					return IEvent::MOUSELEFTCLICK;
+				if (event.bstate & BUTTON3_PRESSED)
+					return IEvent::MOUSERIGHTCLICK;
+			}
+		}
 
 		switch (ch) {
 			case 'n':
@@ -48,7 +61,11 @@ namespace Display {
 	}
 
 	std::pair<int, int> arcadeNcursesEvent::getMousePos() {
-		return {0, 0};
+		std::pair<int, int> tmp = this->_mousePos;
+
+		tmp.second -= 4;
+		tmp.first /= 2;
+		return tmp;
 	}
 
 	void arcadeNcursesEvent::setMapSize(std::pair<int, int> size) {
