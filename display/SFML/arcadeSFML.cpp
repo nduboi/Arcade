@@ -99,7 +99,7 @@ void arcadeSFML::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<siz
 void arcadeSFML::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize)
 {
     sf::Font font;
-    if (!font.loadFromFile("assets/Arial.ttf"))
+    if (!font.loadFromFile("assets/ARCADECLASSIC.TTF"))
         return;
 
     sf::Text sfText;
