@@ -177,7 +177,7 @@ namespace Display {
 	{
         TTF_Font* font = (charSize == 20 && defaultFont)
             ? defaultFont
-            : TTF_OpenFont("assets/Arial.ttf", charSize);
+            : TTF_OpenFont("assets/ARCADECLASSIC.TTF", charSize);
 
         if (!font) {
             SDL_Log("Impossible de charger la police : %s", TTF_GetError());

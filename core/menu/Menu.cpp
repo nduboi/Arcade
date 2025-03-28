@@ -19,14 +19,11 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
 
     std::pair<int, int> windowSize = window->getWindowSize();
 
-    window->clear();
-
     window->drawSpriteMenu(
         {static_cast<float>(windowSize.first), static_cast<float>(windowSize.second)},
         "assets/background/background_menu.jpg", {0, 0});
 
     _menuTitle.draw(window);
-    window->display();
 }
 
 std::vector<Boxes> Menu::getBoxPoses()
