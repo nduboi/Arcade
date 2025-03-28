@@ -39,6 +39,10 @@ public:
 	void setMapSize(std::pair<int, int> size) override;
 
 	void cleanup() override;
+
+	std::string getUsername();
+
+    void renderWrittiing();
 	/**
 	 * @brief Constructor for the EventModule class.
 	 * 

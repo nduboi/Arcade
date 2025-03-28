@@ -75,6 +75,13 @@ namespace Display {
 	void arcadeNcursesEvent::cleanup() {
 	}
 
+	std::string arcadeNcursesEvent::getUsername() {
+		return "";
+	}
+
+	void arcadeNcursesEvent::renderWrittiing() {
+	}
+
 	arcadeNcursesEvent::arcadeNcursesEvent(std::shared_ptr<IWindow> window) {
 		(void) window;
 	}

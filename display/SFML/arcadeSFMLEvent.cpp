@@ -93,6 +93,13 @@ void arcadeSFMLEvent::setMapSize(std::pair<int, int> size) {
 void arcadeSFMLEvent::cleanup() {
 }
 
+std::string arcadeSFMLEvent::getUsername() {
+    return "";
+}
+
+void arcadeSFMLEvent::renderWrittiing() {
+}
+
 arcadeSFMLEvent::arcadeSFMLEvent(std::shared_ptr<IWindow> window) : _window(window) {
     this->_mousePos = std::make_pair(0, 0);
     this->_mapSize = std::make_pair(0, 0);

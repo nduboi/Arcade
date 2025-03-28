@@ -27,6 +27,10 @@ public:
 
 	void cleanup() override;
 
+	std::string getUsername();
+
+	void renderWrittiing();
+
 	arcadeSDLEvent(std::shared_ptr<IWindow> window);
 
 	~arcadeSDLEvent() = default;

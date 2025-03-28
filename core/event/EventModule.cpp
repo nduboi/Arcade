@@ -37,6 +37,20 @@ void EventModule::cleanup() {
 	this->_object->cleanup();
 }
 
+std::string EventModule::getUsername()
+{
+	if (!this->_object)
+		throw EventModuleException("No lib loaded");
+	return this->_object->getUsername();
+}
+
+void EventModule::renderWrittiing()
+{
+	if (!this->_object)
+		throw EventModuleException("No lib loaded");
+	this->_object->renderWrittiing();
+}
+
 EventModule::EventModule(IEvent *mdl)
 {
 	this->_object.reset(mdl);

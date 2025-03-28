@@ -28,6 +28,10 @@ namespace Display {
 
 		void cleanup() override;
 
+		virtual std::string getUsername();
+
+		virtual void renderWrittiing();
+
 		arcadeNcursesEvent(std::shared_ptr<IWindow> window);
 
 		~arcadeNcursesEvent() = default;

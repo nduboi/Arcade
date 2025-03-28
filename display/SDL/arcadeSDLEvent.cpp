@@ -102,6 +102,13 @@ void arcadeSDLEvent::setMapSize(std::pair<int, int> size) {
 void arcadeSDLEvent::cleanup() {
 }
 
+std::string arcadeSDLEvent::getUsername() {
+    return "";
+}
+
+void arcadeSDLEvent::renderWrittiing() {
+}
+
 arcadeSDLEvent::arcadeSDLEvent(std::shared_ptr<IWindow> window) : _window(window) {
     this->_mousePos = std::make_pair(0, 0);
     this->_mapSize = std::make_pair(0, 0);
