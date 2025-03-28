@@ -11,6 +11,7 @@ namespace Display {
 
 	IEvent::event_t arcadeNcursesEvent::pollEvents(std::pair<int, int> gridSize) {
 		int ch = wgetch(stdscr);
+		(void)gridSize;
 
 		switch (ch) {
 			case 'n':
@@ -51,11 +52,13 @@ namespace Display {
 	}
 
 	void arcadeNcursesEvent::setMapSize(std::pair<int, int> size) {
+		(void)size;
 	}
 
 	void arcadeNcursesEvent::cleanup() {
 	}
 
 	arcadeNcursesEvent::arcadeNcursesEvent(std::shared_ptr<IWindow> window) {
+		(void) window;
 	}
 } // game

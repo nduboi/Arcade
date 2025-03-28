@@ -16,6 +16,8 @@ Core::Core() : _menu(this->display) {
 }
 
 Core::~Core() {
+	if (this->display)
+		this->display->closeWindow();
 	this->event.reset();
 	this->display.reset();
 	this->displayPtr.reset();
@@ -132,8 +134,8 @@ void Core::_processClickEvent(int x, int y, int z) {
 	if (entity == nullptr)
 		return;
 
-	clickType_t state = (_lastEvent == IEvent::event_t::MOUSELEFTCLICK) ? LEFT_CLICK :
-		(_lastEvent == IEvent::event_t::MOUSERIGHTCLICK) ? RIGHT_CLICK : MIDDLE_CLICK;
+	clickType_t state = (this->_lastEvent == IEvent::event_t::MOUSELEFTCLICK) ? LEFT_CLICK :
+		(this->_lastEvent == IEvent::event_t::MOUSERIGHTCLICK) ? RIGHT_CLICK : MIDDLE_CLICK;
 	std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
 	entity->onClick(gameModule, state);
 }
@@ -284,6 +286,8 @@ void Core::displayAllLib()
 
 void Core::loadDisplayModule(const std::string &path)
 {
+	if (this->display)
+		this->display->closeWindow();
 	this->event.reset();
 	this->display.reset();
 	this->displayPtr.reset();

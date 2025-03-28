@@ -10,6 +10,8 @@ add_library(arcade_ncurses SHARED
 
 target_link_libraries(arcade_ncurses ncurses)
 
+target_compile_options(arcade_ncurses PRIVATE -g3 -ggdb -O0 -Wall -Wextra -Wpedantic)
+
 add_custom_command(TARGET arcade_ncurses POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "$<TARGET_FILE_DIR:arcade_ncurses>/libarcade_ncurses.so"
