@@ -54,6 +54,9 @@ namespace Display {
 	void NcursesEncapsulation::drawRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size, int color) const
 	{
 		short ncursesColor;
+		if (color == 0)
+			return;
+
 		switch (color) {
 			case 0: ncursesColor = COLOR_BLACK; break;
 			case 1: ncursesColor = COLOR_WHITE; break;
@@ -92,6 +95,35 @@ namespace Display {
 		(void)color;
 	}
 
+	void NcursesEncapsulation::drawCharacter(char character, const std::pair<int, int> &pos, const std::pair<int, int> &size, int color) const
+	{
+		short ncursesColor;
+		if (color == 0)
+			return;
+
+		switch (color) {
+			case 0: ncursesColor = COLOR_BLACK; break;
+			case 1: ncursesColor = COLOR_WHITE; break;
+			case 2: ncursesColor = COLOR_RED; break;
+			case 3: ncursesColor = COLOR_GREEN; break;
+			case 4: ncursesColor = COLOR_BLUE; break;
+			default: ncursesColor = COLOR_BLACK; break;
+		}
+
+		if (color > 0) {
+			init_pair(color, ncursesColor, COLOR_BLACK);
+			wattron(this->_game, COLOR_PAIR(color));
+		}
+		for (int y = 0; y < size.first; y++) {
+			for (int x = 0; x < size.second; x++) {
+				mvwaddch(this->_game, pos.second + x, pos.first + y, character | A_REVERSE);
+			}
+		}
+		if (color > 0) {
+			wattroff(this->_game, COLOR_PAIR(color));
+		}
+	}
+
 	void NcursesEncapsulation::changeTitle(const std::string &title)
 	{
 		this->_appTitle = title;
@@ -126,6 +158,8 @@ namespace Display {
 		curs_set(0);
 		nodelay(stdscr, TRUE);
 		timeout(0);
+		mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
+		mouseinterval(0);
 		int row, col;
 		(void) row;
 		getmaxyx(this->_window, row, col);
