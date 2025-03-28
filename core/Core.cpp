@@ -213,14 +213,14 @@ void Core::_displayMenu()
 }
 
 void Core::_displayHUD() {
-	// if (this->_moduleLoaded == GAME) {
-	// 	std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
-	// 	std::vector<std::shared_ptr<IEntity>> hud = gameModule->getHUD();
+	if (this->_moduleLoaded != GAME)
+		return;
 
-	// 	for (auto &entity : hud) {
-	// 		std::cout << "HUD: " << entity->getText() << std::endl;
-	// 	}
-	// }
+	std::vector<std::shared_ptr<IEntity>> hud = this->game->getHUD();
+
+	for (auto &entity : hud) {
+		this->display->drawText(entity->getText(), entity->getColor(), entity->getPosition());
+	}
 }
 
 void Core::_refreshLibList() {
