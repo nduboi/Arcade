@@ -53,6 +53,8 @@ bool GameTemplate::getIsStarted() const
 
 void GameTemplate::setIsStarted(bool isStarted)
 {
+    if (isStarted == true && this->_isStarted == false)
+        this->setTime(0);
     this->_isStarted = isStarted;
 }
 
@@ -73,9 +75,18 @@ std::vector<std::shared_ptr<IEntity>> GameTemplate::getHUD() const
 
 size_t GameTemplate::getTime() const
 {
+    static size_t lastTime = 0;
+
+    if (this->_isStarted == false)
+        return 0;
+    if (this->getGameState() != PLAYING)
+        return lastTime;
+
     auto currentTime = std::chrono::steady_clock::now();
     auto elapsedSeconds = std::chrono::duration_cast<std::chrono::seconds>(
         currentTime - this->_time).count();
+
+    lastTime = elapsedSeconds;
     return static_cast<size_t>(elapsedSeconds);
 }
 
