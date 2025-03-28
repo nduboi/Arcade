@@ -38,6 +38,7 @@ class GameTemplate : public IGameModule {
         std::vector<std::shared_ptr<IEntity>> getHUD() const override;
         size_t getTime() const override;
         void setTime(size_t time) override;
+        void update(std::shared_ptr<IGameModule> gameModule) override;
 };
 
 #endif /* !AGAMEMODULE_HPP_ */

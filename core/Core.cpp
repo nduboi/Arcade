@@ -145,6 +145,8 @@ void Core::_processClickEvent(int x, int y, int z) {
 void Core::_compute() {
 	if (this->_moduleLoaded == GAME) {
 		std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
+		gameModule->update(gameModule);
+
 		grid_t grid = gameModule->getEntities();
 		std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
 

@@ -89,6 +89,12 @@ void GameModule::setTime(size_t time) {
 	this->_object->setTime(time);
 }
 
+void GameModule::update(std::shared_ptr<IGameModule> gameModule) {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	this->_object->update(gameModule);
+}
+
 GameModule::GameModule(IGameModule *mdl) {
 	this->_object.reset(mdl);
 }

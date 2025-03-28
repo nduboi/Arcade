@@ -99,3 +99,8 @@ void GameTemplate::setTime(size_t time)
         this->_time = newTime;
     }
 }
+
+void GameTemplate::update(std::shared_ptr<IGameModule> gameModule)
+{
+    (void)gameModule;
+}

@@ -40,6 +40,8 @@ public:
 
 	void setTime(size_t time) override;
 
+	void update(std::shared_ptr<IGameModule> gameModule) override;
+
 	GameModule(IGameModule *);
 
 	~GameModule() = default;
