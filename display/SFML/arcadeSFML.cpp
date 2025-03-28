@@ -159,9 +159,26 @@ bool arcadeSFML::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_
 }
 
 void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
-	(void)text;
-	(void)color;
-	(void)position;
+	sf::Text sfText;
+	sf::Font font;
+
+	if (!font.loadFromFile("assets/Arial.ttf"))
+		return;
+
+	sfText.setFont(font);
+	sfText.setString(text);
+	sfText.setCharacterSize(24);
+	switch (color)
+	{
+		case 0: sfText.setFillColor(sf::Color::Black); break;
+		case 1: sfText.setFillColor(sf::Color::White); break;
+		case 2: sfText.setFillColor(sf::Color::Red); break;
+		case 3: sfText.setFillColor(sf::Color::Green); break;
+		case 4: sfText.setFillColor(sf::Color::Blue); break;
+		default: sfText.setFillColor(sf::Color::Black); break;
+	}
+	sfText.setPosition(position.first, position.second);
+	this->window.draw(sfText);
 }
 
 void arcadeSFML::setMapSize(std::pair<size_t, size_t> size) {
