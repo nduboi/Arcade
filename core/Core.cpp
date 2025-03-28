@@ -9,13 +9,15 @@
 #include "Core.hpp"
 #include "IEntity.hpp"
 
-Core::Core() : _menu(this->display) {
+Core::Core() : _menu(this->display), _saver("savefile.json") {
 	this->_refreshLibList();
 	this->_lastEvent = IEvent::event_t::NOTHING;
 	this->_moduleLoaded = MENU;
 }
 
 Core::~Core() {
+	if (this->game)
+		this->_saveScore();
 	if (this->display)
 		this->display->closeWindow();
 	this->event.reset();
@@ -248,12 +250,14 @@ void Core::_refreshLibList() {
 void Core::_loadNextGame() {
 	if (this->_gameLibPath.size() == 1 && this->_moduleLoaded == GAME)
 		return;
+	this->_saveScore();
 	this->_gameLibIndex++;
 	if (this->_gameLibIndex >= this->_gameLibPath.size())
 		this->_gameLibIndex = 0;
 	if (strcmp(this->_gameLoader.getModulePath(), "") != 0 && std::filesystem::canonical(this->_gameLibPath.at(this->_gameLibIndex)) == std::filesystem::canonical(this->_gameLoader.getModulePath()))
 		return this->_loadNextGame();
 	this->loadGameModule(this->_gameLibPath.at(this->_gameLibIndex));
+	this->_setHighScore();
 }
 
 void Core::_loadNextGraphic() {
@@ -304,6 +308,27 @@ void Core::loadGameModule(const std::string &path) {
 		throw CoreException("Error the library loaded is not a Game Module");
 	this->_moduleLoaded = GAME;
 	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
+}
+
+void Core::_saveScore() {
+	if (this->_moduleLoaded != GAME)
+		return;
+
+	std::size_t highScore = this->game->getHighScore();
+	std::string username = "default";
+	std::string game = this->_gameLibPath.at(this->_gameLibIndex);
+
+	this->_saver.saveScore(highScore, username, game);
+}
+
+void Core::_setHighScore() {
+	if (this->_moduleLoaded != GAME)
+		return;
+
+	std::string username = "default";
+	std::string game = this->_gameLibPath.at(this->_gameLibIndex);
+
+	this->game->setHighScore(this->_saver.getHighScore(username, game));
 }
 
 void Core::loop() {

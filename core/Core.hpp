@@ -8,6 +8,7 @@
 #include "WindowModule.hpp"
 #include "GameModule.hpp"
 #include "Menu.hpp"
+#include "Saver.hpp"
 
 class Core {
 private:
@@ -30,6 +31,8 @@ private:
 
 	IEvent::event_t _lastEvent;
 
+	Saver _saver;
+
 	std::pair<int, int> _getEventDirection() const;
 
 	bool _isEventClick() const;
@@ -41,6 +44,8 @@ private:
 	void _compute();
 
 	void _saveScore();
+
+	void _setHighScore();
 
 	void _display();
 
