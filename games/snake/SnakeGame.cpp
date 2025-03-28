@@ -45,9 +45,9 @@ void SnakeGame::setLayerBackground()
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             if (grass)
-                this->_entities[y][x][0] = std::make_shared<VoidEntity>("assets/snake/grass_bright.png", 0, "", std::make_pair(x, y));
+                this->_entities[y][x][0] = std::make_shared<VoidEntity>("assets/snake/grass_bright.png", 1, "", std::make_pair(x, y));
             else
-                this->_entities[y][x][0] = std::make_shared<VoidEntity>("assets/snake/grass_dark.png", 0, "", std::make_pair(x, y));
+                this->_entities[y][x][0] = std::make_shared<VoidEntity>("assets/snake/grass_dark.png", 1, "", std::make_pair(x, y));
             grass = !grass;
         }
     }
@@ -57,20 +57,20 @@ void SnakeGame::setLayerEntities()
 {
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
-            this->_entities[y][x][1] = std::make_shared<VoidEntity>(this->_entities[y][x][0]->getSpriteName(), 0, "", std::make_pair(x, y));
+            this->_entities[y][x][1] = std::make_shared<VoidEntity>(this->_entities[y][x][0]->getSpriteName(), 1, "", std::make_pair(x, y));
         }
     }
 
-    this->_entities[8][8][1] = std::make_shared<SnakeHeadEntity>(4, "O", std::make_pair(8, 8));
+    this->_entities[8][8][1] = std::make_shared<SnakeHeadEntity>(4, "", std::make_pair(8, 8));
     this->setSnakeBody();
     this->setLayerApple();
 }
 
 void SnakeGame::setSnakeBody()
 {
-    this->_entities[8][7][1] = std::make_shared<SnakeBodyEntity>(3, "=", std::make_pair(7, 8), 0);
-    this->_entities[8][6][1] = std::make_shared<SnakeBodyEntity>(3, "=", std::make_pair(6, 8), 1);
-    this->_entities[8][5][1] = std::make_shared<SnakeBodyEntity>(3, "=", std::make_pair(5, 8), 2);
+    this->_entities[8][7][1] = std::make_shared<SnakeBodyEntity>(3, "", std::make_pair(7, 8), 0);
+    this->_entities[8][6][1] = std::make_shared<SnakeBodyEntity>(3, "", std::make_pair(6, 8), 1);
+    this->_entities[8][5][1] = std::make_shared<SnakeBodyEntity>(3, "", std::make_pair(5, 8), 2);
 
     auto body1 = std::dynamic_pointer_cast<SnakeBodyEntity>(this->_entities[8][7][1]);
     auto body2 = std::dynamic_pointer_cast<SnakeBodyEntity>(this->_entities[8][6][1]);
