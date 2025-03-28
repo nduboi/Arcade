@@ -26,14 +26,15 @@ namespace Display {
 	}
 
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
-		color_t color, color_t outline,  int thickness)
+	color_t color)
 	{
 	}
 
 	void arcadeNcurses::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
 	}
 
-	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
+
+	void arcadeNcurses::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) {
 	}
 
 	std::pair<int, int> arcadeNcurses::getWindowSize() {

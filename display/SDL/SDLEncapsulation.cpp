@@ -15,6 +15,11 @@ namespace Display {
 				return;
 			}
 		}
+		if (TTF_Init() == -1) {
+			std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
+			SDL_Quit();
+			return;
+		}
 		if (SDL_NumJoysticks() > 0) {
 			SDL_JoystickOpen(0);
 		}
@@ -37,6 +42,12 @@ namespace Display {
 			SDL_Quit();
 			return;
 		}
+
+		defaultFont = TTF_OpenFont("assets/Arial.ttf", 20);
+		if (!defaultFont) {
+			std::cerr << "Failed to load default font! SDL_ttf Error: " << TTF_GetError() << std::endl;
+		}
+
 		SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
 		SDL_RenderClear(this->renderer);
 		SDL_RenderPresent(this->renderer);
@@ -91,12 +102,166 @@ namespace Display {
 		return SDL_CreateTextureFromSurface(this->renderer, surface);
 	}
 
-	SDLEncapsulation::~SDLEncapsulation() {
+	void SDLEncapsulation::drawSpriteMenu(const std::pair<float, float>& size,
+        const std::string& asset, const std::pair<int, int>& position)
+	{
+        SDL_Surface* surface = IMG_Load(asset.c_str());
+        if (!surface) {
+            SDL_Log("Impossible de charger l'image : %s", IMG_GetError());
+            return;
+        }
+
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+        if (!texture) {
+            SDL_Log("Impossible de créer la texture : %s", SDL_GetError());
+            SDL_FreeSurface(surface);
+            return;
+        }
+
+        SDL_Rect destRect;
+        destRect.x = position.first;
+        destRect.y = position.second;
+        destRect.w = static_cast<int>(size.first);
+        destRect.h = static_cast<int>(size.second);
+
+        SDL_RenderCopy(this->renderer, texture, NULL, &destRect);
+        SDL_FreeSurface(surface);
+        SDL_DestroyTexture(texture);
+    }
+
+    void SDLEncapsulation::drawRectangleMenu(const std::pair<size_t, size_t>& size,
+        const std::pair<size_t, size_t>& position, const Color& color)
+	{
+        SDL_Color sdlColor = {
+            static_cast<Uint8>(color.r),
+            static_cast<Uint8>(color.g),
+            static_cast<Uint8>(color.b),
+            255
+        };
+        SDL_SetRenderDrawColor(this->renderer, sdlColor.r, sdlColor.g, sdlColor.b, sdlColor.a);
+
+        SDL_Rect rect;
+        rect.x = position.first;
+        rect.y = position.second;
+        rect.w = size.first;
+        rect.h = size.second;
+
+        SDL_RenderFillRect(this->renderer, &rect);
+    }
+
+    void SDLEncapsulation::drawThickRectangle(const std::pair<int, int>& position,
+        const std::pair<int, int>& size, int thickness)
+	{
+        SDL_Rect outerRect = {
+            position.first,
+            position.second,
+            static_cast<int>(size.first),
+            static_cast<int>(size.second)
+        };
+        SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 255);
+        SDL_RenderFillRect(this->renderer, &outerRect);
+
+        SDL_Rect innerRect = {
+            position.first + thickness,
+            position.second + thickness,
+            static_cast<int>(size.first - 2 * thickness),
+            static_cast<int>(size.second - 2 * thickness)
+        };
+        SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+        SDL_RenderFillRect(this->renderer, &innerRect);
+    }
+
+    void SDLEncapsulation::drawTextMenu(const std::string& text,
+        const std::pair<size_t, size_t>& position,
+		const Color& color, int charSize)
+	{
+        TTF_Font* font = (charSize == 20 && defaultFont)
+            ? defaultFont
+            : TTF_OpenFont("assets/Arial.ttf", charSize);
+
+        if (!font) {
+            SDL_Log("Impossible de charger la police : %s", TTF_GetError());
+            return;
+        }
+
+        SDL_Color sdlColor = {
+            static_cast<Uint8>(color.r),
+            static_cast<Uint8>(color.g),
+            static_cast<Uint8>(color.b),
+            255
+        };
+
+        SDL_Surface* surface = TTF_RenderText_Blended(font, text.c_str(), sdlColor);
+        if (!surface) {
+            SDL_Log("Impossible de créer la surface de texte : %s", TTF_GetError());
+            if (font != defaultFont) TTF_CloseFont(font);
+            return;
+        }
+
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+        if (!texture) {
+            SDL_Log("Impossible de créer la texture de texte : %s", SDL_GetError());
+            SDL_FreeSurface(surface);
+            if (font != defaultFont) TTF_CloseFont(font);
+            return;
+        }
+
+        SDL_Rect destRect;
+        destRect.x = position.first;
+        destRect.y = position.second;
+        destRect.w = surface->w;
+        destRect.h = surface->h;
+
+        SDL_RenderCopy(this->renderer, texture, NULL, &destRect);
+
+        SDL_FreeSurface(surface);
+        SDL_DestroyTexture(texture);
+        if (font != defaultFont) TTF_CloseFont(font);
+    }
+
+    void SDLEncapsulation::drawText(const std::string& text,
+        int color, const std::pair<size_t, size_t>& position)
+	{
+        if (!defaultFont) return;
+
+        SDL_Color sdlColor = {255, 255, 255, 255};
+        SDL_Surface* surface = TTF_RenderText_Blended(defaultFont, text.c_str(), sdlColor);
+        if (!surface) {
+            SDL_Log("Impossible de créer la surface de texte : %s", TTF_GetError());
+            return;
+        }
+
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+        if (!texture) {
+            SDL_Log("Impossible de créer la texture de texte : %s", SDL_GetError());
+            SDL_FreeSurface(surface);
+            return;
+        }
+
+        SDL_Rect destRect;
+        destRect.x = position.first;
+        destRect.y = position.second;
+        destRect.w = surface->w;
+        destRect.h = surface->h;
+
+        SDL_RenderCopy(this->renderer, texture, NULL, &destRect);
+
+        SDL_FreeSurface(surface);
+        SDL_DestroyTexture(texture);
+    }
+
+	SDLEncapsulation::~SDLEncapsulation()
+	{
+		if (defaultFont) {
+			TTF_CloseFont(defaultFont);
+		}
 		SDL_DestroyRenderer(this->renderer);
 		SDL_DestroyWindow(this->window);
+		TTF_Quit();
 		IMG_Quit();
 		SDL_Quit();
 		this->renderer = nullptr;
 		this->window = nullptr;
+		this->defaultFont = nullptr;
 	}
 }
