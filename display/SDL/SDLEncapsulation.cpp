@@ -26,7 +26,7 @@ namespace Display {
 		this->window = SDL_CreateWindow("Arcade - SDL2",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			800, 800,
+			800, 900,
 			SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
 		if (!this->window) {
 			std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
@@ -225,6 +225,14 @@ namespace Display {
         if (!defaultFont) return;
 
         SDL_Color sdlColor = {255, 255, 255, 255};
+        switch (color)
+        {
+            case 0: sdlColor = {0, 0, 0, 255}; break;      // Black
+            case 1: sdlColor = {255, 255, 255, 255}; break; // White
+            case 2: sdlColor = {255, 0, 0, 255}; break;    // Red
+            case 3: sdlColor = {0, 255, 0, 255}; break;    // Green
+            case 4: sdlColor = {0, 0, 255, 255}; break;    // Blue
+        }
         SDL_Surface* surface = TTF_RenderText_Blended(defaultFont, text.c_str(), sdlColor);
         if (!surface) {
             SDL_Log("Impossible de créer la surface de texte : %s", TTF_GetError());

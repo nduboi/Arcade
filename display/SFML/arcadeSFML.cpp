@@ -24,7 +24,7 @@ void arcadeSFML::clear() {
 std::pair<int, int> arcadeSFML::_getWindowPosition(std::pair<int, int> position) {
 	std::pair<int, int> windowPosition;
 	sf::Vector2u windowSize = this->window.getSize();
-	const int hudOffset = 100; // HUD offset of 100 pixels at the top
+	const int hudOffset = 100;
 
 	windowPosition.first = (position.first * windowSize.x) / this->_mapSize.first;
 	windowPosition.second = hudOffset + (position.second * (windowSize.y - hudOffset)) / this->_mapSize.second;
