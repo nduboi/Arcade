@@ -78,8 +78,8 @@ size_t Cell::createNumberMines(std::pair<size_t, size_t> map)
         return 10;
     if (map.first == 16 && map.second == 16)
         return 40;
-    if (map.first == 20 && map.second == 20)
-        return 120;
+    if (map.first == 30 && map.second == 30)
+        return 200;
     return static_cast<size_t>(totalCells * 0.15);
 }
 
