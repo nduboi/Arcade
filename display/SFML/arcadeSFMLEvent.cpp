@@ -74,7 +74,7 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
 std::pair<int, int> arcadeSFMLEvent::getMousePos()
 {
     auto sfmlWindow = std::dynamic_pointer_cast<arcadeSFML>(this->_window);
-    const int hudOffset = 100; // HUD offset of 100 pixels at the top
+    const int hudOffset = 100;
 
     if (this->_mapSize.first > 0 && this->_mapSize.second > 0) {
         sf::Vector2u winSize = sfmlWindow->window.getSize();

@@ -57,13 +57,13 @@ namespace Display {
 	}
 
 	arcadeNcurses::arcadeNcurses() {
-		this->_ncurses.changeTitle("Arcade");
+		this->_ncurses.changeTitle("");
 	}
 
 	void arcadeNcurses::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
-		(void)text;
-		(void)color;
-		(void)position;
+		(void) color;
+		(void) position;
+		this->_ncurses.appendToTitle(text);
 	}
 
 	void arcadeNcurses::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {

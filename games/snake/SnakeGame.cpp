@@ -12,6 +12,7 @@
 #include "AppleEntity.hpp"
 
 #include "ScoreEntityHUD.hpp"
+#include "HighScoreEntityHUD.hpp"
 #include "TimeEntityHUD.hpp"
 
 const int MAP_HEIGHT = 17;
@@ -24,7 +25,7 @@ SnakeGame::SnakeGame()
     this->_score = 0;
     this->_isStarted = false;
     this->_gameState = PLAYING;
-    this->_time = std::chrono::steady_clock::now(); // Initialize with current time
+    this->_time = std::chrono::steady_clock::now();
 
     this->_entities.resize(MAP_HEIGHT);
     for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -103,9 +104,10 @@ std::vector<std::shared_ptr<IEntity>> SnakeGame::getHUD() const
 {
     std::vector<std::shared_ptr<IEntity>> hud;
 
-    hud.push_back(std::make_shared<ScoreEntityHUD>(this->getScore()));
+    hud.push_back(std::make_shared<ScoreEntityHUD>(this->getScore(), std::make_pair(10, 15)));
+    hud.push_back(std::make_shared<HighScoreEntityHUD>(this->getHighScore(), std::make_pair(10, 55)));
 
     std::size_t secondsElapsed = this->getTime();
-    hud.push_back(std::make_shared<TimeEntityHUD>(secondsElapsed));
+    hud.push_back(std::make_shared<TimeEntityHUD>(secondsElapsed, std::make_pair(350, 35)));
     return hud;
 }

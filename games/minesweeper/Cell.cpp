@@ -119,6 +119,7 @@ void Cell::placeMines(std::shared_ptr<IGameModule> gameModule)
         }
     }
     this->calculateAdjacentMines(gameModule);
+    gameModule->setIsStarted(true);
 }
 
 gameState_t Cell::checkWinCondition(std::shared_ptr<IGameModule> gameModule)

@@ -24,7 +24,7 @@ void arcadeSFML::clear() {
 std::pair<int, int> arcadeSFML::_getWindowPosition(std::pair<int, int> position) {
 	std::pair<int, int> windowPosition;
 	sf::Vector2u windowSize = this->window.getSize();
-	const int hudOffset = 100; // HUD offset of 100 pixels at the top
+	const int hudOffset = 100;
 
 	windowPosition.first = (position.first * windowSize.x) / this->_mapSize.first;
 	windowPosition.second = hudOffset + (position.second * (windowSize.y - hudOffset)) / this->_mapSize.second;
@@ -159,9 +159,26 @@ bool arcadeSFML::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_
 }
 
 void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
-	(void)text;
-	(void)color;
-	(void)position;
+	sf::Text sfText;
+	sf::Font font;
+
+	if (!font.loadFromFile("assets/Arial.ttf"))
+		return;
+
+	sfText.setFont(font);
+	sfText.setString(text);
+	sfText.setCharacterSize(24);
+	switch (color)
+	{
+		case 0: sfText.setFillColor(sf::Color::Black); break;
+		case 1: sfText.setFillColor(sf::Color::White); break;
+		case 2: sfText.setFillColor(sf::Color::Red); break;
+		case 3: sfText.setFillColor(sf::Color::Green); break;
+		case 4: sfText.setFillColor(sf::Color::Blue); break;
+		default: sfText.setFillColor(sf::Color::Black); break;
+	}
+	sfText.setPosition(position.first, position.second);
+	this->window.draw(sfText);
 }
 
 void arcadeSFML::setMapSize(std::pair<size_t, size_t> size) {

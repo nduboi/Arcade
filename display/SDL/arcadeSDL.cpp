@@ -34,16 +34,17 @@ std::pair<int, int> arcadeSDL::_getWindowPosition(std::pair<int, int> position)
 {
     std::pair<int, int> windowPosition;
     auto windowSize = this->sdl->getWindowSize();
+    const int hudOffset = 100;
 
     windowPosition.first = (position.first * windowSize.first) / this->_mapSize.first;
-    windowPosition.second = (position.second * windowSize.second) / this->_mapSize.second;
-
+    windowPosition.second = hudOffset + (position.second * (windowSize.second - hudOffset)) / this->_mapSize.second;
     return windowPosition;
 }
 
 void arcadeSDL::_resizeTexture(SDL_Rect &rect, std::pair<int, int> position)
 {
     auto windowSize = this->sdl->getWindowSize();
+    windowSize.second -= 100;
 
     rect.w = windowSize.first / this->_mapSize.first + 0.1;
     rect.h = windowSize.second / this->_mapSize.second + 0.1;

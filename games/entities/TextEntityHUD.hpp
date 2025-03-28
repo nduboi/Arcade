@@ -12,7 +12,7 @@
 
 class TextEntityHUD : public AEntity {
     public:
-        TextEntityHUD(std::string text);
+        TextEntityHUD(std::string text, std::pair<std::size_t, std::size_t> position);
         ~TextEntityHUD() = default;
 };
 

@@ -17,7 +17,8 @@ namespace Display {
 		this->_isOpen = false;
 	}
 
-	void NcursesEncapsulation::clear() const {
+	void NcursesEncapsulation::clear() {
+		this->changeTitle("");
 		if (this->_header)
 			werase(this->_header);
 		if (this->_game)
@@ -94,6 +95,11 @@ namespace Display {
 	void NcursesEncapsulation::changeTitle(const std::string &title)
 	{
 		this->_appTitle = title;
+	}
+
+	void NcursesEncapsulation::appendToTitle(const std::string &title)
+	{
+		this->_appTitle += " " + title;
 	}
 
 	NcursesEncapsulation::NcursesEncapsulation() {

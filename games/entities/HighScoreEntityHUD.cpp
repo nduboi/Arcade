@@ -2,15 +2,15 @@
 ** EPITECH PROJECT, 2025
 ** arcade
 ** File description:
-** TimeEntityHUD
+** HighScoreEntityHUD
 */
 
-#include "TimeEntityHUD.hpp"
+#include "HighScoreEntityHUD.hpp"
 
-TimeEntityHUD::TimeEntityHUD(std::size_t time, std::pair<size_t, size_t> position)
+HighScoreEntityHUD::HighScoreEntityHUD(std::size_t score, std::pair<std::size_t, std::size_t> position)
 {
     this->_color = 1;
-    this->_text = "Time: " + std::to_string(time) + "s";
+    this->_text = "Highscore: " + std::to_string(score);
     this->_position = position;
     this->_isMovable = false;
     this->_hasCollisions = false;
