@@ -6,7 +6,6 @@
 
 #include <iostream>
 #include <ncurses.h>
-#include <ncurses.h>
 #include <unistd.h>
 
 namespace Display {
