@@ -5,6 +5,7 @@ add_library(arcade_snake SHARED
     ../entities/AEntity.cpp
     ../entities/VoidEntity.cpp
     ../entities/ScoreEntityHUD.cpp
+    ../entities/HighScoreEntityHUD.cpp
     ../entities/TimeEntityHUD.cpp
     SnakeHeadEntity.cpp
     SnakeBodyEntity.cpp

@@ -5,6 +5,7 @@ add_library(arcade_minesweeper SHARED
     ../GameTemplate.cpp
     ../entities/AEntity.cpp
     ../entities/ScoreEntityHUD.cpp
+    ../entities/HighScoreEntityHUD.cpp
     ../entities/TimerEntityHUD.cpp
     ../entities/TextEntityHUD.cpp
 )
