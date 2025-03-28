@@ -88,20 +88,64 @@ void arcadeSFML::drawRectangle(int color, std::pair<size_t, size_t> position) {
 	this->window.draw(rect);
 }
 
-void arcadeSFML::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
-	//TODO: À implémenter
+void arcadeSFML::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color)
+{
+    sf::RectangleShape rectangle(sf::Vector2f(size.first, size.second));
+    rectangle.setPosition(position.first, position.second);
+    rectangle.setFillColor(sf::Color(color.r, color.g, color.b));
+    this->window.draw(rectangle);
 }
 
-void arcadeSFML::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) {
-	//TODO: À implémenter
+void arcadeSFML::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize)
+{
+    sf::Font font;
+    if (!font.loadFromFile("assets/Arial.ttf"))
+        return;
+
+    sf::Text sfText;
+    sfText.setFont(font);
+    sfText.setString(text);
+    sfText.setCharacterSize(charSize);
+    sfText.setFillColor(sf::Color(color.r, color.g, color.b));
+    sfText.setPosition(position.first, position.second);
+
+    this->window.draw(sfText);
 }
 
-void arcadeSFML::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
-	//TODO: À implémenter
+void arcadeSFML::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position)
+{
+    sf::Texture texture;
+    if (!texture.loadFromFile(asset))
+        return;
+
+    sf::Sprite sprite(texture);
+    sprite.setPosition(position.first, position.second);
+    sprite.setScale(
+        size.first / texture.getSize().x,
+        size.second / texture.getSize().y
+    );
+
+    this->window.draw(sprite);
 }
 
-void arcadeSFML::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
-	//TODO: À implémenter
+void arcadeSFML::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness)
+{
+    sf::RectangleShape outerRect(sf::Vector2f(size.first, size.second));
+    outerRect.setPosition(position.first, position.second);
+    outerRect.setFillColor(sf::Color::White);
+
+    sf::RectangleShape innerRect(sf::Vector2f(
+        size.first - 2 * thickness,
+        size.second - 2 * thickness
+    ));
+    innerRect.setPosition(
+        position.first + thickness,
+        position.second + thickness
+    );
+    innerRect.setFillColor(sf::Color::Black);
+
+    this->window.draw(outerRect);
+    this->window.draw(innerRect);
 }
 
 std::pair<int, int> arcadeSFML::getWindowSize() {

@@ -8,6 +8,7 @@
 #include <iostream>
 #include "arcadeSDL.hpp"
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 void arcadeSDL::display() {
     if (this->sdl)
@@ -48,7 +49,8 @@ void arcadeSDL::_resizeTexture(SDL_Rect &rect, std::pair<int, int> position)
     rect.h = windowSize.second / this->_mapSize.second + 0.1;
 }
 
-void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
+void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position)
+{
     SDL_Surface *surface = IMG_Load(asset.c_str());
     if (!surface) {
         this->drawRectangle(color, position);
@@ -71,7 +73,8 @@ void arcadeSDL::drawSprite(std::string asset, int color, std::string text, std::
     (void)text;
 }
 
-void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position) {
+void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position)
+{
     std::pair<int, int> windowPosition = this->_getWindowPosition(position);
 	SDL_Rect rect = {windowPosition.first, windowPosition.second, 0, 0};
     this->_resizeTexture(rect, position);
@@ -79,41 +82,52 @@ void arcadeSDL::drawRectangle(int color, std::pair<size_t, size_t> position) {
     this->sdl->drawRectangle(rect);
 }
 
-void arcadeSDL::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
-    //TODO: À implémenter
+void arcadeSDL::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position)
+{
+    this->sdl->drawSpriteMenu(size, asset, position);
 }
 
-void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color, color_t outline,  int thickness) {
-    //TODO: À implémenter
+void arcadeSDL::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color)
+{
+    this->sdl->drawRectangleMenu(size, position, {static_cast<Uint8>(color.r), static_cast<Uint8>(color.g), static_cast<Uint8>(color.b), 255});
 }
 
-void arcadeSDL::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
-    //TODO: À implémenter
+void arcadeSDL::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness)
+{
+    this->sdl->drawThickRectangle(position, size, thickness);
 }
 
-void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color) {
-    //TODO: À implémenter
+void arcadeSDL::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize)
+{
+    this->sdl->drawTextMenu(text, position, {static_cast<Uint8>(color.r), static_cast<Uint8>(color.g), static_cast<Uint8>(color.b), 255}, charSize);
 }
 
-std::pair<int, int> arcadeSDL::getWindowSize() {
-    //TODO: À implémenter
-	return {0, 0};
+std::pair<int, int> arcadeSDL::getWindowSize()
+{
+    return this->sdl->getWindowSize();
 }
 
-bool arcadeSDL::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
-    //TODO: À implémenter
-    return false;
+bool arcadeSDL::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size)
+{
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY);
+
+    return (mouseX >= position.first &&
+            mouseX <= position.first + size.first &&
+            mouseY >= position.second &&
+            mouseY <= position.second + size.second);
 }
 
-void arcadeSDL::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
-    (void)text;
-    (void)color;
-    (void)position;
+void arcadeSDL::drawText(std::string text, int color, std::pair<size_t, size_t> position)
+{
+    this->sdl->drawText(text, color, position);
 }
 
-void arcadeSDL::setMapSize(std::pair<size_t, size_t> size) {
+void arcadeSDL::setMapSize(std::pair<size_t, size_t> size)
+{
     this->_mapSize = size;
 }
+
 
 void arcadeSDL::resizeWindow(size_t x, size_t y) {
     if (this->sdl)

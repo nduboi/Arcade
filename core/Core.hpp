@@ -7,7 +7,7 @@
 #include "EventModule.hpp"
 #include "WindowModule.hpp"
 #include "GameModule.hpp"
-#include "MenuModule.hpp"
+#include "Menu.hpp"
 
 class Core {
 private:
@@ -17,9 +17,9 @@ private:
 		TYPE_COUNT,
 	} LogicModule_t;
 
+
 	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
 	Loader::LibLoader _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
-	Loader::LibLoader _menuLoader; ///< Unique pointer to the GameLoader LibLoader.
 
 	std::vector<std::string> _displayLibPath;
 	std::vector<std::string> _gameLibPath;
@@ -44,6 +44,8 @@ private:
 
 	void _displayGame();
 
+	void _displayMenu();
+
 	void _displayHUD();
 
 	void _refreshLibList();
@@ -57,16 +59,14 @@ public:
 	std::shared_ptr<WindowModule> display; ///< Unique pointer to the display WindowModule.
 	std::shared_ptr<EventModule> event; ///< Unique pointer to the display WindowModule.
 	std::shared_ptr<GameModule> game; ///< Shared pointer to the game GameModule.
-	std::unique_ptr<MenuModule> menu; ///< Unique pointer to the game GameModule.
 
+	Menu _menu;
 
 	void displayAllLib();
 
 	void loadDisplayModule(const std::string &displayLib);
 
 	void loadGameModule(const std::string &gameLib);
-
-	void loadMenuModule(const std::string &menuLib = "./lib/arcade_menu.so");
 
 	void loop();
 

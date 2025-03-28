@@ -9,9 +9,10 @@
 #include "Core.hpp"
 #include "IEntity.hpp"
 
-Core::Core() {
+Core::Core() : _menu(this->display) {
 	this->_refreshLibList();
 	this->_lastEvent = IEvent::event_t::NOTHING;
+	this->_moduleLoaded = MENU;
 }
 
 Core::~Core() {
@@ -93,7 +94,7 @@ void Core::_analyze() {
 #ifdef _DEBUG
 		printf("EVENT MENU\n");
 #endif
-		this->loadGameModule("./lib/arcade_menu.so");
+		this->_moduleLoaded = MENU;
 	}
 	this->_lastEvent = event;
 }
@@ -171,6 +172,7 @@ void Core::_compute() {
 void Core::_display() {
 	this->display->clear();
 	this->_displayGame();
+	this->_displayMenu();
 	this->_displayHUD();
 	this->display->display();
 }
@@ -197,6 +199,13 @@ void Core::_displayGame()
 				}
 			}
 		}
+	}
+}
+
+void Core::_displayMenu()
+{
+	if (this->_moduleLoaded == MENU) {
+		this->_menu.displayMenu(this->displayPtr, this->_menu.getBoxPoses(), this->_displayLibPath, this->_gameLibPath);
 	}
 }
 
@@ -300,16 +309,6 @@ void Core::loadGameModule(const std::string &path) {
 		throw CoreException("Error the library loaded is not a Game Module");
 	this->_moduleLoaded = GAME;
 	this->game = std::make_unique<GameModule>(this->_gameLoader.initEntryPointGame());
-}
-
-void Core::loadMenuModule(const std::string &path) {
-	this->menu.reset();
-	this->_menuLoader.closeLib();
-	this->_menuLoader.openLib(path.c_str());
-	if (this->_menuLoader.getModuleType() != Loader::MENU_MODULE)
-		throw CoreException("Error the library loaded is not a Menu Module");
-	this->_moduleLoaded = MENU;
-	this->menu = std::make_unique<MenuModule>(this->_menuLoader.initEntryPointMenu());
 }
 
 void Core::loop() {

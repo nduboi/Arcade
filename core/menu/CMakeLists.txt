@@ -1,3 +1,6 @@
 add_library(MenuModule STATIC
-        MenuModule.cpp
+    Menu.cpp
+    Menu.hpp
+    MenuTitle.cpp
+    MenuTitle.hpp
 )
