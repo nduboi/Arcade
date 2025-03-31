@@ -60,5 +60,12 @@ For detailed documentation on the platform, including how to implement new graph
 ## Collaborators
 
 We have developed this project as part of the EPITECH curriculum. The contributors to this project are:
-Our team: **eliott.tesnier@epitech.eu** - **nolan.papa@epitech.eu** - **noa.roussiere@epitech.eu**
-Architecture group: **albane.merian@@epitech.eu** - **alban.roussee@epitech.eu** - **matisse.marsac@epitech.eu**
+Our team: 
+- **eliott.tesnier@epitech.eu**
+- **nolan.papa@epitech.eu**
+- **noa.roussiere@epitech.eu**
+
+Architecture group:
+- **albane.merian@epitech.eu**
+- **alban.roussee@epitech.eu**
+- **matisse.marsac@epitech.eu**
