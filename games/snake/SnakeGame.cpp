@@ -14,6 +14,7 @@
 #include "ScoreEntityHUD.hpp"
 #include "HighScoreEntityHUD.hpp"
 #include "TimeEntityHUD.hpp"
+#include "BigTextEntityHUD.hpp"
 
 const int MAP_HEIGHT = 17;
 const int MAP_WIDTH = 17;
@@ -109,5 +110,13 @@ std::vector<std::shared_ptr<IEntity>> SnakeGame::getHUD() const
 
     std::size_t secondsElapsed = this->getTime();
     hud.push_back(std::make_shared<TimeEntityHUD>(secondsElapsed, std::make_pair(350, 35)));
+
+
+    if (this->getIsStarted() == false)
+        hud.push_back(std::make_shared<BigTextEntityHUD>("Press any direction to start", std::make_pair(250, 850)));
+    if (this->getGameState() == LOSE)
+        hud.push_back(std::make_shared<BigTextEntityHUD>("Game Over", std::make_pair(350, 850)));
+    if (this->getGameState() == WIN)
+        hud.push_back(std::make_shared<BigTextEntityHUD>("You Win", std::make_pair(350, 850)));
     return hud;
 }
