@@ -12,6 +12,7 @@ Arcade is a retro-style gaming platform written in C++ that dynamically loads bo
 Launch Arcade by specifying the initial graphical library:
 ```bash
 ./arcade ./lib/arcade_ncurses.so
+```
 
 ## When Running
 
