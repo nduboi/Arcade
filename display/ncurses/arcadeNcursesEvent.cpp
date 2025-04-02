@@ -39,6 +39,8 @@ namespace Display {
 				return IEvent::CLOSE;
 			case 'm':
 				return IEvent::MENU;
+			case 'h':
+				return IEvent::NEXTDIFFICULTY;
 			case 0x1B:
 				return IEvent::ESCAPE;
 			case KEY_UP:

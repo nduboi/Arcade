@@ -23,6 +23,8 @@ class MinesweeperGame : public GameTemplate {
 
                 std::vector<std::shared_ptr<IEntity>> getHUD() const override;
 
+                void changeDifficulty() override;
+
         private:
                 // Variable
                 size_t _width;

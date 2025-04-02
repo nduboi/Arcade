@@ -34,7 +34,7 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::SPACE;
                 case sf::Keyboard::Enter:
                     return IEvent::ENTER;
-                case sf::Keyboard::BackSpace:
+                case sf::Keyboard::M:
                     return IEvent::MENU;
                 case sf::Keyboard::N:
                     return IEvent::NEXTGRAPHIC;
@@ -42,6 +42,8 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::REFRESH;
                 case sf::Keyboard::G:
                     return IEvent::NEXTGAME;
+                case sf::Keyboard::H:
+                    return IEvent::NEXTDIFFICULTY;
             }
         }
         if (event.type == sf::Event::MouseButtonPressed) {

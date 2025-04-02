@@ -50,6 +50,8 @@ class IGameModule {
         virtual void setTime(size_t time) = 0;
 
         virtual void update(std::shared_ptr<IGameModule> gameModule) = 0;
+
+        virtual void changeDifficulty() = 0;
 };
 
 #endif /* !IGAMEMODULE_HPP_ */
