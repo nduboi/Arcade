@@ -45,7 +45,7 @@ void Cell::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
             this->_firstClick = false;
         }
         if (!_isFlagged) {
-            this->setRevealed(true);
+            this->setRevealed(true, gameModule);
             if (this->_isMine) {
                 this->_clicked = true;
                 this->_gameState = LOSE;
@@ -59,7 +59,7 @@ void Cell::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
                 this->revealAllMines(gameModule);
                 gameModule->setGameState(LOSE);
             } else if (_adjacentMines == 0) {
-                this->revealAdjacentCells(this->_position.first, this->_position.second, grid);
+                this->revealAdjacentCells(this->_position.first, this->_position.second, grid, gameModule);
             }
             this->checkWinCondition(gameModule);
         }
@@ -72,7 +72,6 @@ void Cell::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
 size_t Cell::createNumberMines(std::pair<size_t, size_t> map)
 {
     size_t totalCells = map.first * map.second;
-    double percentage = 10.0;
 
     if (map.first == 9 && map.second == 9)
         return 10;
@@ -124,6 +123,9 @@ void Cell::placeMines(std::shared_ptr<IGameModule> gameModule)
 
 gameState_t Cell::checkWinCondition(std::shared_ptr<IGameModule> gameModule)
 {
+    if (gameModule->getGameState() != PLAYING)
+        return gameModule->getGameState();
+
     grid_t grid = gameModule->getEntities();
     std::pair<size_t, size_t> mapSize = gameModule->getGridSize();
 
@@ -150,7 +152,7 @@ gameState_t Cell::checkWinCondition(std::shared_ptr<IGameModule> gameModule)
             }
         }
         this->revealAllMines(gameModule);
-        gameModule->setScore(mapSize.first * mapSize.second * 10 - mineCount * 5);
+        gameModule->setScore(gameModule->getScore() + (100 - gameModule->getTime()));
     }
 
     return gameModule->getGameState();
@@ -221,7 +223,7 @@ size_t Cell::countAdjacentMines(size_t x, size_t y, const grid_t& grid) const
     return count;
 }
 
-void Cell::revealAdjacentCells(size_t x, size_t y, grid_t& grid)
+void Cell::revealAdjacentCells(size_t x, size_t y, grid_t& grid, std::shared_ptr<IGameModule> gameModule)
 {
     std::pair<size_t, size_t> mapSize = {grid[0].size(), grid.size()};
     static const std::pair<int, int> directions[] = {
@@ -239,9 +241,9 @@ void Cell::revealAdjacentCells(size_t x, size_t y, grid_t& grid)
             auto cell = std::dynamic_pointer_cast<Cell>(grid[ny][nx][0]);
 
             if (!cell->isRevealed() && !cell->isFlagged()) {
-                cell->setRevealed(true);
+                cell->setRevealed(true, gameModule);
                 if (cell->getAdjacentMines() == 0)
-                    this->revealAdjacentCells(nx, ny, grid);
+                    this->revealAdjacentCells(nx, ny, grid, gameModule);
             }
         }
     }
@@ -274,7 +276,7 @@ std::string Cell::getText() const
 }
 
 
-void Cell::setRevealed(bool revealed)
+void Cell::setRevealed(bool revealed, std::shared_ptr<IGameModule> gameModule)
 {
     this->_isRevealed = revealed;
 
@@ -287,10 +289,12 @@ void Cell::setRevealed(bool revealed)
             this->_spriteName = "./assets/minesweeper/cell_" + std::to_string(this->_adjacentMines) + ".png";
             this->_color = -1;
             this->_text = std::to_string(this->_adjacentMines);
+            gameModule->setScore(gameModule->getScore() + 1);
         } else {
             this->_spriteName = "./assets/minesweeper/cell_0.png";
             this->_color = 0;
             this->_text = " ";
+            gameModule->setScore(gameModule->getScore() + 1);
         }
     } else {
         this->_spriteName = "./assets/minesweeper/hidden.png";
@@ -311,7 +315,7 @@ void Cell::revealAllMines(std::shared_ptr<IGameModule> gameModule)
                 if (cell->isFlagged()) {
                     cell->_spriteName = "./assets/minesweeper/mine_flag.png";
                 }
-                cell->setRevealed(true);
+                cell->setRevealed(true, gameModule);
             }
         }
     }

@@ -30,7 +30,7 @@ class Cell : public AEntity {
         size_t getAdjacentMines() const;
 
         // Setters
-        void setRevealed(bool revealed);
+        void setRevealed(bool revealed, std::shared_ptr<IGameModule> gameModule);
         void setFlagged(bool flagged);
         void setMine(bool mine);
         void setAdjacentMines(size_t count);
@@ -50,7 +50,7 @@ class Cell : public AEntity {
         size_t createNumberMines(std::pair<size_t, size_t> map);
         void calculateAdjacentMines(std::shared_ptr<IGameModule> gameModule);
         size_t countAdjacentMines(size_t x, size_t y, const grid_t& grid) const;
-        void revealAdjacentCells(size_t x, size_t y, grid_t& grid);
+        void revealAdjacentCells(size_t x, size_t y, grid_t& grid, std::shared_ptr<IGameModule> gameModule);
         void revealAllMines(std::shared_ptr<IGameModule> gameModule);
         gameState_t checkWinCondition(std::shared_ptr<IGameModule> gameModule);
 };
