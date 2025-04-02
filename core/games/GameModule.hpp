@@ -42,6 +42,8 @@ public:
 
 	void update(std::shared_ptr<IGameModule> gameModule) override;
 
+	void changeDifficulty() override;
+
 	GameModule(IGameModule *);
 
 	~GameModule() = default;

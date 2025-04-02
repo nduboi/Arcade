@@ -57,3 +57,23 @@ std::vector<std::shared_ptr<IEntity>> MinesweeperGame::getHUD() const
     hud.push_back(std::make_shared<TextEntityHUD>(difficulty, std::make_pair(600, 35)));
     return hud;
 }
+
+void MinesweeperGame::changeDifficulty()
+{
+    if (this->_width == 9 && this->_height == 9) {
+        this->_width = 16;
+        this->_height = 16;
+    } else if (this->_width == 16 && this->_height == 16) {
+        this->_width = 30;
+        this->_height = 30;
+    } else {
+        this->_width = 9;
+        this->_height = 9;
+    }
+    this->_highScore = 0;
+    this->_score = 0;
+    this->_isStarted = false;
+    this->_gameState = PLAYING;
+    this->_time = std::chrono::steady_clock::now();
+    this->initializeGrid();
+}

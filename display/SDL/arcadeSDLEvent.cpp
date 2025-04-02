@@ -49,6 +49,8 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::NEXTGRAPHIC;
                 case SDLK_m:
                     return IEvent::MENU;
+                case SDLK_h:
+                    return IEvent::NEXTDIFFICULTY;
             }
         }
         if (event.type == SDL_MOUSEBUTTONDOWN) {

@@ -106,6 +106,15 @@ void Core::_analyze() {
 		this->_moduleLoaded = MENU;
 		display->resizeWindow(1620, 900);
 	}
+	if (event == IEvent::event_t::NEXTDIFFICULTY) {
+#ifdef _DEBUG
+		printf("EVENT NEXTDIFFICULTY\n");
+#endif
+		if (this->_moduleLoaded == GAME) {
+			this->_saver.saveScore(this->game->getHighScore(), "default", this->_gameLibPath.at(this->_gameLibIndex));
+			this->game->changeDifficulty();
+		}
+	}
 	this->_lastEvent = event;
 }
 
