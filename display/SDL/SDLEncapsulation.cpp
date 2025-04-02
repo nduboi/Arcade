@@ -26,7 +26,7 @@ namespace Display {
 		this->window = SDL_CreateWindow("Arcade - SDL2",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			800, 900,
+			1620, 900,
 			SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
 		if (!this->window) {
 			std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
@@ -177,7 +177,7 @@ namespace Display {
 	{
         TTF_Font* font = (charSize == 20 && defaultFont)
             ? defaultFont
-            : TTF_OpenFont("assets/Arial.ttf", charSize);
+            : TTF_OpenFont("assets/ARCADECLASSIC.TTF", charSize);
 
         if (!font) {
             SDL_Log("Impossible de charger la police : %s", TTF_GetError());

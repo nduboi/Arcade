@@ -7,6 +7,7 @@
 
 #include "MenuTitle.hpp"
 #include <iostream>
+
 MenuTitle::MenuTitle(const std::shared_ptr<IWindow> &window, const std::string& title,
     const std::pair<int, int>& position, int fontSize) : _window(window)
 {
@@ -18,7 +19,7 @@ MenuTitle::MenuTitle(const std::shared_ptr<IWindow> &window, const std::string& 
 void MenuTitle::draw(const std::shared_ptr<IWindow> &window)
 {
     if (window) {
-        window->drawTextMenu(this->_title, this->_position, {255,0,0}, this->_fontSize);
+        window->drawTextMenu(this->_title, this->_position, {253,176,42}, this->_fontSize);
     }
 }
 
