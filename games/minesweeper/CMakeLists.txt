@@ -8,6 +8,7 @@ add_library(arcade_minesweeper SHARED
     ../entities/HighScoreEntityHUD.cpp
     ../entities/TimerEntityHUD.cpp
     ../entities/TextEntityHUD.cpp
+    ../entities/BigTextEntityHUD.cpp
 )
 
 add_custom_command(TARGET arcade_minesweeper POST_BUILD
