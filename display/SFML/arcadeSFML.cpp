@@ -177,6 +177,13 @@ void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t>
 		case 4: sfText.setFillColor(sf::Color::Blue); break;
 		default: sfText.setFillColor(sf::Color::Black); break;
 	}
+	switch (color)
+	{
+		case 0: sfText.setOutlineColor(sf::Color::White); break;
+		case 1: sfText.setOutlineColor(sf::Color::Black); break;
+		default: sfText.setOutlineColor(sf::Color::White); break;
+	}
+	sfText.setOutlineThickness(1);
 	sfText.setPosition(position.first, position.second);
 	this->window.draw(sfText);
 }
