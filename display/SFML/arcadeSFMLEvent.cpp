@@ -34,7 +34,7 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::SPACE;
                 case sf::Keyboard::Enter:
                     return IEvent::ENTER;
-                case sf::Keyboard::BackSpace:
+                case sf::Keyboard::M:
                     return IEvent::MENU;
                 case sf::Keyboard::N:
                     return IEvent::NEXTGRAPHIC;

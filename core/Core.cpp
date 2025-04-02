@@ -84,7 +84,7 @@ void Core::_analyze() {
 #ifdef _DEBUG
 		printf("EVENT REFRESH\n");
 #endif
-		this->_refreshLibList();
+		this->_reloadCurrentGame();
 	}
 	if (event == IEvent::event_t::NEXTGAME) {
 #ifdef _DEBUG
@@ -97,6 +97,14 @@ void Core::_analyze() {
 		printf("EVENT MENU\n");
 #endif
 		this->_moduleLoaded = MENU;
+		display->resizeWindow(1620, 900);
+	}
+	if (event == IEvent::event_t::ESCAPE) {
+#ifdef _DEBUG
+		printf("EVENT ESCAPE\n");
+#endif
+		this->_moduleLoaded = MENU;
+		display->resizeWindow(1620, 900);
 	}
 	this->_lastEvent = event;
 }
@@ -272,6 +280,17 @@ void Core::_loadNextGraphic() {
 	if (std::filesystem::canonical(this->_displayLibPath.at(this->_displayLibIndex)) == std::filesystem::canonical(this->_displayLoader.getModulePath()))
 		return this->_loadNextGraphic();
 	this->loadDisplayModule(this->_displayLibPath.at(this->_displayLibIndex));
+	if (this->_moduleLoaded == GAME)
+		this->display->resizeWindow(800, 900);
+	else
+		this->display->resizeWindow(1620, 900);
+}
+
+void Core::_reloadCurrentGame() {
+	this->_saveScore();
+	this->loadGameModule(this->_gameLibPath.at(this->_gameLibIndex));
+	this->_setHighScore();
+	this->display->resizeWindow(800, 900);
 }
 
 void Core::displayAllLib()
