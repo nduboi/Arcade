@@ -23,10 +23,19 @@ class MinesweeperGame : public GameTemplate {
 
                 std::vector<std::shared_ptr<IEntity>> getHUD() const override;
 
+                void changeDifficulty() override;
+
+                void update(std::shared_ptr<IGameModule> gameModule) override;
+
         private:
                 // Variable
                 size_t _width;
                 size_t _height;
+
+                int _nbMines;
+
+                int getNbMines() const;
+                int getNbFlags() const;
 };
 
 #endif /* !MINESWEEPERGAME_HPP_ */

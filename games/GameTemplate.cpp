@@ -104,3 +104,7 @@ void GameTemplate::update(std::shared_ptr<IGameModule> gameModule)
 {
     (void)gameModule;
 }
+
+void GameTemplate::changeDifficulty()
+{
+}

@@ -95,6 +95,12 @@ void GameModule::update(std::shared_ptr<IGameModule> gameModule) {
 	this->_object->update(gameModule);
 }
 
+void GameModule::changeDifficulty() {
+	if (!this->_object)
+		throw GameModuleException("Error no lib Loaded");
+	this->_object->changeDifficulty();
+}
+
 GameModule::GameModule(IGameModule *mdl) {
 	this->_object.reset(mdl);
 }

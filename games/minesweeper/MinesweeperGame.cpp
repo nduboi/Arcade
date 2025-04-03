@@ -11,6 +11,7 @@
 #include "HighScoreEntityHUD.hpp"
 #include "TimerEntityHUD.hpp"
 #include "TextEntityHUD.hpp"
+#include "BigTextEntityHUD.hpp"
 
 MinesweeperGame::MinesweeperGame(size_t width, size_t height)
 {
@@ -21,6 +22,7 @@ MinesweeperGame::MinesweeperGame(size_t width, size_t height)
     this->_isStarted = false;
     this->_gameState = PLAYING;
     this->_time = std::chrono::steady_clock::now();
+    this->_nbMines = this->getNbMines();
 
     initializeGrid();
 }
@@ -54,6 +56,72 @@ std::vector<std::shared_ptr<IEntity>> MinesweeperGame::getHUD() const
         difficulty += "Medium";
     else
         difficulty += "Hard";
-    hud.push_back(std::make_shared<TextEntityHUD>(difficulty, std::make_pair(600, 35)));
+    hud.push_back(std::make_shared<TextEntityHUD>(difficulty, std::make_pair(600, 55)));
+
+    hud.push_back(std::make_shared<TextEntityHUD>("Mines: " + std::to_string(this->_nbMines - this->getNbFlags()), std::make_pair(600, 15)));
+
+    if (this->getIsStarted() == false)
+        hud.push_back(std::make_shared<BigTextEntityHUD>("Click on any cell to start", std::make_pair(250, 850)));
+    if (this->getGameState() == LOSE)
+        hud.push_back(std::make_shared<BigTextEntityHUD>("Game Over", std::make_pair(350, 850)));
+    if (this->getGameState() == WIN)
+        hud.push_back(std::make_shared<BigTextEntityHUD>("You Win", std::make_pair(350, 850)));
     return hud;
+}
+
+void MinesweeperGame::changeDifficulty()
+{
+    if (this->_width == 9 && this->_height == 9) {
+        this->_width = 16;
+        this->_height = 16;
+    } else if (this->_width == 16 && this->_height == 16) {
+        this->_width = 30;
+        this->_height = 30;
+    } else {
+        this->_width = 9;
+        this->_height = 9;
+    }
+    this->_highScore = 0;
+    this->_score = 0;
+    this->_isStarted = false;
+    this->_gameState = PLAYING;
+    this->_time = std::chrono::steady_clock::now();
+    this->initializeGrid();
+}
+
+void MinesweeperGame::update(std::shared_ptr<IGameModule> gameModule)
+{
+    if (this->_isStarted == false)
+        return;
+    if (this->_gameState != PLAYING)
+        return;
+
+    std::size_t secondsElapsed = this->getTime();
+    if (secondsElapsed >= 100)
+        this->_gameState = LOSE;
+}
+
+int MinesweeperGame::getNbMines() const
+{
+    if (this->_width == 9 && this->_height == 9)
+        return 10;
+    if (this->_width == 16 && this->_height == 16)
+        return 40;
+    if (this->_width == 30 && this->_height == 30)
+        return 200;
+    return static_cast<int>(this->_width * this->_height * 0.15);
+}
+
+int MinesweeperGame::getNbFlags() const
+{
+    int flags = 0;
+
+    for (size_t y = 0; y < this->_height; ++y) {
+        for (size_t x = 0; x < this->_width; ++x) {
+            auto cell = std::dynamic_pointer_cast<Cell>(this->_entities[y][x][0]);
+            if (cell->isFlagged())
+                flags++;
+        }
+    }
+    return flags;
 }

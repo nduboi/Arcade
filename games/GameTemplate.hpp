@@ -39,6 +39,7 @@ class GameTemplate : public IGameModule {
         size_t getTime() const override;
         void setTime(size_t time) override;
         void update(std::shared_ptr<IGameModule> gameModule) override;
+        void changeDifficulty() override;
 };
 
 #endif /* !AGAMEMODULE_HPP_ */

@@ -30,6 +30,8 @@ class IEvent {
             MOUSELEFTCLICK,
             MENU,
             NOTHING,
+            TYPING,
+            NEXTDIFFICULTY,
         } event_t;
         virtual ~IEvent() = default;
         virtual void init() = 0;

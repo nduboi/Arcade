@@ -59,6 +59,8 @@ private:
 
 	void _refreshLibList();
 
+	void _reloadCurrentGame();
+
 	void _loadNextGame();
 
 	void _loadNextGraphic();
