@@ -34,6 +34,7 @@ class Menu : public IMenu {
 		void displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
 			std::vector<std::string> games) override;
 		action_e handleClick(int x, int y, std::string& selectedValue);
+		std::string extractNameFromPath(const std::string& path);
 
 		// Getter
 		std::vector<Boxes> getBoxPoses() override;
