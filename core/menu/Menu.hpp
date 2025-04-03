@@ -56,6 +56,7 @@ class Menu : public IMenu {
 		std::vector<Boxes> _boxes;
 		std::vector<Button> _graphicLibButtons;
 		std::vector<Button> _gameButtons;
+		std::string currentGraphicLib;
 
 		void initButtons(const std::vector<std::string>& libs, const std::vector<std::string>& games);
 		void drawButtons(const std::shared_ptr<IWindow> &window);
