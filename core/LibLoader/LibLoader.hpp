@@ -69,8 +69,17 @@ namespace Loader
 		 */
 
 		template<class T, typename... Args>
-		T* initEntryPoint(const char* entryPoint, Args&&... args) const {
+		T* initEntryPointPtr(const char* entryPoint, Args&&... args) const {
 			auto create = reinterpret_cast<T* (*)(Args...)>(dlsym(this->_moduleHandle, entryPoint));
+			if (!create) {
+				throw DllException(std::string("Error cannot load entry point: ") + entryPoint);
+			}
+			return create(std::forward<Args>(args)...);
+		}
+
+		template<class T, typename... Args>
+		T initEntryPoint(const char* entryPoint, Args&&... args) const {
+			auto create = reinterpret_cast<T (*)(Args...)>(dlsym(this->_moduleHandle, entryPoint));
 			if (!create) {
 				throw DllException(std::string("Error cannot load entry point: ") + entryPoint);
 			}

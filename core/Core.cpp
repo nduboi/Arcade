@@ -83,14 +83,14 @@ void Core::_loadDisplayLib(const std::string &path) {
 	this->_displayLoader.openLib(path);
 
 	this->_windowPtr = std::shared_ptr<IWindow>(
-		this->_displayLoader.initEntryPoint<IWindow>("createInstance")
+		this->_displayLoader.initEntryPointPtr<IWindow>("createInstance")
 	);
 	if (!this->_windowPtr) {
 		throw CoreException("Failed to load createDisplay symbol.");
 	}
 	this->_window = std::make_shared<WindowModule>(this->_windowPtr);
 	this->_event = std::make_shared<EventModule>(
-		this->_displayLoader.initEntryPoint<IEvent>("createEvent", this->_windowPtr)
+		this->_displayLoader.initEntryPointPtr<IEvent>("createEvent", this->_windowPtr)
 	);
 	if (!this->_event) {
 		throw CoreException("Failed to load createEvent symbol.");
@@ -104,7 +104,7 @@ void Core::_loadGameLib(const std::string &path) {
 	this->_gameLoader.openLib(path);
 
 	this->_game = std::make_shared<GameModule>(
-		this->_gameLoader.initEntryPoint<IGameModule>("createGame")
+		this->_gameLoader.initEntryPointPtr<IGameModule>("createGame")
 	);
 	if (!this->_game) {
 		throw CoreException("Failed to load createDisplay symbol.");
@@ -162,9 +162,10 @@ void Core::_refreshLibPaths() {
 		for (const auto &entry : std::filesystem::directory_iterator(libFolder)) {
 			if (entry.path().extension() == ".so") {
 				libLoader.openLib(entry.path().string());
-				if (libLoader.getModuleType() == Loader::GAME_MODULE)
+				Loader::ModuleType_t moduleType = libLoader.initEntryPoint<Loader::ModuleType_t>("getType");
+				if (moduleType == Loader::GAME_MODULE)
 					this->_gameLibsPaths.push_back(entry.path().string());
-				if (libLoader.getModuleType() == Loader::DISPLAY_MODULE)
+				if (moduleType == Loader::DISPLAY_MODULE)
 					this->_displayLibsPaths.push_back(entry.path().string());
 				libLoader.closeLib();
 			}

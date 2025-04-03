@@ -19,13 +19,6 @@ namespace Loader {
 		} catch (...) {
 			throw DllException("Error during dlopen("+path+", ...): " + std::string(dlerror()));
 		}
-
-		//Todo bouger ça \/ retirer du constructeur
-		this->_getModuleType = reinterpret_cast<GetModuleTypeFct>(dlsym(this->_moduleHandle, "getType"));
-		if (!this->_getModuleType)
-			throw DllException("Error cannot getType function");
-		this->_moduleType = this->_getModuleType();
-		std::cout << "Library loaded successfully: " << path << std::endl;
 	}
 
 	void LibLoader::closeLib() {
