@@ -99,6 +99,7 @@ void Core::_analyze() {
 #ifdef _DEBUG
 		printf("EVENT MENU\n");
 #endif
+		this->display->resizeWindow(1600, 900);
 		this->_moduleLoaded = MENU;
 	}
 	this->_lastEvent = event;
