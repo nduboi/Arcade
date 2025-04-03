@@ -11,16 +11,16 @@ Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade 
     _libraryTitle(window, "Graphic", {400, 200}, 36), _gameTitle(window, "Game", {1100, 200}, 36)
 {
     Boxes libBox;
-    libBox.posTop = {50, 150};
-    libBox.posBottom = {200, 250};
+    libBox.posTop = {150, 250};
+    libBox.posBottom = {600, 550};
     libBox.typesBoxes = action_e::GRAPHICLIB;
     libBox.selected = false;
     libBox._nameBoxes = "Graphic Libraries";
     _boxes.push_back(libBox);
 
     Boxes gameBox;
-    gameBox.posTop = {250, 150};
-    gameBox.posBottom = {400, 250};
+    gameBox.posTop = {850, 250};
+    gameBox.posBottom = {1300, 550};
     gameBox.typesBoxes = action_e::GAMELIB;
     gameBox.selected = false;
     gameBox._nameBoxes = "Game Libraries";
@@ -64,10 +64,6 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
             {static_cast<size_t>(box.posTop.first), static_cast<size_t>(box.posTop.second)},
             {boxColor[0], boxColor[1], boxColor[2]}
         );
-
-        window->drawTextMenu(
-            box._nameBoxes, {(box.posTop.first + box.posBottom.first) / 2 - box._nameBoxes.length() * 5,
-            box.posBottom.second + 10}, {255, 255, 255}, 20);
     }
     drawButtons(window);
 }
@@ -145,6 +141,24 @@ void Menu::initButtons(const std::vector<std::string>& libs, const std::vector<s
     }
 }
 
+std::string Menu::extractNameFromPath(const std::string& path)
+{
+    size_t arcadePos = path.find("lib/");
+    size_t soPos = path.find(".so");
+
+    if (arcadePos != std::string::npos && soPos != std::string::npos) {
+        size_t start = arcadePos + 11;
+        return path.substr(start, soPos - start);
+    } else {
+        size_t lastSlash = path.find_last_of("/");
+        if (lastSlash != std::string::npos && soPos != std::string::npos) {
+            return path.substr(lastSlash + 1, soPos - (lastSlash + 1));
+        }
+    }
+
+    return path;
+}
+
 void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
 {
     for (const auto& btn : _graphicLibButtons) {
@@ -163,8 +177,10 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
             {btnColor[0], btnColor[1], btnColor[2]}
         );
 
+        std::string displayName = extractNameFromPath(btn.text);
+
         window->drawTextMenu(
-            btn.text,
+            displayName,
             {btn.posTop.first + 10,
              (btn.posTop.second + btn.posBottom.second) / 2 - 5},
             {255, 255, 255},
@@ -188,8 +204,10 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
             {btnColor[0], btnColor[1], btnColor[2]}
         );
 
+        std::string displayName = extractNameFromPath(btn.text);
+
         window->drawTextMenu(
-            btn.text,
+            displayName,
             {btn.posTop.first + 10,
              (btn.posTop.second + btn.posBottom.second) / 2 - 5},
             {255, 255, 255},
