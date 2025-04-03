@@ -173,7 +173,7 @@ int Menu::estimateTextWidth(const std::string& text, int fontSize)
 void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
 {
     for (const auto& btn : _graphicLibButtons) {
-        std::vector<int> btnColor = btn.selected ?
+        std::vector<int> btnColor = (btn.value == currentGraphicLib) ?
             std::vector<int>{100, 200, 100} :
             std::vector<int>{150, 150, 150};
 
@@ -203,9 +203,7 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
     }
 
     for (const auto& btn : _gameButtons) {
-        std::vector<int> btnColor = btn.selected ?
-            std::vector<int>{100, 200, 100} :
-            std::vector<int>{150, 150, 150};
+        std::vector<int> btnColor = std::vector<int>{150, 150, 150};
 
         std::pair<size_t, size_t> btnSize = {
             static_cast<size_t>(btn.posBottom.first - btn.posTop.first),
@@ -239,11 +237,7 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
-            for (auto& b : _graphicLibButtons) {
-                b.selected = false;
-            }
-
-            btn.selected = true;
+            currentGraphicLib = btn.value;
             selectedValue = btn.value;
             return btn.action;
         }
@@ -253,11 +247,6 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
-            for (auto& b : _gameButtons) {
-                b.selected = false;
-            }
-
-            btn.selected = true;
             selectedValue = btn.value;
             return btn.action;
         }
