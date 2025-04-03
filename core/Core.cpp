@@ -68,6 +68,9 @@ void Core::_analyze() {
 #ifdef _DEBUG
 		printf("EVENT MOUSELEFTCLICK\n");
 #endif
+		if (this->_moduleLoaded == MENU) {
+			this->_processMenuClick();
+		}
 	}
 	if (event == IEvent::event_t::MOUSERIGHTCLICK) {
 #ifdef _DEBUG
@@ -142,6 +145,38 @@ void Core::_processClickEvent(int x, int y, int z) {
 	entity->onClick(gameModule, state);
 }
 
+void Core::_processMenuClick()
+{
+    if (this->_moduleLoaded != MENU)
+        return;
+
+    std::pair<int, int> mousePos = this->event->getMousePos();
+
+    std::string selectedValue;
+    action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
+
+    if (action == action_e::GRAPHICLIB) {
+        for (size_t i = 0; i < this->_displayLibPath.size(); i++) {
+            if (this->_displayLibPath[i].find(selectedValue) != std::string::npos) {
+                this->_displayLibIndex = i;
+                this->loadDisplayModule(this->_displayLibPath[i]);
+                break;
+            }
+        }
+    } else if (action == action_e::GAMELIB) {
+        for (size_t i = 0; i < this->_gameLibPath.size(); i++) {
+            if (this->_gameLibPath[i].find(selectedValue) != std::string::npos) {
+                this->_gameLibIndex = i;
+                this->loadGameModule(this->_gameLibPath[i]);
+                this->_setHighScore();
+                this->_moduleLoaded = GAME;
+				this->display->resizeWindow(800, 900);
+                break;
+            }
+        }
+    }
+}
+
 void Core::_compute() {
 	if (this->_moduleLoaded == GAME) {
 		std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->game);
@@ -209,9 +244,9 @@ void Core::_displayGame()
 
 void Core::_displayMenu()
 {
-	if (this->_moduleLoaded == MENU) {
-		this->_menu.displayMenu(this->displayPtr, this->_menu.getBoxPoses(), this->_displayLibPath, this->_gameLibPath);
-	}
+    if (this->_moduleLoaded == MENU) {
+        this->_menu.displayMenu(this->displayPtr, this->_menu.getBoxPoses(), this->_displayLibPath, this->_gameLibPath);
+    }
 }
 
 void Core::_displayHUD() {
