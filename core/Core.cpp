@@ -213,26 +213,52 @@ void Core::_loadNextGame() {
 	this->_gameLibIndex++;
 	if (this->_gameLibIndex >= this->_gameLibPath.size())
 		this->_gameLibIndex = 0;
-	if (strcmp(this->_gameLoader.getModulePath(), "") != 0 && std::filesystem::canonical(this->_gameLibPath.at(this->_gameLibIndex)) == std::filesystem::canonical(this->_gameLoader.getModulePath()))
-		return this->_loadNextGame();
+	while (std::filesystem::canonical(this->_gameLibPath.at(this->_gameLibIndex)) == std::filesystem::canonical(this->_gameLoader.getModulePath())) {
+		this->_gameLibIndex++;
+		if (this->_gameLibIndex >= this->_gameLibPath.size())
+			this->_gameLibIndex = 0;
+	}
 	this->loadGameModule(this->_gameLibPath.at(this->_gameLibIndex));
 	this->_setHighScore();
 	this->display->resizeWindow(800, 900);
 }
 
 void Core::_loadNextGraphic() {
-	if (this->_displayLibPath.size() == 1)
-		return;
-	this->_displayLibIndex++;
-	if (this->_displayLibIndex >= this->_displayLibPath.size())
-		this->_displayLibIndex = 0;
-	if (std::filesystem::canonical(this->_displayLibPath.at(this->_displayLibIndex)) == std::filesystem::canonical(this->_displayLoader.getModulePath()))
-		return this->_loadNextGraphic();
-	this->loadDisplayModule(this->_displayLibPath.at(this->_displayLibIndex));
-	if (this->_moduleLoaded == GAME)
-		this->display->resizeWindow(800, 900);
-	else
-		this->display->resizeWindow(1620, 900);
+    if (this->_displayLibPath.size() == 1)
+        return;
+
+    std::cout << "Switching to the next graphic library..." << std::endl;
+
+    // Désinitialiser proprement la bibliothèque graphique actuelle
+    if (this->display) {
+        try {
+            std::cout << "Closing current display library..." << std::endl;
+            this->display->closeWindow();
+        } catch (const std::exception &e) {
+            std::cerr << "Error closing current display: " << e.what() << std::endl;
+        }
+    }
+    this->event.reset();
+    this->display.reset();
+    this->displayPtr.reset();
+    this->_displayLoader.closeLib();
+
+    // Charger la bibliothèque graphique suivante
+    this->_displayLibIndex++;
+    if (this->_displayLibIndex >= this->_displayLibPath.size())
+        this->_displayLibIndex = 0;
+
+    try {
+        std::cout << "Loading new display library: " << this->_displayLibPath.at(this->_displayLibIndex) << std::endl;
+        this->loadDisplayModule(this->_displayLibPath.at(this->_displayLibIndex));
+        if (this->_moduleLoaded == GAME)
+            this->display->resizeWindow(800, 900);
+        else
+            this->display->resizeWindow(1620, 900);
+        std::cout << "Successfully switched to the new graphic library." << std::endl;
+    } catch (const std::exception &e) {
+        std::cerr << "Error loading next graphic library: " << e.what() << std::endl;
+    }
 }
 
 void Core::_reloadCurrentGame() {
@@ -272,8 +298,6 @@ void Core::loadDisplayModule(const std::string &path)
 }
 
 void Core::loadGameModule(const std::string &path) {
-	this->game.reset();
-	this->_gameLoader.closeLib();
 	this->_gameLoader.openLib(path.c_str());
 	if (this->_gameLoader.getModuleType() != Loader::GAME_MODULE)
 		throw CoreException("Error the library loaded is not a Game Module");

@@ -141,4 +141,13 @@ arcadeSDL::arcadeSDL()
     this->_mapSize = {0, 0};
 }
 
-arcadeSDL::~arcadeSDL() = default;
+arcadeSDL::~arcadeSDL() {
+    try {
+        if (this->sdl) {
+            std::cout << "Destroying SDL resources..." << std::endl;
+            this->sdl.reset();
+        }
+    } catch (const std::exception &e) {
+        std::cerr << "Error during SDL destruction: " << e.what() << std::endl;
+    }
+}

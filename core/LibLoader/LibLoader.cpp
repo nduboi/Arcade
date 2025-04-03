@@ -10,8 +10,9 @@
 namespace Loader {
 	void LibLoader::openLib(const std::string &path)
 	{
-		this->_modulePath = path;
-		this->closeLib();
+		std::cout << "Opening library: " << path << std::endl;
+		this->closeLib(); // Assurez-vous que la bibliothèque précédente est fermée
+
 		try {
 			this->_moduleHandle = openDynamicLib(path.c_str());
 			if (!this->_moduleHandle)
@@ -19,10 +20,12 @@ namespace Loader {
 		} catch (...) {
 			throw DllException("Error during dlopen("+path+", ...): " + std::string(getDlError()));
 		}
+
 		this->_getModuleType = reinterpret_cast<GetModuleTypeFct>(getFunctionDynamicLib(this->_moduleHandle, "getType"));
 		if (!this->_getModuleType)
 			throw DllException("Error cannot getType function");
 		this->_moduleType = this->_getModuleType();
+		std::cout << "Library loaded successfully: " << path << std::endl;
 	}
 
 	IWindow * LibLoader::initEntryPointDisplay() const {
@@ -54,14 +57,16 @@ namespace Loader {
 	}
 
 	void LibLoader::closeLib() {
-		if (this->_moduleHandle)
+		if (this->_moduleHandle) {
+			std::cout << "Closing library: " << this->_modulePath << std::endl;
 			closeDynamicLib(this->_moduleHandle);
-		this->_moduleHandle = nullptr;
+			this->_moduleHandle = nullptr;
+		} else {
+			std::cout << "No library to close." << std::endl;
+		}
 	}
 
 	LibLoader::~LibLoader() {
-		if (this->_moduleHandle)
-			closeDynamicLib(this->_moduleHandle);
-		this->_moduleHandle = nullptr;
+		this->closeLib();
 	}
 }

@@ -6,23 +6,34 @@
 
 namespace Display {
 	SDLEncapsulation::SDLEncapsulation() {
-		if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0) {
-			std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
-		}
+		std::cout << "Initializing SDL resources..." << std::endl;
+
+		// Initialisation de SDL
 		if (SDL_WasInit(SDL_INIT_VIDEO) == 0) {
 			if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) < 0) {
 				std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
 				return;
 			}
 		}
-		if (TTF_Init() == -1) {
-			std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
+
+		// Initialisation de SDL_image
+		if ((IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) & (IMG_INIT_PNG | IMG_INIT_JPG)) == 0) {
+			std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
 			SDL_Quit();
 			return;
 		}
-		if (SDL_NumJoysticks() > 0) {
-			SDL_JoystickOpen(0);
+
+		// Initialisation de SDL_ttf
+		if (TTF_WasInit() == 0) {
+			if (TTF_Init() == -1) {
+				std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
+				IMG_Quit();
+				SDL_Quit();
+				return;
+			}
 		}
+
+		// Création de la fenêtre
 		this->window = SDL_CreateWindow("Arcade - SDL2",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
@@ -30,27 +41,36 @@ namespace Display {
 			SDL_WINDOW_SHOWN | SDL_WINDOW_ALLOW_HIGHDPI);
 		if (!this->window) {
 			std::cerr << "Window could not be created! SDL_Error: " << SDL_GetError() << std::endl;
+			TTF_Quit();
+			IMG_Quit();
 			SDL_Quit();
 			return;
 		}
 
+		// Création du renderer
 		this->renderer = SDL_CreateRenderer(this->window, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
 		if (!this->renderer) {
 			std::cerr << "Renderer could not be created! SDL_Error: " << SDL_GetError() << std::endl;
 			SDL_DestroyWindow(this->window);
+			TTF_Quit();
+			IMG_Quit();
 			SDL_Quit();
 			return;
 		}
 
-		defaultFont = TTF_OpenFont("assets/Arial.ttf", 20);
-		if (!defaultFont) {
+		// Chargement de la police par défaut
+		this->defaultFont = TTF_OpenFont("assets/Arial.ttf", 20);
+		if (!this->defaultFont) {
 			std::cerr << "Failed to load default font! SDL_ttf Error: " << TTF_GetError() << std::endl;
 		}
 
 		SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
 		SDL_RenderClear(this->renderer);
 		SDL_RenderPresent(this->renderer);
+
+		std::cout << "SDL resources initialized successfully." << std::endl;
 	}
 
 	void SDLEncapsulation::display() const {
@@ -258,18 +278,35 @@ namespace Display {
         SDL_DestroyTexture(texture);
     }
 
-	SDLEncapsulation::~SDLEncapsulation()
-	{
+	SDLEncapsulation::~SDLEncapsulation() {
+		std::cout << "Destroying SDL resources..." << std::endl;
+
 		if (defaultFont) {
 			TTF_CloseFont(defaultFont);
+			defaultFont = nullptr;
 		}
-		SDL_DestroyRenderer(this->renderer);
-		SDL_DestroyWindow(this->window);
-		TTF_Quit();
-		IMG_Quit();
-		SDL_Quit();
-		this->renderer = nullptr;
-		this->window = nullptr;
-		this->defaultFont = nullptr;
+
+		if (renderer) {
+			SDL_DestroyRenderer(renderer);
+			renderer = nullptr;
+		}
+
+		if (window) {
+			SDL_DestroyWindow(window);
+			window = nullptr;
+		}
+
+		// Désinitialisation des sous-systèmes SDL
+		if (TTF_WasInit()) {
+			TTF_Quit();
+		}
+		if (IMG_Init(0)) {
+			IMG_Quit();
+		}
+		if (SDL_WasInit(SDL_INIT_VIDEO)) {
+			SDL_Quit();
+		}
+
+		std::cout << "SDL resources destroyed successfully." << std::endl;
 	}
 }

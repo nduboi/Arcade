@@ -19,9 +19,6 @@ private:
 	} LogicModule_t;
 
 
-	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
-	Loader::LibLoader _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
-
 	std::vector<std::string> _displayLibPath;
 	std::vector<std::string> _gameLibPath;
 
@@ -30,6 +27,9 @@ private:
 	int _displayLibIndex = 0;
 
 	IEvent::event_t _lastEvent;
+
+	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
+	Loader::LibLoader _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
 
 	Saver _saver;
 
