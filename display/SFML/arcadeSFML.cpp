@@ -154,7 +154,12 @@ std::pair<int, int> arcadeSFML::getWindowSize() {
 }
 
 bool arcadeSFML::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
-	//TODO: À implémenter
+	sf::Vector2i mousePos = sf::Mouse::getPosition(this->window);
+
+	if (mousePos.x >= static_cast<int>(position.first) && mousePos.x <= static_cast<int>(position.first + size.first) &&
+		mousePos.y >= static_cast<int>(position.second) && mousePos.y <= static_cast<int>(position.second + size.second)) {
+		return true;
+	}
 	return false;
 }
 

@@ -33,83 +33,23 @@ void Core::_analyze() {
 	IEvent::event_t event = this->event->pollEvents(gridSize);
 	this->_lastEvent = IEvent::event_t::NOTHING;
 
-	if (event == IEvent::event_t::CLOSE) {
-#ifdef _DEBUG
-		printf("EVENT CLOSE\n");
-#endif
+	if (event == IEvent::event_t::CLOSE)
 		this->display->closeWindow();
-	}
-	if (event == IEvent::event_t::LEFT) {
-#ifdef _DEBUG
-		printf("EVENT LEFT\n");
-#endif
-	}
-	if (event == IEvent::event_t::RIGHT) {
-#ifdef _DEBUG
-		printf("EVENT RIGHT\n");
-#endif
-	}
-	if (event == IEvent::event_t::UP) {
-#ifdef _DEBUG
-		printf("EVENT UP\n");
-#endif
-	}
-	if (event == IEvent::event_t::DOWN) {
-#ifdef _DEBUG
-		printf("EVENT DOWN\n");
-#endif
-	}
-	if (event == IEvent::event_t::MOUSECLICK) {
-#ifdef _DEBUG
-		printf("EVENT MOUSECLICK\n");
-#endif
-	}
-	if (event == IEvent::event_t::MOUSELEFTCLICK) {
-#ifdef _DEBUG
-		printf("EVENT MOUSELEFTCLICK\n");
-#endif
-	}
-	if (event == IEvent::event_t::MOUSERIGHTCLICK) {
-#ifdef _DEBUG
-		printf("EVENT MOUSERIGHTCLICK\n");
-#endif
-	}
-	if (event == IEvent::event_t::NEXTGRAPHIC) {
-#ifdef _DEBUG
-		printf("EVENT NEXTGRAPHIC\n");
-#endif
+	if (event == IEvent::event_t::NEXTGRAPHIC)
 		this->_loadNextGraphic();
-	}
-	if (event == IEvent::event_t::REFRESH) {
-#ifdef _DEBUG
-		printf("EVENT REFRESH\n");
-#endif
+	if (event == IEvent::event_t::REFRESH)
 		this->_reloadCurrentGame();
-	}
-	if (event == IEvent::event_t::NEXTGAME) {
-#ifdef _DEBUG
-		printf("EVENT NEXTGAME\n");
-#endif
+	if (event == IEvent::event_t::NEXTGAME)
 		this->_loadNextGame();
-	}
 	if (event == IEvent::event_t::MENU) {
-#ifdef _DEBUG
-		printf("EVENT MENU\n");
-#endif
 		this->_moduleLoaded = MENU;
 		display->resizeWindow(1620, 900);
 	}
 	if (event == IEvent::event_t::ESCAPE) {
-#ifdef _DEBUG
-		printf("EVENT ESCAPE\n");
-#endif
 		this->_moduleLoaded = MENU;
 		display->resizeWindow(1620, 900);
 	}
 	if (event == IEvent::event_t::NEXTDIFFICULTY) {
-#ifdef _DEBUG
-		printf("EVENT NEXTDIFFICULTY\n");
-#endif
 		if (this->_moduleLoaded == GAME) {
 			this->_saver.saveScore(this->game->getHighScore(), "default", this->_gameLibPath.at(this->_gameLibIndex));
 			this->game->changeDifficulty();
