@@ -120,13 +120,10 @@ void Core::_switchGraphic() {
         std::cerr << "No display libraries available." << std::endl;
         return;
     }
-    this->_indexDisplay = (this->_indexDisplay == 0)
-        ? this->_displayLibsPaths.size() - 1
-        : this->_indexDisplay - 1;
+    this->_indexDisplay = (this->_indexDisplay == 0) ? this->_displayLibsPaths.size() - 1 : this->_indexDisplay - 1;
     try {
         this->_loadDisplayLib(this->_displayLibsPaths.at(this->_indexDisplay));
-        std::cout << "Switched to display library: "
-				<< this->_displayLibsPaths.at(this->_indexDisplay) << std::endl;
+        std::cout << "Switched to display library: " << this->_displayLibsPaths.at(this->_indexDisplay) << std::endl;
     } catch (const std::exception &e) {
         std::cerr << "Failed to switch display library: " << e.what() << std::endl;
     }
