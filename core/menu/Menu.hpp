@@ -46,6 +46,8 @@ class Menu : public IMenu {
 		void setMenuTitle(const std::string& title,
 			const std::pair<int, int>& position = {200, 50}, int fontSize = 36);
 
+		void setSelectedGraphicLib(const std::string& graphicLib);
+
 	private:
 		// Variable
 		std::string _username;
