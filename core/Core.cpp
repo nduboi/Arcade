@@ -213,11 +213,6 @@ void Core::_loadNextGame() {
 	this->_gameLibIndex++;
 	if (this->_gameLibIndex >= this->_gameLibPath.size())
 		this->_gameLibIndex = 0;
-	while (std::filesystem::canonical(this->_gameLibPath.at(this->_gameLibIndex)) == std::filesystem::canonical(this->_gameLoader.getModulePath())) {
-		this->_gameLibIndex++;
-		if (this->_gameLibIndex >= this->_gameLibPath.size())
-			this->_gameLibIndex = 0;
-	}
 	this->loadGameModule(this->_gameLibPath.at(this->_gameLibIndex));
 	this->_setHighScore();
 	this->display->resizeWindow(800, 900);
