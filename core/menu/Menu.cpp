@@ -145,6 +145,16 @@ void Menu::initButtons(const std::vector<std::string>& libs, const std::vector<s
 
         _gameButtons.push_back(btn);
     }
+
+    int totalHeightLibs = (buttonHeight + spacing) * libs.size();
+    int totalHeightGames = (buttonHeight + spacing) * games.size();
+
+    for (auto &box : _boxes) {
+        if (box.typesBoxes == action_e::GRAPHICLIB)
+            box.posBottom.second = box.posTop.second + totalHeightLibs + 20;
+        else if (box.typesBoxes == action_e::GAMELIB)
+            box.posBottom.second = box.posTop.second + totalHeightGames + 20;
+    }
 }
 
 std::string Menu::extractNameFromPath(const std::string& path)
@@ -173,7 +183,7 @@ int Menu::estimateTextWidth(const std::string& text, int fontSize)
 void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
 {
     for (const auto& btn : _graphicLibButtons) {
-        std::vector<int> btnColor = (btn.value == currentGraphicLib) ?
+        std::vector<int> btnColor = (btn.value == _currentGraphicLib) ?
             std::vector<int>{100, 200, 100} :
             std::vector<int>{150, 150, 150};
 
@@ -237,7 +247,7 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
-            currentGraphicLib = btn.value;
+            _currentGraphicLib = btn.value;
             selectedValue = btn.value;
             return btn.action;
         }
