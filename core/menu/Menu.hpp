@@ -17,31 +17,27 @@
 
 class Menu : public IMenu {
 	private:
+		std::string _username;
 		std::shared_ptr<IWindow> _window;
 		MenuTitle _menuTitle;
 		MenuTitle _libraryTitle;
 		MenuTitle _gameTitle;
 	public:
-		// Constructor
-		Menu(const std::shared_ptr<IWindow> &window);
+		// Getter
+		std::vector<Boxes> getBoxPoses() override;
+		std::string getUsername() override;
 
 		// Method
 		void displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
 			std::vector<std::string> games) override;
-
-		// Getter
-		std::vector<Boxes> getBoxPoses() override;
-		std::string getUsername() override;
 
 		// Setter
 		void setUsername(std::string username) override;
 		void setMenuTitle(const std::string& title,
 			const std::pair<int, int>& position = {200, 50}, int fontSize = 36);
 
-	private:
-		// Variable
-		std::string _username;
-
+		// Constructor
+		Menu(const std::shared_ptr<IWindow> &window);
 };
 
 #endif // MENU_HPP

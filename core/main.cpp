@@ -8,7 +8,7 @@
 #include <dlfcn.h>
 #include <iostream>
 #include <string>
-#include <exception>
+#include "Exception.hpp"
 #include "Core.hpp"
 
 int main(int ac, char **av) {
@@ -18,18 +18,12 @@ int main(int ac, char **av) {
     }
 
     std::string lib = av[1];
-    Core window_data;
-
-    if (lib == "-h" || lib == "--help") {
-        std::cout << "Run the program with lib as argument:" << std::endl;
-        std::cout << "  ./arcade [lib]" << std::endl;
-        window_data.displayAllLib();
-        return 0;
-    }
 
     try {
-        window_data.loadDisplayModule(lib);
+        Core window_data(lib);
         window_data.loop();
+    } catch (HelpException &) {
+        return 0;
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 84;

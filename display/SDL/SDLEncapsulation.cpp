@@ -8,22 +8,17 @@ namespace Display {
 	SDLEncapsulation::SDLEncapsulation() {
 		std::cout << "Initializing SDL resources..." << std::endl;
 
-		// Initialisation de SDL
 		if (SDL_WasInit(SDL_INIT_VIDEO) == 0) {
 			if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) < 0) {
 				std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << std::endl;
 				return;
 			}
 		}
-
-		// Initialisation de SDL_image
 		if ((IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) & (IMG_INIT_PNG | IMG_INIT_JPG)) == 0) {
 			std::cerr << "SDL_image could not initialize! SDL_image Error: " << IMG_GetError() << std::endl;
 			SDL_Quit();
 			return;
 		}
-
-		// Initialisation de SDL_ttf
 		if (TTF_WasInit() == 0) {
 			if (TTF_Init() == -1) {
 				std::cerr << "SDL_ttf could not initialize! SDL_ttf Error: " << TTF_GetError() << std::endl;
@@ -32,8 +27,6 @@ namespace Display {
 				return;
 			}
 		}
-
-		// Création de la fenêtre
 		this->window = SDL_CreateWindow("Arcade - SDL2",
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
@@ -46,8 +39,6 @@ namespace Display {
 			SDL_Quit();
 			return;
 		}
-
-		// Création du renderer
 		this->renderer = SDL_CreateRenderer(this->window, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 		SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
@@ -59,8 +50,6 @@ namespace Display {
 			SDL_Quit();
 			return;
 		}
-
-		// Chargement de la police par défaut
 		this->defaultFont = TTF_OpenFont("assets/Arial.ttf", 20);
 		if (!this->defaultFont) {
 			std::cerr << "Failed to load default font! SDL_ttf Error: " << TTF_GetError() << std::endl;
@@ -296,7 +285,6 @@ namespace Display {
 			window = nullptr;
 		}
 
-		// Désinitialisation des sous-systèmes SDL
 		if (TTF_WasInit()) {
 			TTF_Quit();
 		}
