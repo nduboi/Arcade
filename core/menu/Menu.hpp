@@ -35,6 +35,7 @@ class Menu : public IMenu {
 			std::vector<std::string> games) override;
 		action_e handleClick(int x, int y, std::string& selectedValue);
 		std::string extractNameFromPath(const std::string& path);
+		int estimateTextWidth(const std::string& text, int fontSize);
 
 		// Getter
 		std::vector<Boxes> getBoxPoses() override;
