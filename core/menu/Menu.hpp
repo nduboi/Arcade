@@ -16,18 +16,24 @@
 #include <string>
 
 class Menu : public IMenu {
-	private:
-		std::shared_ptr<IWindow> _window;
-		MenuTitle _menuTitle;
-		MenuTitle _libraryTitle;
-		MenuTitle _gameTitle;
 	public:
+		//Struct button
+		struct Button {
+			std::pair<int, int> posTop;
+			std::pair<int, int> posBottom;
+			std::string text;
+			bool selected;
+			action_e action;
+			std::string value;
+		};
+
 		// Constructor
 		Menu(const std::shared_ptr<IWindow> &window);
 
 		// Method
 		void displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
 			std::vector<std::string> games) override;
+		action_e handleClick(int x, int y, std::string& selectedValue);
 
 		// Getter
 		std::vector<Boxes> getBoxPoses() override;
@@ -41,6 +47,16 @@ class Menu : public IMenu {
 	private:
 		// Variable
 		std::string _username;
+		std::shared_ptr<IWindow> _window;
+		MenuTitle _menuTitle;
+		MenuTitle _libraryTitle;
+		MenuTitle _gameTitle;
+		std::vector<Boxes> _boxes;
+		std::vector<Button> _graphicLibButtons;
+		std::vector<Button> _gameButtons;
+
+		void initButtons(const std::vector<std::string>& libs, const std::vector<std::string>& games);
+		void drawButtons(const std::shared_ptr<IWindow> &window);
 
 };
 
