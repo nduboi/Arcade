@@ -39,6 +39,8 @@ private:
 
 	void _processClickEvent(int x, int y, int z);
 
+	void _processMenuClick();
+
 	void _analyze();
 
 	void _compute();
