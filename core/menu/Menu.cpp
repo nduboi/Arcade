@@ -16,7 +16,7 @@ Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade 
     libBox.typesBoxes = action_e::GRAPHICLIB;
     libBox.selected = false;
     libBox._nameBoxes = "Graphic Libraries";
-    _boxes.push_back(libBox);
+    this->_boxes.push_back(libBox);
 
     Boxes gameBox;
     gameBox.posTop = {950, 250};
@@ -24,7 +24,7 @@ Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade 
     gameBox.typesBoxes = action_e::GAMELIB;
     gameBox.selected = false;
     gameBox._nameBoxes = "Game Libraries";
-    _boxes.push_back(gameBox);
+    this->_boxes.push_back(gameBox);
 }
 
 void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes,
@@ -33,7 +33,7 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
     if (!window)
         return;
 
-    if (_graphicLibButtons.empty() || _gameButtons.empty()) {
+    if (this->_graphicLibButtons.empty() || this->_gameButtons.empty()) {
         initButtons(libs, games);
     }
 
@@ -43,9 +43,9 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
         {static_cast<float>(windowSize.first), static_cast<float>(windowSize.second)},
         "assets/background/background_menu.jpg", {0, 0});
 
-    _menuTitle.draw(window);
-    _libraryTitle.draw(window);
-    _gameTitle.draw(window);
+    this->_menuTitle.draw(window);
+    this->_libraryTitle.draw(window);
+    this->_gameTitle.draw(window);
 
     std::vector<Boxes> boxes = getBoxPoses();
 
@@ -76,7 +76,7 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
 
 std::vector<Boxes> Menu::getBoxPoses()
 {
-    return _boxes;
+    return this->_boxes;
 }
 
 std::string Menu::getUsername()
@@ -97,8 +97,8 @@ void Menu::setMenuTitle(const std::string& title,
 
 void Menu::initButtons(const std::vector<std::string>& libs, const std::vector<std::string>& games)
 {
-    _graphicLibButtons.clear();
-    _gameButtons.clear();
+    this->_graphicLibButtons.clear();
+    this->_gameButtons.clear();
 
     std::vector<Boxes> boxes = getBoxPoses();
 
@@ -128,7 +128,7 @@ void Menu::initButtons(const std::vector<std::string>& libs, const std::vector<s
         btn.action = action_e::GRAPHICLIB;
         btn.value = libs[i];
 
-        _graphicLibButtons.push_back(btn);
+        this->_graphicLibButtons.push_back(btn);
     }
 
     startX = gameBox.posTop.first + 10;
@@ -143,7 +143,7 @@ void Menu::initButtons(const std::vector<std::string>& libs, const std::vector<s
         btn.action = action_e::GAMELIB;
         btn.value = games[i];
 
-        _gameButtons.push_back(btn);
+        this->_gameButtons.push_back(btn);
     }
 
     int totalHeightLibs = (buttonHeight + spacing) * libs.size();
@@ -182,8 +182,8 @@ int Menu::estimateTextWidth(const std::string& text, int fontSize)
 
 void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
 {
-    for (const auto& btn : _graphicLibButtons) {
-        std::vector<int> btnColor = (btn.value == _currentGraphicLib) ?
+    for (const auto& btn : this->_graphicLibButtons) {
+        std::vector<int> btnColor = (btn.value == this->_currentGraphicLib) ?
             std::vector<int>{100, 200, 100} :
             std::vector<int>{150, 150, 150};
 
@@ -243,7 +243,7 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
 
 action_e Menu::handleClick(int x, int y, std::string& selectedValue)
 {
-    for (auto& btn : _graphicLibButtons) {
+    for (auto& btn : this->_graphicLibButtons) {
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
@@ -253,7 +253,7 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
         }
     }
 
-    for (auto& btn : _gameButtons) {
+    for (auto& btn : this->_gameButtons) {
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
