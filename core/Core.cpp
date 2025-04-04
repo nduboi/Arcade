@@ -131,6 +131,17 @@ void Core::_switchGraphic() {
 
 void Core::_switchGame() {
 	this->_loadedModuleType = GAME;
+	if (this->_gameLibsPaths.empty()) {
+		std::cerr << "No game libraries available." << std::endl;
+		return;
+	}
+	this->_indexGame = (this->_indexGame == 0) ? this->_gameLibsPaths.size() - 1 : this->_indexGame - 1;
+	try {
+		this->_loadGameLib(this->_gameLibsPaths.at(this->_indexGame));
+		std::cout << "Switched to game library: " << this->_gameLibsPaths.at(this->_indexGame) << std::endl;
+	} catch (const std::exception &e) {
+		std::cerr << "Failed to switch game library: " << e.what() << std::endl;
+	}
 }
 
 void Core::_displayAllLib() {
@@ -186,8 +197,10 @@ void Core::_analyse() {
 		this->_switchGraphic();
 	if (event == IEvent::event_t::REFRESH)
 		this->_reloadCurrentGame();
-	if (event == IEvent::event_t::NEXTGAME)
+	if (event == IEvent::event_t::NEXTGAME) {
 		this->_switchGame();
+		this->_window->resizeWindow(800, 900);
+	}
 	if (event == IEvent::event_t::MENU) {
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
