@@ -301,6 +301,7 @@ void Core::loadDisplayModule(const std::string &path)
 		this->display->closeWindow();
 	this->event.reset();
 	this->display.reset();
+	this->displayPtr.reset();
 	this->_displayLoader.closeLib();
 	this->_displayLoader.openLib(path);
 	if (this->_displayLoader.getModuleType() != Loader::DISPLAY_MODULE)
