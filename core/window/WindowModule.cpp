@@ -1,3 +1,11 @@
+/**
+ * @file WindowModule.cpp
+ * @brief Implementation of the WindowModule class.
+ *
+ * This file contains the implementation of the WindowModule class, which
+ * provides methods for managing the display window and rendering graphics.
+ */
+
 //
 // Created by roussierenoa on 3/17/25.
 //

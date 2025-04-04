@@ -13,6 +13,7 @@ SHOW_FILES             = YES
 SHOW_NAMESPACES        = YES
 PROJECT_LOGO           = docStyle/logo-arcade.svg
 
+EXCLUDE                = ./include/json.hpp
 
 HTML_EXTRA_STYLESHEET  = docStyle/doxygen-awesome.css \
                         docStyle/doxygen-awesome-sidebar-only.css \

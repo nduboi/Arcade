@@ -5,6 +5,14 @@
 ** MenuTitle
 */
 
+/**
+ * @file MenuTitle.hpp
+ * @brief Declaration of the MenuTitle class.
+ *
+ * This file contains the definition of the MenuTitle class, which is responsible
+ * for managing the title displayed in the menu interface.
+ */
+
 #ifndef MENU_TITLE_HPP
 #define MENU_TITLE_HPP
 

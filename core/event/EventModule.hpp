@@ -3,8 +3,7 @@
  * @brief Declaration of the EventModule class.
  *
  * This file contains the definition of the EventModule class, which implements
- * the IEventModule interface. It is responsible for managing the display module
- * functionality and interacts with a library loader.
+ * the IEvent interface for managing events in the Arcade project.
  *
  * @author EPITECH PROJECT
  * @date 2025
@@ -18,7 +17,7 @@
 #include "LibLoader.hpp"
 /**
  * @class EventModule
- * @brief A class that implements the IEventModule interface.
+ * @brief A class that implements the IEvent interface.
  *
  * The EventModule class is responsible for initializing and stopping
  * the display module. It interacts with a library loader to manage

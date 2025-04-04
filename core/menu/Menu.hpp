@@ -5,6 +5,14 @@
 ** Menu
 */
 
+/**
+ * @file Menu.hpp
+ * @brief Declaration of the Menu class.
+ *
+ * This file contains the definition of the Menu class, which is responsible
+ * for managing the menu interface in the Arcade project.
+ */
+
 #ifndef MENU_HPP
 #define MENU_HPP
 

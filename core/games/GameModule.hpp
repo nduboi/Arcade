@@ -2,6 +2,14 @@
 // Created by roussierenoa on 3/20/25.
 //
 
+/**
+ * @file GameModule.hpp
+ * @brief Declaration of the GameModule class.
+ *
+ * This file contains the definition of the GameModule class, which implements
+ * the IGameModule interface for managing game logic and state.
+ */
+
 #ifndef GAMEMODULE_HPP
 #define GAMEMODULE_HPP
 

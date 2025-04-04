@@ -1,8 +1,9 @@
 /**
  * @file Exception.hpp
- * @brief Exception class for handling DLL-related errors in the barcade project.
+ * @brief Exception classes for handling various errors in the Arcade project.
  *
- * This file contains the definition of the DllException class, WindowException class.
+ * This file contains the definitions of multiple exception classes used to handle
+ * errors related to dynamic libraries, display modules, game modules, and other components.
  *
  * @date 3/18/25
  */
@@ -16,6 +17,7 @@
 
 #ifndef Exception_HPP_
 #define Exception_HPP_
+
 #include <exception>
 #include <string>
 
@@ -49,10 +51,9 @@ class DllException : public std::exception {
 
 /**
  * @class WindowException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling window-related errors.
  *
- * The WindowException class is used to handle errors related to display module
- *
+ * The WindowException class is used to handle errors related to display module.
  */
 class WindowException : public std::exception {
 private:
@@ -77,10 +78,9 @@ public:
 
 /**
  * @class CoreException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling core-related errors.
  *
- * The CoreException class is used to handle errors related to display module
- *
+ * The CoreException class is used to handle errors related to the core module.
  */
 class CoreException : public std::exception {
 private:
@@ -105,10 +105,9 @@ public:
 
 /**
  * @class GameModuleException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling game module-related errors.
  *
- * The GameModuleException class is used to handle errors related to display module
- *
+ * The GameModuleException class is used to handle errors related to game modules.
  */
 class GameModuleException : public std::exception {
 private:
@@ -133,10 +132,9 @@ public:
 
 /**
  * @class MenuModuleException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling menu module-related errors.
  *
- * The MenuModuleException class is used to handle errors related to display module
- *
+ * The MenuModuleException class is used to handle errors related to menu modules.
  */
 class MenuModuleException : public std::exception {
 private:
@@ -161,10 +159,9 @@ public:
 
 /**
  * @class EventModuleException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling event module-related errors.
  *
- * The EventModuleException class is used to handle errors related to display module
- *
+ * The EventModuleException class is used to handle errors related to event modules.
  */
 class EventModuleException : public std::exception {
 private:
@@ -189,10 +186,9 @@ public:
 
 /**
  * @class EntityModuleException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling entity module-related errors.
  *
- * The EntityModuleException class is used to handle errors related to display module
- *
+ * The EntityModuleException class is used to handle errors related to entity modules.
  */
 class EntityModuleException : public std::exception {
 private:
@@ -217,10 +213,9 @@ public:
 
 /**
  * @class ProgramCoreException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling program core-related errors.
  *
- * The ProgramCoreException class is used to handle errors related to the program 
- * core
+ * The ProgramCoreException class is used to handle errors related to the program core.
  */
 class ProgramCoreException : public std::exception {
     private:
@@ -245,10 +240,9 @@ class ProgramCoreException : public std::exception {
 
 /**
  * @class NcursesException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling Ncurses-related errors.
  *
- * The NcursesException class is used to handle errors related to the program
- * core
+ * The NcursesException class is used to handle errors related to the Ncurses library.
  */
 class NcursesException : public std::exception {
 private:
@@ -273,10 +267,9 @@ public:
 
 /**
  * @class SDLException
- * @brief Exception class for handling DLL-related errors.
+ * @brief Exception class for handling SDL-related errors.
  *
- * The SDLException class is used to handle errors related to the program
- * core
+ * The SDLException class is used to handle errors related to the SDL library.
  */
 class SDLException : public std::exception {
 private:

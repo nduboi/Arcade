@@ -1,13 +1,9 @@
 /**
  * @file LibLoader.hpp
- * @brief Header file for the LibLoader class, responsible for dynamically loading modules.
- * 
- * This file defines the LibLoader class, which provides functionality to load and manage
- * dynamic libraries (modules) at runtime. It includes methods to retrieve module information
- * such as type, path, and name, as well as to create display module objects.
- * 
- * @author Roussiere Noa
- * @date 2023
+ * @brief Declaration of the LibLoader class.
+ *
+ * This file contains the definition of the LibLoader class, which is responsible
+ * for dynamically loading and managing libraries in the Arcade project.
  */
 
 #ifndef LIBLOADER_HPP
