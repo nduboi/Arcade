@@ -150,9 +150,6 @@ void Core::_compute() {
 		std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
 
 		for (int y = 0; y < gridSize.second; y++) {
-			if (y == 16) {
-				std::cout << "y = 16" << std::endl;
-			}
 			for (int x = 0; x < gridSize.first; x++) {
 				for (int z = 0; z < grid[y][x].size(); z++) {
 					IEntity *entity = grid[y][x][z].get();
