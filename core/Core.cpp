@@ -37,13 +37,15 @@ void Core::_analyze() {
 		this->display->closeWindow();
 	if (event == IEvent::event_t::NEXTGRAPHIC)
 		this->_loadNextGraphic();
-	if (event == IEvent::event_t::REFRESH)
+	if (event == IEvent::event_t::REFRESH && this->_moduleLoaded == GAME)
 		this->_reloadCurrentGame();
 	if (event == IEvent::event_t::NEXTGAME)
 		this->_loadNextGame();
 	if (event == IEvent::event_t::MENU) {
 		this->_moduleLoaded = MENU;
 		display->resizeWindow(1620, 900);
+		display->setMapSize({0, 0});
+		this->event->setMapSize({0, 0});
 	}
 	if (event == IEvent::event_t::ESCAPE) {
 		this->_moduleLoaded = MENU;
@@ -114,6 +116,7 @@ void Core::_processMenuClick()
     std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
 
+	std::cout << "Selected value: " << selectedValue << std::endl;
     if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibPath.size(); i++) {
             if (this->_displayLibPath[i].find(selectedValue) != std::string::npos) {
@@ -204,6 +207,7 @@ void Core::_displayGame()
 void Core::_displayMenu()
 {
 	if (this->_moduleLoaded == MENU) {
+		this->_menu.setSelectedGraphicLib(this->_displayLibPath[this->_displayLibIndex]);
 		this->_menu.displayMenu(this->displayPtr, this->_menu.getBoxPoses(), this->_displayLibPath, this->_gameLibPath);
 	}
 }
@@ -305,6 +309,10 @@ void Core::loadDisplayModule(const std::string &path)
 	this->display = std::make_shared<WindowModule>(displayPtr);
 	this->event = std::make_shared<EventModule>(this->_displayLoader.initEntryPointEvent(this->displayPtr));
 	this->event->init();
+	for (int i = 0; i < this->_displayLibPath.size(); i++) {
+		if (std::filesystem::canonical(this->_displayLibPath.at(i)) == std::filesystem::canonical(this->_displayLoader.getModulePath()))
+			this->_displayLibIndex = i;
+	}
 }
 
 void Core::loadGameModule(const std::string &path) {

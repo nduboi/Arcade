@@ -124,7 +124,7 @@ void Menu::initButtons(const std::vector<std::string>& libs, const std::vector<s
         btn.posTop = {startX, startY + i * (buttonHeight + spacing)};
         btn.posBottom = {startX + buttonWidth, startY + i * (buttonHeight + spacing) + buttonHeight};
         btn.text = libs[i];
-        btn.selected = (i == 0);
+        btn.selected = (libs[i] == this->_currentGraphicLib);
         btn.action = action_e::GRAPHICLIB;
         btn.value = libs[i];
 
@@ -192,6 +192,10 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
             static_cast<size_t>(btn.posBottom.second - btn.posTop.second)
         };
 
+        if (window->isMouseOver({static_cast<size_t>(btn.posTop.first), static_cast<size_t>(btn.posTop.second)},
+            {static_cast<size_t>(btn.posBottom.first - btn.posTop.first), static_cast<size_t>(btn.posBottom.second - btn.posTop.second)})) {
+            btnColor = std::vector<int>{200, 200, 200};
+        }
         window->drawRectangleMenu(
             btnSize,
             {static_cast<size_t>(btn.posTop.first), static_cast<size_t>(btn.posTop.second)},
@@ -220,6 +224,10 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
             static_cast<size_t>(btn.posBottom.second - btn.posTop.second)
         };
 
+        if (window->isMouseOver({static_cast<size_t>(btn.posTop.first), static_cast<size_t>(btn.posTop.second)},
+            {static_cast<size_t>(btn.posBottom.first - btn.posTop.first), static_cast<size_t>(btn.posBottom.second - btn.posTop.second)})) {
+            btnColor = std::vector<int>{200, 200, 200};
+        }
         window->drawRectangleMenu(
             btnSize,
             {static_cast<size_t>(btn.posTop.first), static_cast<size_t>(btn.posTop.second)},
@@ -264,4 +272,9 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
 
     selectedValue = "";
     return action_e::NOTHING;
+}
+
+void Menu::setSelectedGraphicLib(const std::string& graphicLib)
+{
+    this->_currentGraphicLib = graphicLib;
 }
