@@ -48,11 +48,11 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             this->_mousePos = {event.mouseButton.x, event.mouseButton.y};
-            if (event.mouseButton.button == sf::Mouse::Button::Right)
+            if (event.mouseButton.button == sf::Mouse::Right)
                 return MOUSERIGHTCLICK;
-            if (event.mouseButton.button == sf::Mouse::Button::Left)
+            if (event.mouseButton.button == sf::Mouse::Left)
                 return MOUSELEFTCLICK;
-            if (event.mouseButton.button == sf::Mouse::Button::Middle)
+            if (event.mouseButton.button == sf::Mouse::Middle)
                 return MOUSECLICK;
         }
         if (event.type == sf::Event::JoystickMoved) {
