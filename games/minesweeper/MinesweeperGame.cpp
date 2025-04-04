@@ -47,15 +47,20 @@ std::vector<std::shared_ptr<IEntity>> MinesweeperGame::getHUD() const
     hud.push_back(std::make_shared<HighScoreEntityHUD>(this->getHighScore(), std::make_pair(10, 55)));
 
     std::size_t secondsElapsed = this->getTime();
-    hud.push_back(std::make_shared<TimerEntityHUD>(secondsElapsed, 100, std::make_pair(300, 35)));
 
     std::string difficulty = "Difficulty: ";
-    if (this->_width == 9 && this->_height == 9)
+    if (this->_width == 9 && this->_height == 9) {
         difficulty += "Easy";
-    else if (this->_width == 16 && this->_height == 16)
+        hud.push_back(std::make_shared<TimerEntityHUD>(secondsElapsed, 120, std::make_pair(300, 35)));
+    }
+    else if (this->_width == 16 && this->_height == 16) {
         difficulty += "Medium";
-    else
+        hud.push_back(std::make_shared<TimerEntityHUD>(secondsElapsed, 360, std::make_pair(300, 35)));
+    }
+    else {
         difficulty += "Hard";
+        hud.push_back(std::make_shared<TimerEntityHUD>(secondsElapsed, 720, std::make_pair(300, 35)));
+    }
     hud.push_back(std::make_shared<TextEntityHUD>(difficulty, std::make_pair(600, 55)));
 
     hud.push_back(std::make_shared<TextEntityHUD>("Mines: " + std::to_string(this->_nbMines - this->getNbFlags()), std::make_pair(600, 15)));
@@ -87,6 +92,7 @@ void MinesweeperGame::changeDifficulty()
     this->_gameState = PLAYING;
     this->_time = std::chrono::steady_clock::now();
     this->initializeGrid();
+    this->_nbMines = this->getNbMines();
 }
 
 void MinesweeperGame::update(std::shared_ptr<IGameModule> gameModule)
@@ -97,8 +103,13 @@ void MinesweeperGame::update(std::shared_ptr<IGameModule> gameModule)
         return;
 
     std::size_t secondsElapsed = this->getTime();
-    if (secondsElapsed >= 100)
+    if (this->_width == 9 && this->_height == 9 && secondsElapsed >= 120) {
         this->_gameState = LOSE;
+    } else if (this->_width == 16 && this->_height == 16 && secondsElapsed >= 360) {
+        this->_gameState = LOSE;
+    } else if (secondsElapsed >= 720) {
+        this->_gameState = LOSE;
+    }
 }
 
 int MinesweeperGame::getNbMines() const
