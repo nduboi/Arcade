@@ -10,6 +10,8 @@ add_library(arcade_ncurses SHARED
 
 target_link_libraries(arcade_ncurses ncurses)
 
+set_target_properties(arcade_ncurses PROPERTIES LINK_FLAGS "-Wl,--export-dynamic")
+
 target_compile_options(arcade_ncurses PRIVATE -g3 -ggdb -O0 -Wall -Wextra -Wpedantic)
 
 add_custom_command(TARGET arcade_ncurses POST_BUILD

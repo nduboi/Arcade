@@ -8,6 +8,8 @@ add_library(arcade_sfml SHARED
 
 target_link_libraries(arcade_sfml sfml-graphics sfml-window sfml-system)
 
+set_target_properties(arcade_sfml PROPERTIES LINK_FLAGS "-Wl,--export-dynamic")
+
 add_custom_command(TARGET arcade_sfml POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "$<TARGET_FILE_DIR:arcade_sfml>/libarcade_sfml.so"

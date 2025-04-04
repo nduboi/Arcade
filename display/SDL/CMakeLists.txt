@@ -10,6 +10,8 @@ add_library(arcade_sdl2 SHARED
 
 target_link_libraries(arcade_sdl2 SDL2 SDL2_image SDL2_ttf)
 
+set_target_properties(arcade_sdl2 PROPERTIES LINK_FLAGS "-Wl,--export-dynamic")
+
 add_custom_command(TARGET arcade_sdl2 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
         "$<TARGET_FILE_DIR:arcade_sdl2>/libarcade_sdl2.so"
