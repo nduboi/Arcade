@@ -89,11 +89,13 @@ std::pair<int, int> arcadeSDLEvent::getMousePos()
     auto sdlWindow = std::dynamic_pointer_cast<arcadeSDL>(this->_window);
     const int hudOffset = 100;
 
+    if (_mousePos.first < 0 || _mousePos.second < hudOffset)
+        return {-1, -1};
     if (this->_mapSize.first > 0 && this->_mapSize.second > 0) {
         auto WinSize = sdlWindow->sdl->getWindowSize();
         return {
             (this->_mousePos.first * this->_mapSize.first) / WinSize.first,
-            ((this->_mousePos.second - hudOffset ) * this->_mapSize.second) / WinSize.second
+            ((this->_mousePos.second - hudOffset) * this->_mapSize.second) / (WinSize.second - hudOffset)
         };
     }
     return this->_mousePos;
