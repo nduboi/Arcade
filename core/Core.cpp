@@ -127,6 +127,10 @@ void Core::_switchGraphic() {
     } catch (const std::exception &e) {
         std::cerr << "Failed to switch display library: " << e.what() << std::endl;
     }
+	if (this->_loadedModuleType == GAME)
+		this->_window->resizeWindow(800, 900);
+	else
+		this->_window->resizeWindow(1620, 900);
 }
 
 void Core::_switchGame() {
@@ -195,7 +199,7 @@ void Core::_analyse() {
 		this->_window->closeWindow();
 	if (event == IEvent::event_t::NEXTGRAPHIC)
 		this->_switchGraphic();
-	if (event == IEvent::event_t::REFRESH)
+	if (event == IEvent::event_t::REFRESH && this->_loadedModuleType == GAME)
 		this->_reloadCurrentGame();
 	if (event == IEvent::event_t::NEXTGAME) {
 		this->_switchGame();
@@ -204,6 +208,8 @@ void Core::_analyse() {
 	if (event == IEvent::event_t::MENU) {
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
+		this->_window->setMapSize({0, 0});
+		this->_event->setMapSize({0, 0});
 	}
 	if (event == IEvent::event_t::ESCAPE) {
 		this->_loadedModuleType = MENU;
@@ -215,6 +221,44 @@ void Core::_analyse() {
 			this->_game->changeDifficulty();
 		}
 	}
+	if (event == IEvent::event_t::MOUSELEFTCLICK) {
+		if (this->_loadedModuleType == MENU) {
+			this->_processMenuClick();
+		}
+	}
+}
+
+void Core::_processMenuClick()
+{
+    if (this->_loadedModuleType != MENU)
+        return;
+
+    std::pair<int, int> mousePos = this->_event->getMousePos();
+
+    std::string selectedValue;
+    action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
+
+	std::cout << "Selected value: " << selectedValue << std::endl;
+    if (action == action_e::GRAPHICLIB) {
+        for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {
+            if (this->_displayLibsPaths[i].find(selectedValue) != std::string::npos) {
+                this->_indexDisplay = i;
+                this->_loadDisplayLib(this->_displayLibsPaths[i]);
+                break;
+            }
+        }
+    } else if (action == action_e::GAMELIB) {
+        for (size_t i = 0; i < this->_gameLibsPaths.size(); i++) {
+            if (this->_gameLibsPaths[i].find(selectedValue) != std::string::npos) {
+                this->_indexGame = i;
+                this->_loadGameLib(this->_gameLibsPaths[i]);
+                this->_setHighScore();
+                this->_loadedModuleType = GAME;
+				this->_window->resizeWindow(800, 900);
+                break;
+            }
+        }
+    }
 }
 
 void Core::_compute() {
@@ -270,6 +314,7 @@ void Core::_displayGame() {
 
 void Core::_displayMenu() {
 	if (this->_loadedModuleType == MENU) {
+		this->_menu.setSelectedGraphicLib(this->_displayLibsPaths[this->_indexDisplay]);
 		this->_menu.displayMenu(this->_windowPtr, this->_menu.getBoxPoses(), this->_displayLibsPaths, this->_gameLibsPaths);
 	}
 }
@@ -308,6 +353,7 @@ void Core::loop() {
 		this->_compute();
 		this->_display();
 	}
+	this->_window->closeWindow();
 }
 
 Core::Core(std::string argv): _menu(this->_window), _saver("savefile.json") {

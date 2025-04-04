@@ -16,28 +16,53 @@
 #include <string>
 
 class Menu : public IMenu {
-	private:
-		std::string _username;
-		std::shared_ptr<IWindow> _window;
-		MenuTitle _menuTitle;
-		MenuTitle _libraryTitle;
-		MenuTitle _gameTitle;
 	public:
-		// Getter
-		std::vector<Boxes> getBoxPoses() override;
-		std::string getUsername() override;
+		//Struct button
+		struct Button {
+			std::pair<int, int> posTop;
+			std::pair<int, int> posBottom;
+			std::string text;
+			bool selected;
+			action_e action;
+			std::string value;
+		};
+
+		// Constructor
+		Menu(const std::shared_ptr<IWindow> &window);
 
 		// Method
 		void displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes, std::vector<std::string> libs,
 			std::vector<std::string> games) override;
+		action_e handleClick(int x, int y, std::string& selectedValue);
+		std::string extractNameFromPath(const std::string& path);
+		int estimateTextWidth(const std::string& text, int fontSize);
+
+		// Getter
+		std::vector<Boxes> getBoxPoses() override;
+		std::string getUsername() override;
 
 		// Setter
 		void setUsername(std::string username) override;
 		void setMenuTitle(const std::string& title,
 			const std::pair<int, int>& position = {200, 50}, int fontSize = 36);
 
-		// Constructor
-		Menu(const std::shared_ptr<IWindow> &window);
+		void setSelectedGraphicLib(const std::string& graphicLib);
+
+	private:
+		// Variable
+		std::string _username;
+		std::shared_ptr<IWindow> _window;
+		MenuTitle _menuTitle;
+		MenuTitle _libraryTitle;
+		MenuTitle _gameTitle;
+		std::vector<Boxes> _boxes;
+		std::vector<Button> _graphicLibButtons;
+		std::vector<Button> _gameButtons;
+		std::string _currentGraphicLib;
+
+		void initButtons(const std::vector<std::string>& libs, const std::vector<std::string>& games);
+		void drawButtons(const std::shared_ptr<IWindow> &window);
+
 };
 
 #endif // MENU_HPP

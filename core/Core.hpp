@@ -57,6 +57,9 @@ private:
 	void _refreshLibPaths();
 
 	void _analyse();
+
+	void _processMenuClick();
+
 	void _compute();
 	void _displayGame();
 	void _displayMenu();
@@ -68,7 +71,5 @@ public:
 	Core(std::string argv);
 	~Core();
 };
-
-
 
 #endif //CORE_HPP
