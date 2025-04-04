@@ -49,6 +49,7 @@ void Core::_analyze() {
 	}
 	if (event == IEvent::event_t::ESCAPE) {
 		this->_moduleLoaded = MENU;
+		display->setMapSize({0, 0});
 		display->resizeWindow(1620, 900);
 	}
 	if (event == IEvent::event_t::NEXTDIFFICULTY) {
