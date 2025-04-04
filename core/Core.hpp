@@ -66,9 +66,9 @@ private:
 	void _loadNextGraphic();
 
 public:
-	std::shared_ptr<IWindow> displayPtr; ///< Unique pointer to the display IWindow.
-	std::shared_ptr<WindowModule> display; ///< Unique pointer to the display WindowModule.
-	std::shared_ptr<EventModule> event; ///< Unique pointer to the display WindowModule.
+	std::shared_ptr<IWindow> displayPtr; ///< Shared pointer to the display IWindow.
+	std::shared_ptr<WindowModule> display; ///< Shared pointer to the display WindowModule.
+	std::shared_ptr<EventModule> event; ///< Shared pointer to the display WindowModule.
 	std::shared_ptr<GameModule> game; ///< Shared pointer to the game GameModule.
 
 	Menu _menu;
