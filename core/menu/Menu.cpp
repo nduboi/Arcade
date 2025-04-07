@@ -374,8 +374,8 @@ void Menu::drawUsernameInput(const std::shared_ptr<IWindow> &window)
     );
 
     window->drawTextMenu(
-        "Enter Username",
-        {_usernameBox.posTop.first + 20, _usernameBox.posTop.second + 20},
+        "Enter   Username",
+        {_usernameBox.posTop.first + 75, _usernameBox.posTop.second + 10},
         {255, 255, 255},
         28
     );
@@ -385,8 +385,8 @@ void Menu::drawUsernameInput(const std::shared_ptr<IWindow> &window)
         static_cast<size_t>(40)
     };
 
-    int inputBoxX = _usernameBox.posTop.first + 50;
-    int inputBoxY = _usernameBox.posTop.second + 60;
+    int inputBoxX = _usernameBox.posTop.first + 75;
+    int inputBoxY = _usernameBox.posTop.second + 50;
 
     window->drawRectangleMenu(
         inputBoxSize,
@@ -408,26 +408,26 @@ void Menu::drawUsernameInput(const std::shared_ptr<IWindow> &window)
 
     window->drawRectangleMenu(
         buttonSize,
-        {static_cast<size_t>(_usernameBox.posTop.first + 50), static_cast<size_t>(_usernameBox.posTop.second + 120)},
+        {static_cast<size_t>(_usernameBox.posTop.first + 90), static_cast<size_t>(_usernameBox.posTop.second + 120)},
         {100, 200, 100}
     );
 
     window->drawTextMenu(
         "OK",
-        {_usernameBox.posTop.first + 85, _usernameBox.posTop.second + 130},
+        {_usernameBox.posTop.first + 125, _usernameBox.posTop.second + 125},
         {255, 255, 255},
         24
     );
 
     window->drawRectangleMenu(
         buttonSize,
-        {static_cast<size_t>(_usernameBox.posTop.first + 200), static_cast<size_t>(_usernameBox.posTop.second + 120)},
+        {static_cast<size_t>(_usernameBox.posTop.first + 240), static_cast<size_t>(_usernameBox.posTop.second + 120)},
         {200, 100, 100}
     );
 
     window->drawTextMenu(
         "Cancel",
-        {_usernameBox.posTop.first + 220, _usernameBox.posTop.second + 130},
+        {_usernameBox.posTop.first + 250, _usernameBox.posTop.second + 125},
         {255, 255, 255},
         24
     );
