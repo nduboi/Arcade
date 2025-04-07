@@ -6,7 +6,9 @@
 
 namespace Display {
 	SDLEncapsulation::SDLEncapsulation() {
+#ifdef _DEBUG
 		std::cout << "Initializing SDL resources..." << std::endl;
+#endif
 
 		if (SDL_WasInit(SDL_INIT_VIDEO) == 0) {
 			if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK | SDL_INIT_EVENTS) < 0) {
@@ -57,9 +59,10 @@ namespace Display {
 		SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
 		SDL_RenderClear(this->renderer);
 		SDL_RenderPresent(this->renderer);
-
+#ifdef _DEBUG
 		std::cout << "SDL resources initialized successfully." << std::endl;
-	}
+#endif
+    }
 
 	void SDLEncapsulation::display() const {
 		SDL_RenderPresent(this->renderer);
@@ -251,8 +254,9 @@ namespace Display {
     }
 
 	SDLEncapsulation::~SDLEncapsulation() {
-		std::cout << "Destroying SDL resources..." << std::endl;
-
+#ifdef _DEBUG
+        std::cout << "Destroying SDL resources..." << std::endl;
+#endif
 		if (defaultFont) {
 			TTF_CloseFont(defaultFont);
 			defaultFont = nullptr;
@@ -271,6 +275,8 @@ namespace Display {
 			IMG_Quit();
 		if (SDL_WasInit(SDL_INIT_VIDEO))
 			SDL_Quit();
-		std::cout << "SDL resources destroyed successfully." << std::endl;
-	}
+#ifdef _DEBUG
+        std::cout << "SDL resources destroyed successfully." << std::endl;
+#endif
+    }
 }
