@@ -27,7 +27,8 @@ bool Core::_isEventClick() {
 		this->_lastEvent == IEvent::event_t::MOUSERIGHTCLICK;
 }
 
-void Core::_processClickEvent(int x, int y, int z) {
+void Core::_processClickEvent(int x, int y, int z)
+{
 	std::pair<size_t, size_t> gridSize = this->_game->getGridSize();
 	this->_event->setMapSize({static_cast<int>(gridSize.first), static_cast<int>(gridSize.second)});
 
@@ -270,8 +271,8 @@ void Core::_compute() {
 		grid_t grid = gameModule->getEntities();
 		std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
 
-		for (int y = 0; y < gridSize.first; y++) {
-			for (int x = 0; x < gridSize.second; x++) {
+		for (int y = 0; y < gridSize.second; y++) {
+			for (int x = 0; x < gridSize.first; x++) {
 				for (int z = 0; z < grid[y][x].size(); z++) {
 					IEntity *entity = grid[y][x][z].get();
 					if (entity == nullptr)
@@ -290,8 +291,6 @@ void Core::_compute() {
 				}
 			}
 		}
-	} else {
-		// Compute menu
 	}
 }
 
@@ -301,8 +300,8 @@ void Core::_displayGame() {
 		std::pair<size_t, size_t> gridSize = this->_game->getGridSize();
 
 		this->_window->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
-		for (int y = 0; y < gridSize.first; y++) {
-			for (int x = 0; x < gridSize.second; x++) {
+		for (int y = 0; y < gridSize.second; y++) {
+			for (int x = 0; x < gridSize.first; x++) {
 				for (int z = 0; z < grid[y][x].size(); z++) {
 					IEntity *entity = grid[y][x][z].get();
 
