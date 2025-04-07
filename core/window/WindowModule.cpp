@@ -104,8 +104,10 @@ WindowModule::WindowModule(std::shared_ptr<IWindow> mdl)
 	this->_object = mdl;
 }
 
-WindowModule::~WindowModule()
-{
-	this->_object.reset();
+WindowModule::~WindowModule() {
+    if (this->_object) {
+        std::cout << "Destroying WindowModule resources..." << std::endl;
+        this->_object.reset();
+    }
 }
 

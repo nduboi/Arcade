@@ -104,6 +104,25 @@ public:
 };
 
 /**
+ * @class HelpException
+ * @brief Exception class for handling DLL-related errors.
+ *
+ * The HelpException class is used to handle errors related to display module
+ *
+ */
+class HelpException : public std::exception {
+public:
+    /**
+     * @brief Constructor for HelpException.
+     */
+    HelpException() = default;
+    /**
+     * @brief Destructor for HelpException.
+     */
+    ~HelpException() = default;
+};
+
+/**
  * @class GameModuleException
  * @brief Exception class for handling DLL-related errors.
  *

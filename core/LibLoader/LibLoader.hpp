@@ -14,13 +14,13 @@
 #define LIBLOADER_HPP
 
 #include <memory>
+#include <dlfcn.h>
 #include "IGameModule.hpp"
 #include "IMenu.hpp"
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 #include "LoaderType.hpp"
 #include "Exception.hpp"
-#include "DynamicLib.hpp"
 
 namespace Loader
 {
@@ -47,6 +47,7 @@ namespace Loader
 		 * @brief Get the type of the loaded module.
 		 * @return The type of the module as a Loader::ModuleType_t.
 		 */
+		//TODO : retirer cette fonction
 		Loader::ModuleType_t getModuleType() const {return this->_moduleType;};
 
 		/**
@@ -66,14 +67,24 @@ namespace Loader
 		 * @return T* A pointer to an instance of the specified class type `T`.
 		 * @throws DllException If the "getClass" function cannot be retrieved or invoked.
 		 */
-		IWindow *initEntryPointDisplay() const;
 
-		IEvent *initEntryPointEvent(std::shared_ptr<IWindow> win) const;
+		template<class T, typename... Args>
+		T* initEntryPointPtr(const char* entryPoint, Args&&... args) const {
+			auto create = reinterpret_cast<T* (*)(Args...)>(dlsym(this->_moduleHandle, entryPoint));
+			if (!create) {
+				throw DllException(std::string("Error cannot load entry point: ") + entryPoint);
+			}
+			return create(std::forward<Args>(args)...);
+		}
 
-		IGameModule *initEntryPointGame() const;
-
-		IMenu *initEntryPointMenu() const;
-
+		template<class T, typename... Args>
+		T initEntryPoint(const char* entryPoint, Args&&... args) const {
+			auto create = reinterpret_cast<T (*)(Args...)>(dlsym(this->_moduleHandle, entryPoint));
+			if (!create) {
+				throw DllException(std::string("Error cannot load entry point: ") + entryPoint);
+			}
+			return create(std::forward<Args>(args)...);
+		}
 		/**
 		 * @brief Closes the currently loaded library.
 		 * 

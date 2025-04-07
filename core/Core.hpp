@@ -1,89 +1,75 @@
-#ifndef PROGRAM_HPP
-#define PROGRAM_HPP
+//
+// Created by roussierenoa on 4/3/25.
+//
 
-#include <functional>
+#ifndef CORE_HPP
+#define CORE_HPP
+#include <EventModule.hpp>
+#include <GameModule.hpp>
 #include <memory>
-#include <thread>
-#include "EventModule.hpp"
-#include "WindowModule.hpp"
-#include "GameModule.hpp"
+#include <WindowModule.hpp>
 #include "Menu.hpp"
 #include "Saver.hpp"
+#include "LibLoader.hpp"
+#include "Exception.hpp"
 
 class Core {
 private:
-	typedef enum LogicModule_e {
+	enum ModuleType {
 		GAME,
-		MENU,
-		TYPE_COUNT,
-	} LogicModule_t;
+		MENU
+	};
 
+	ModuleType _loadedModuleType = MENU;
+	std::vector<std::string> _displayLibsPaths;
+	std::vector<std::string> _gameLibsPaths;
 
-	Loader::LibLoader _displayLoader; ///< Unique pointer to the DisplayLoader LibLoader.
-	Loader::LibLoader _gameLoader; ///< Unique pointer to the GameLoader LibLoader.
+	unsigned int _indexDisplay = 0;
+	unsigned int _indexGame = 0;
 
-	std::vector<std::string> _displayLibPath;
-	std::vector<std::string> _gameLibPath;
+	IEvent::event_t _lastEvent = IEvent::NOTHING;
 
-	LogicModule_t _moduleLoaded;
-	int _gameLibIndex = 0;
-	int _displayLibIndex = 0;
+	Loader::LibLoader _displayLoader;
+	Loader::LibLoader _gameLoader;
 
-	IEvent::event_t _lastEvent;
-
+	std::shared_ptr<IWindow> _windowPtr;
+	std::shared_ptr<WindowModule> _window;
+	std::shared_ptr<EventModule> _event;
+	std::shared_ptr<GameModule> _game;
+	Menu _menu;
 	Saver _saver;
 
 	std::pair<int, int> _getEventDirection() const;
-
-	bool _isEventClick() const;
-
+	bool _isEventClick();
 	void _processClickEvent(int x, int y, int z);
 
-	void _processMenuClick();
-
-	void _analyze();
-
-	void _compute();
-
 	void _saveScore();
-
 	void _setHighScore();
-
-	void _display();
-
-	void _displayGame();
-
-	void _displayMenu();
-
-	void _displayHUD();
-
-	void _refreshLibList();
 
 	void _reloadCurrentGame();
 
-	void _loadNextGame();
+	void _loadDisplayLib(const std::string &path);
+	void _switchGraphic();
+	void _loadGameLib(const std::string &path);
+	void _switchGame();
 
-	void _loadNextGraphic();
+	void _displayAllLib();
+	void _refreshLibPaths();
+
+	void _analyse();
+
+	void _processMenuClick();
+
+	void _compute();
+	void _displayGame();
+	void _displayMenu();
+	void _displayHUD();
+	void _display();
 
 public:
-	std::shared_ptr<IWindow> displayPtr; ///< Shared pointer to the display IWindow.
-	std::shared_ptr<WindowModule> display; ///< Shared pointer to the display WindowModule.
-	std::shared_ptr<EventModule> event; ///< Shared pointer to the display WindowModule.
-	std::shared_ptr<GameModule> game; ///< Shared pointer to the game GameModule.
-
-	Menu _menu;
-
-	void displayAllLib();
-
-	void loadDisplayModule(const std::string &displayLib);
-
-	void loadGameModule(const std::string &gameLib);
-
 	void loop();
-
-	Core();
-
+	Core(std::string argv);
 	~Core();
 };
 
-#endif // PROGRAM_HPP
+#endif //CORE_HPP

@@ -1,4 +1,5 @@
 add_library(LibLoader STATIC
         LibLoader.cpp
-        DynamicLib.cpp
+        LibLoader.hpp
+        LoaderType.hpp
 )
