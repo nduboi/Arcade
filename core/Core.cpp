@@ -179,7 +179,6 @@ void Core::_refreshLibPaths() {
 					this->_gameLibsPaths.push_back(entry.path().string());
 				if (moduleType == Loader::DISPLAY_MODULE)
 					this->_displayLibsPaths.push_back(entry.path().string());
-				libLoader.closeLib();
 			}
 		}
 	} catch (const std::filesystem::filesystem_error &e) {

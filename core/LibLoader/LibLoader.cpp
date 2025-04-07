@@ -10,8 +10,6 @@ namespace Loader {
 	void LibLoader::openLib(const std::string &path)
 	{
 		std::cout << "Opening library: " << path << std::endl;
-		if (this->_moduleHandle)
-			this->closeLib();
 		try {
 			this->_moduleHandle = dlopen(path.c_str(), RTLD_LAZY);
 			if (!this->_moduleHandle)
