@@ -29,7 +29,7 @@ bool Core::_isEventClick() {
 
 void Core::_processClickEvent(int x, int y, int z) {
 	std::pair<size_t, size_t> gridSize = this->_game->getGridSize();
-	this->_event->setMapSize({static_cast<int>(gridSize.second), static_cast<int>(gridSize.first)});
+	this->_event->setMapSize({static_cast<int>(gridSize.first), static_cast<int>(gridSize.second)});
 
 	std::pair<int, int> pos = this->_event->getMousePos();
 
@@ -214,6 +214,8 @@ void Core::_analyse() {
 	if (event == IEvent::event_t::ESCAPE) {
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
+		this->_window->setMapSize({0, 0});
+		this->_event->setMapSize({0, 0});
 	}
 	if (event == IEvent::event_t::NEXTDIFFICULTY) {
 		if (this->_loadedModuleType == GAME) {
