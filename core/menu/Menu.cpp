@@ -462,14 +462,7 @@ void Menu::drawUsernameButton(const std::shared_ptr<IWindow> &window)
         window->drawTextMenu(
             btn.text,
             {textX, textY},
-            {255, 255, 255},
-            24
-        );
-    }
-
-    if (!_username.empty()) {
-        window->drawTextMenu(
-            "User: " + _username,
+            {255, 255, 255},("savefile.json")
             {1500, 560},
             {255, 255, 255},
             20
@@ -506,35 +499,24 @@ void Menu::drawHighscores(const std::shared_ptr<IWindow> &window)
     int y = scoreY + 70;
 
     for (const auto& gameBtn : _gameButtons) {
-        std::string gameName = extractNameFromPath(gameBtn.text);
-
-        if (!_username.empty()) {
-            int score = _saver.getHighScore(_username, gameName);
-
-            window->drawTextMenu(
-                gameName,
-                {scoreX + 20, y},
-                {200, 200, 255},
-                16
-            );
-
-            window->drawTextMenu(
-                std::to_string(score),
-                {scoreX + 180, y},
-                {255, 200, 100},
-                16
-            );
-
-            y += 30;
-        }
-    }
-
-    if (_username.empty()) {
+        std::string gameName = gameBtn.text;
+        std::cout << "game name: " << gameName << std::endl;
+        int score = _saver.getHighScore(_username, gameName);
+        std::cout << "highscore: " << score << std::endl;
         window->drawTextMenu(
-            "Please set username",
-            {scoreX + 40, y + 50},
-            {255, 150, 150},
-            18
+            extractNameFromPath(gameName),
+            {scoreX + 20, y},
+            {200, 200, 255},
+            16
         );
+
+        window->drawTextMenu(
+            std::to_string(score),
+            {scoreX + 180, y},
+            {255, 200, 100},
+            16
+        );
+
+        y += 30;
     }
 }
