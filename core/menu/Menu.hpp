@@ -11,6 +11,7 @@
 #include "IGameModule.hpp"
 #include "IMenu.hpp"
 #include "MenuTitle.hpp"
+#include "Saver.hpp"
 #include <memory>
 #include <vector>
 #include <string>
@@ -36,6 +37,10 @@ class Menu : public IMenu {
 		action_e handleClick(int x, int y, std::string& selectedValue);
 		std::string extractNameFromPath(const std::string& path);
 		int estimateTextWidth(const std::string& text, int fontSize);
+		void drawUsernameInput(const std::shared_ptr<IWindow> &window);
+		void drawUsernameButton(const std::shared_ptr<IWindow> &window);
+		void drawHighscores(const std::shared_ptr<IWindow> &window);
+		void handleKeyInput(char key);
 
 		// Getter
 		std::vector<Boxes> getBoxPoses() override;
@@ -47,7 +52,6 @@ class Menu : public IMenu {
 			const std::pair<int, int>& position = {200, 50}, int fontSize = 36);
 
 		void setSelectedGraphicLib(const std::string& graphicLib);
-
 	private:
 		// Variable
 		std::string _username;
@@ -59,6 +63,14 @@ class Menu : public IMenu {
 		std::vector<Button> _graphicLibButtons;
 		std::vector<Button> _gameButtons;
 		std::string _currentGraphicLib;
+		std::vector<Button> _usernameButtons;
+		bool _showUsernameInput;
+		bool _showHighscores;
+		std::string _inputUsername;
+		Boxes _usernameBox;
+		Boxes _highscoreBox;
+
+		Saver _saver;
 
 		void initButtons(const std::vector<std::string>& libs, const std::vector<std::string>& games);
 		void drawButtons(const std::shared_ptr<IWindow> &window);
