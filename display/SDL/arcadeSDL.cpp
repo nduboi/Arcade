@@ -144,7 +144,9 @@ arcadeSDL::arcadeSDL()
 arcadeSDL::~arcadeSDL() {
     try {
         if (this->sdl) {
+#ifdef _DEBUG
             std::cout << "Destroying SDL resources..." << std::endl;
+#endif
             this->sdl.reset();
         }
     } catch (const std::exception &e) {

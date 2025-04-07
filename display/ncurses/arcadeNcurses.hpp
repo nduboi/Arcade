@@ -43,6 +43,8 @@ namespace Display {
 
 		std::pair<int, int> getWindowSize() override;
 
+		std::pair<int, int> getMapSize() const {return this->_mapSize;};
+
 		bool isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) override;
 
 		arcadeNcurses();
