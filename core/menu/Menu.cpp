@@ -8,23 +8,41 @@
 #include "Menu.hpp"
 
 Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {575, 25}, 72),
-    _libraryTitle(window, "Graphic", {400, 200}, 36), _gameTitle(window, "Game", {1125, 200}, 36)
+    _libraryTitle(window, "Graphic", {400, 200}, 36), _gameTitle(window, "Game", {1125, 200}, 36),
+    _showUsernameInput(false), _showHighscores(false), _saver("savefile.json")
 {
     Boxes libBox;
-    libBox.posTop = {250, 250};
-    libBox.posBottom = {700, 550};
+    libBox.posTop = {50, 350};
+    libBox.posBottom = {500, 650};
     libBox.typesBoxes = action_e::GRAPHICLIB;
     libBox.selected = false;
     libBox._nameBoxes = "Graphic Libraries";
     this->_boxes.push_back(libBox);
 
     Boxes gameBox;
-    gameBox.posTop = {950, 250};
-    gameBox.posBottom = {1400, 550};
+    gameBox.posTop = {1100, 350};
+    gameBox.posBottom = {1550, 650};
     gameBox.typesBoxes = action_e::GAMELIB;
     gameBox.selected = false;
     gameBox._nameBoxes = "Game Libraries";
     this->_boxes.push_back(gameBox);
+
+    Boxes usernameBox;
+    usernameBox.posTop = {600, 650};
+    usernameBox.posBottom = {1050, 750};
+    usernameBox.typesBoxes = action_e::USERNAME;
+    usernameBox.selected = false;
+    usernameBox._nameBoxes = "Username Input";
+    this->_usernameBox = usernameBox;
+
+    Button usernameBtn;
+    usernameBtn.posTop = {725, 120};
+    usernameBtn.posBottom = {900, 160};
+    usernameBtn.text = "Set Username";
+    usernameBtn.selected = false;
+    usernameBtn.action = action_e::USERNAME;
+    usernameBtn.value = "username";
+    this->_usernameButtons.push_back(usernameBtn);
 }
 
 void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes,
@@ -48,7 +66,6 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
     this->_gameTitle.draw(window);
 
     std::vector<Boxes> boxes = getBoxPoses();
-
     for (const auto& box : boxes) {
         std::vector<int> boxColor;
 
@@ -71,7 +88,14 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
             {boxColor[0], boxColor[1], boxColor[2]}
         );
     }
+
     drawButtons(window);
+    drawUsernameButton(window);
+    drawHighscores(window);
+
+    if (_showUsernameInput) {
+        drawUsernameInput(window);
+    }
 }
 
 std::vector<Boxes> Menu::getBoxPoses()
@@ -249,8 +273,62 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
     }
 }
 
+void Menu::handleKeyInput(char key)
+{
+    if (_showUsernameInput) {
+        if (key == 8 && !_inputUsername.empty()) {
+            _inputUsername.pop_back();
+        }
+        else if (_inputUsername.length() < 15 && ((key >= 'a' && key <= 'z') ||
+                 (key >= 'A' && key <= 'Z') || (key >= '0' && key <= '9') || key == '_')) {
+            _inputUsername += key;
+        }
+    }
+}
+
 action_e Menu::handleClick(int x, int y, std::string& selectedValue)
 {
+    if (_showUsernameInput) {
+        if (x >= _usernameBox.posTop.first + 50 && x <= _usernameBox.posTop.first + 150 &&
+            y >= _usernameBox.posTop.second + 120 && y <= _usernameBox.posTop.second + 160) {
+
+            if (!_inputUsername.empty()) {
+                _username = _inputUsername;
+                _inputUsername = "";
+            }
+            _showUsernameInput = false;
+            selectedValue = _username;
+            return action_e::USERNAME;
+        }
+
+        if (x >= _usernameBox.posTop.first + 200 && x <= _usernameBox.posTop.first + 300 &&
+            y >= _usernameBox.posTop.second + 120 && y <= _usernameBox.posTop.second + 160) {
+
+            _inputUsername = "";
+            _showUsernameInput = false;
+            return action_e::NOTHING;
+        }
+
+        if (x >= _usernameBox.posTop.first + 50 && x <= _usernameBox.posTop.first + 350 &&
+            y >= _usernameBox.posTop.second + 60 && y <= _usernameBox.posTop.second + 100) {
+
+            return action_e::USERNAME;
+        }
+
+        return action_e::NOTHING;
+    }
+
+    for (auto& btn : this->_usernameButtons) {
+        if (x >= btn.posTop.first && x <= btn.posBottom.first &&
+            y >= btn.posTop.second && y <= btn.posBottom.second) {
+
+            if (btn.action == action_e::USERNAME) {
+                _showUsernameInput = true;
+                return action_e::USERNAME;
+            }
+        }
+    }
+
     for (auto& btn : this->_graphicLibButtons) {
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
@@ -277,4 +355,186 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
 void Menu::setSelectedGraphicLib(const std::string& graphicLib)
 {
     this->_currentGraphicLib = graphicLib;
+}
+
+void Menu::drawUsernameInput(const std::shared_ptr<IWindow> &window)
+{
+    std::pair<size_t, size_t> boxSize = {
+        static_cast<size_t>(_usernameBox.posBottom.first - _usernameBox.posTop.first),
+        static_cast<size_t>(_usernameBox.posBottom.second - _usernameBox.posTop.second)
+    };
+
+    window->drawRectangleMenu(
+        boxSize,
+        {static_cast<size_t>(_usernameBox.posTop.first), static_cast<size_t>(_usernameBox.posTop.second)},
+        {50, 50, 50}
+    );
+
+    window->drawTextMenu(
+        "Enter Username",
+        {_usernameBox.posTop.first + 20, _usernameBox.posTop.second + 20},
+        {255, 255, 255},
+        28
+    );
+
+    std::pair<size_t, size_t> inputBoxSize = {
+        static_cast<size_t>(300),
+        static_cast<size_t>(40)
+    };
+
+    int inputBoxX = _usernameBox.posTop.first + 50;
+    int inputBoxY = _usernameBox.posTop.second + 60;
+
+    window->drawRectangleMenu(
+        inputBoxSize,
+        {static_cast<size_t>(inputBoxX), static_cast<size_t>(inputBoxY)},
+        {255, 255, 255}
+    );
+
+    window->drawTextMenu(
+        _inputUsername,
+        {inputBoxX + 10, inputBoxY + 10},
+        {0, 0, 0},
+        24
+    );
+
+    std::pair<size_t, size_t> buttonSize = {
+        static_cast<size_t>(100),
+        static_cast<size_t>(40)
+    };
+
+    window->drawRectangleMenu(
+        buttonSize,
+        {static_cast<size_t>(_usernameBox.posTop.first + 50), static_cast<size_t>(_usernameBox.posTop.second + 120)},
+        {100, 200, 100}
+    );
+
+    window->drawTextMenu(
+        "OK",
+        {_usernameBox.posTop.first + 85, _usernameBox.posTop.second + 130},
+        {255, 255, 255},
+        24
+    );
+
+    window->drawRectangleMenu(
+        buttonSize,
+        {static_cast<size_t>(_usernameBox.posTop.first + 200), static_cast<size_t>(_usernameBox.posTop.second + 120)},
+        {200, 100, 100}
+    );
+
+    window->drawTextMenu(
+        "Cancel",
+        {_usernameBox.posTop.first + 220, _usernameBox.posTop.second + 130},
+        {255, 255, 255},
+        24
+    );
+}
+
+void Menu::drawUsernameButton(const std::shared_ptr<IWindow> &window)
+{
+    for (const auto& btn : this->_usernameButtons) {
+        std::vector<int> btnColor = std::vector<int>{150, 150, 150};
+
+        if (btn.action == action_e::USERNAME && _showUsernameInput) {
+            btnColor = std::vector<int>{100, 200, 100};
+        }
+
+        std::pair<size_t, size_t> btnSize = {
+            static_cast<size_t>(btn.posBottom.first - btn.posTop.first),
+            static_cast<size_t>(btn.posBottom.second - btn.posTop.second)
+        };
+
+        if (window->isMouseOver({static_cast<size_t>(btn.posTop.first), static_cast<size_t>(btn.posTop.second)},
+            {static_cast<size_t>(btn.posBottom.first - btn.posTop.first), static_cast<size_t>(btn.posBottom.second - btn.posTop.second)})) {
+            btnColor = std::vector<int>{200, 200, 200};
+        }
+
+        window->drawRectangleMenu(
+            btnSize,
+            {static_cast<size_t>(btn.posTop.first), static_cast<size_t>(btn.posTop.second)},
+            {btnColor[0], btnColor[1], btnColor[2]}
+        );
+
+        int textWidth = estimateTextWidth(btn.text, 24);
+        int textX = btn.posTop.first + (btn.posBottom.first - btn.posTop.first) / 2 - textWidth / 2;
+        int textY = (btn.posTop.second + btn.posBottom.second) / 2 - 12;
+
+        window->drawTextMenu(
+            btn.text,
+            {textX, textY},
+            {255, 255, 255},
+            24
+        );
+    }
+
+    if (!_username.empty()) {
+        window->drawTextMenu(
+            "User: " + _username,
+            {1500, 560},
+            {255, 255, 255},
+            20
+        );
+    }
+}
+
+void Menu::drawHighscores(const std::shared_ptr<IWindow> &window)
+{
+    int scoreX = 600;
+    int scoreY = 250;
+    int width = 450;
+    int height = 400;
+
+    window->drawRectangleMenu(
+        {static_cast<size_t>(width), static_cast<size_t>(height)},
+        {static_cast<size_t>(scoreX), static_cast<size_t>(scoreY)},
+        {50, 50, 60}
+    );
+
+    window->drawTextMenu(
+        "High Scores",
+        {scoreX + 70, scoreY + 20},
+        {255, 255, 255},
+        28
+    );
+
+    window->drawRectangleMenu(
+        {static_cast<size_t>(width - 20), static_cast<size_t>(2)},
+        {static_cast<size_t>(scoreX + 10), static_cast<size_t>(scoreY + 50)},
+        {200, 200, 200}
+    );
+
+    int y = scoreY + 70;
+
+    for (const auto& gameBtn : _gameButtons) {
+        std::string gameName = extractNameFromPath(gameBtn.text);
+
+        if (!_username.empty()) {
+            int score = _saver.getHighScore(_username, gameName);
+
+            window->drawTextMenu(
+                gameName,
+                {scoreX + 20, y},
+                {200, 200, 255},
+                16
+            );
+
+            window->drawTextMenu(
+                std::to_string(score),
+                {scoreX + 180, y},
+                {255, 200, 100},
+                16
+            );
+
+            y += 30;
+        }
+    }
+
+    if (_username.empty()) {
+        window->drawTextMenu(
+            "Please set username",
+            {scoreX + 40, y + 50},
+            {255, 150, 150},
+            18
+        );
+    }
 }
