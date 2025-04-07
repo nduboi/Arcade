@@ -78,8 +78,8 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		int startY = (getmaxy(this->_game)) / 2 - mapSize.second;
-		int startX = ((getmaxx(this->_game)) / 2 - mapSize.first * 2);
+		int startY = getmaxy(this->_game) / 2 - mapSize.second;
+		int startX = getmaxx(this->_game) / 2 - mapSize.first * 2;
 		for (int y = 0; y < size.second * 2; y++) {
 			for (int x = 0; x < size.first * 2; x++) {
 				mvwaddch(this->_game, currentPos.second * 2 + startY + y, currentPos.first * 2 + startX  + x, ' ' | A_REVERSE);
@@ -125,8 +125,8 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		int startY = (getmaxy(this->_game) - mapSize.second - 4) / 2;
-		int startX = ((getmaxx(this->_game) - mapSize.first - 4) / 2);
+		int startY = (getmaxy(this->_game) - mapSize.second) / 2;
+		int startX = (getmaxx(this->_game) - mapSize.first * 2) / 2;
 		currentPos.second += startY;
 		currentPos.first += startX;
 		for (int y = 0; y < size.first; y++) {
