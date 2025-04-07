@@ -212,6 +212,7 @@ void Core::_analyse() {
 		this->_event->setMapSize({0, 0});
 	}
 	if (event == IEvent::event_t::ESCAPE) {
+		this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
