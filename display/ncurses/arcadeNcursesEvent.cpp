@@ -69,10 +69,10 @@ namespace Display {
 			throw std::runtime_error("Failed to cast _window to arcadeNcurses");
 		}
 		auto mapSize = ncurses->getMapSize();
-		int startY = (LINES - (mapSize.second + 2)) / 2;
+		int startY = (LINES - (mapSize.second + 2) + 4) / 2;
 
-		tmp.second -= startY;
-		tmp.first -= ((COLS - 2) - (mapSize.first + 2)) / 2;
+		tmp.second -= (startY);
+		tmp.first -= ((COLS - 2) - (mapSize.first * 2 + 1)) / 2;
 		tmp.first /= 2;
 		return tmp;
 	}
