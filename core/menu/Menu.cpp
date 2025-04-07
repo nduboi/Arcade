@@ -7,8 +7,8 @@
 
 #include "Menu.hpp"
 
-Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {575, 25}, 72),
-    _libraryTitle(window, "Graphic", {400, 200}, 36), _gameTitle(window, "Game", {1125, 200}, 36),
+Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade Games", {590, 25}, 72),
+    _libraryTitle(window, "Graphic", {215, 300}, 36), _gameTitle(window, "Game", {1285, 300}, 36),
     _showUsernameInput(false), _showHighscores(false), _saver("savefile.json")
 {
     Boxes libBox;
@@ -28,8 +28,8 @@ Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade 
     this->_boxes.push_back(gameBox);
 
     Boxes usernameBox;
-    usernameBox.posTop = {600, 650};
-    usernameBox.posBottom = {1050, 750};
+    usernameBox.posTop = {600, 350};
+    usernameBox.posBottom = {1050, 450};
     usernameBox.typesBoxes = action_e::USERNAME;
     usernameBox.selected = false;
     usernameBox._nameBoxes = "Username Input";
@@ -94,6 +94,9 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
     drawHighscores(window);
 
     if (_showUsernameInput) {
+        window->drawSpriteMenu(
+            {static_cast<float>(windowSize.first), static_cast<float>(windowSize.second)},
+            "assets/background/BlurpScreen.png", {0, 0});
         drawUsernameInput(window);
     }
 }
@@ -470,7 +473,7 @@ void Menu::drawUsernameButton(const std::shared_ptr<IWindow> &window)
     if (!_username.empty()) {
         window->drawTextMenu(
             "User: " + _username,
-            {1500, 560},
+            {1500, 50},
             {255, 255, 255},
             20
         );
