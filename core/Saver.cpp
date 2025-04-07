@@ -59,3 +59,29 @@ int Saver::getHighScore(std::string username, std::string game)
     }
     return 0;
 }
+
+int Saver::getHighScore(std::string game)
+{
+    nlohmann::json saveData;
+    std::ifstream inFile(_savefile);
+
+    if (inFile.is_open()) {
+        try {
+            inFile >> saveData;
+            int highScore = 0;
+            for (auto& user : saveData.items()) {
+                if (user.value().contains(game)) {
+                    int score = user.value()[game].get<int>();
+                    if (score > highScore) {
+                        highScore = score;
+                    }
+                }
+            }
+            return highScore;
+        } catch (const std::exception& e) {
+            return 0;
+        }
+        inFile.close();
+    }
+    return 0;
+}
