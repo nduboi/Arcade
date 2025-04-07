@@ -72,7 +72,7 @@ namespace Display {
 		int startY = (LINES - (mapSize.second + 2) + 4) / 2;
 
 		tmp.second -= (startY);
-		tmp.first -= ((COLS - 2) - (mapSize.first * 2 + 1)) / 2;
+		tmp.first -= ((COLS - 2)) / 2 - mapSize.first + 1;
 		tmp.first /= 2;
 		return tmp;
 	}
