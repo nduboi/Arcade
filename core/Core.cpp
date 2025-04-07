@@ -97,7 +97,9 @@ void Core::_loadDisplayLib(const std::string &path) {
 		throw CoreException("Failed to load createEvent symbol.");
 	}
 	this->_event->init();
+#ifdef _DEBUG
 	std::cout << "Display library loaded successfully: " << path << std::endl;
+#endif
 }
 
 void Core::_loadGameLib(const std::string &path) {
@@ -110,7 +112,9 @@ void Core::_loadGameLib(const std::string &path) {
 	if (!this->_game) {
 		throw CoreException("Failed to load createDisplay symbol.");
 	}
+#ifdef _DEBUG
 	std::cout << "Display library loaded successfully: " << path << std::endl;
+#endif
 }
 
 void Core::_switchGraphic() {
@@ -124,8 +128,10 @@ void Core::_switchGraphic() {
     this->_indexDisplay = (this->_indexDisplay == 0) ? this->_displayLibsPaths.size() - 1 : this->_indexDisplay - 1;
     try {
         this->_loadDisplayLib(this->_displayLibsPaths.at(this->_indexDisplay));
+#ifdef _DEBUG
         std::cout << "Switched to display library: " << this->_displayLibsPaths.at(this->_indexDisplay) << std::endl;
-    } catch (const std::exception &e) {
+#endif
+	} catch (const std::exception &e) {
         std::cerr << "Failed to switch display library: " << e.what() << std::endl;
     }
 	if (this->_loadedModuleType == GAME)
@@ -143,7 +149,9 @@ void Core::_switchGame() {
 	this->_indexGame = (this->_indexGame == 0) ? this->_gameLibsPaths.size() - 1 : this->_indexGame - 1;
 	try {
 		this->_loadGameLib(this->_gameLibsPaths.at(this->_indexGame));
+#ifdef _DEBUG
 		std::cout << "Switched to game library: " << this->_gameLibsPaths.at(this->_indexGame) << std::endl;
+#endif
 	} catch (const std::exception &e) {
 		std::cerr << "Failed to switch game library: " << e.what() << std::endl;
 	}
@@ -239,9 +247,10 @@ void Core::_processMenuClick()
 
     std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
-
+#ifdef _DEBUG
 	std::cout << "Selected value: " << selectedValue << std::endl;
-    if (action == action_e::GRAPHICLIB) {
+#endif
+	if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {
             if (this->_displayLibsPaths[i].find(selectedValue) != std::string::npos) {
                 this->_indexDisplay = i;
