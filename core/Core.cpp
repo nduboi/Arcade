@@ -240,7 +240,6 @@ void Core::_processMenuClick()
     std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
 
-	std::cout << "Selected value: " << selectedValue << std::endl;
     if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {
             if (this->_displayLibsPaths[i].find(selectedValue) != std::string::npos) {
