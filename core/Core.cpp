@@ -259,7 +259,9 @@ void Core::_processMenuClick()
                 break;
             }
         }
-    }
+    } else if (action == action_e::USERNAME) {
+		std::cout << "je suis ici" << std::endl;
+	}
 }
 
 void Core::_compute() {
