@@ -508,7 +508,7 @@ void Menu::drawHighscores(const std::shared_ptr<IWindow> &window)
     for (const auto& gameBtn : _gameButtons) {
         std::string gameName = gameBtn.text;
 
-        int score = _saver.getHighScore(_username, gameName);
+        int score = _saver.getHighScore(gameName);
         window->drawTextMenu(
             extractNameFromPath(gameName),
             {scoreX + 20, y},
