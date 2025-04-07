@@ -18,22 +18,29 @@ namespace Display {
 	}
 
 	void NcursesEncapsulation::clear() {
-		this->changeTitle("");
 		if (this->_header)
 			werase(this->_header);
 		if (this->_game)
 			werase(this->_game);
-		if (this->_window)
-			werase(this->_window);
+		erase();
+		this->changeTitle("");
+		int rows, cols;
+		getmaxyx(stdscr, rows, cols);
+		wresize(this->_header, 3, cols);
+		wresize(this->_game, rows - 4, cols);
+		wmove(this->_header, 0, 0);
+		wmove(this->_game, 3, 0);
+		box(this->_header, 0, 0);
+		box(this->_game, 0, 0);
 	}
 
 	void NcursesEncapsulation::display() const {
 		this->_drawHeader();
 		if (this->_header && is_wintouched(this->_header))
-			wnoutrefresh(this->_header);
+			wrefresh(this->_header);
 		if (this->_game && is_wintouched(this->_game))
-			wnoutrefresh(this->_game);
-		doupdate();
+			wrefresh(this->_game);
+		refresh();
 	}
 
 	void NcursesEncapsulation::_drawHeader() const
@@ -51,7 +58,7 @@ namespace Display {
 		mvwprintw(this->_game, pos.first, pos.second, "%s", text.c_str());
 	}
 
-	void NcursesEncapsulation::drawRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size, int color) const
+	void NcursesEncapsulation::drawRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size,  const std::pair<int, int> &mapSize, int color) const
 	{
 		short ncursesColor;
 		if (color == 0)
@@ -70,9 +77,12 @@ namespace Display {
 			init_pair(color, ncursesColor, COLOR_BLACK);
 			wattron(this->_game, COLOR_PAIR(color));
 		}
-		for (int y = 0; y < size.first; y++) {
-			for (int x = 0; x < size.second; x++) {
-				mvwaddch(this->_game, pos.second + x, pos.first + y, ' ' | A_REVERSE);
+		std::pair<int, int> currentPos = {pos};
+		int startY = (getmaxy(this->_game)) / 2 - mapSize.second;
+		int startX = ((getmaxx(this->_game)) / 2 - mapSize.first * 2);
+		for (int y = 0; y < size.second * 2; y++) {
+			for (int x = 0; x < size.first * 2; x++) {
+				mvwaddch(this->_game, currentPos.second * 2 + startY + y, currentPos.first * 2 + startX  + x, ' ' | A_REVERSE);
 			}
 		}
 		if (color > 0) {
@@ -95,7 +105,7 @@ namespace Display {
 		(void)color;
 	}
 
-	void NcursesEncapsulation::drawCharacter(char character, const std::pair<int, int> &pos, const std::pair<int, int> &size, int color) const
+	void NcursesEncapsulation::drawCharacter(char character, const std::pair<int, int> &pos, const std::pair<int, int> &size, const std::pair<int, int> &mapSize, int color) const
 	{
 		short ncursesColor;
 		if (color == 0)
@@ -114,9 +124,14 @@ namespace Display {
 			init_pair(color, ncursesColor, COLOR_BLACK);
 			wattron(this->_game, COLOR_PAIR(color));
 		}
+		std::pair<int, int> currentPos = {pos};
+		int startY = (getmaxy(this->_game) - mapSize.second - 4) / 2;
+		int startX = ((getmaxx(this->_game) - mapSize.first - 4) / 2);
+		currentPos.second += startY;
+		currentPos.first += startX;
 		for (int y = 0; y < size.first; y++) {
 			for (int x = 0; x < size.second; x++) {
-				mvwaddch(this->_game, pos.second + x, pos.first + y, character | A_REVERSE);
+				mvwaddch(this->_game, currentPos.second + x, currentPos.first + y, character | A_REVERSE);
 			}
 		}
 		if (color > 0) {
@@ -136,76 +151,45 @@ namespace Display {
 
 	NcursesEncapsulation::NcursesEncapsulation() {
 		this->_isOpen = false;
+		this->_header = nullptr;
+		this->_game = nullptr;
+		this->_window = nullptr;
 
-		this->term_out = fopen("/dev/tty", "w");
-		this->term_in = fopen("/dev/tty", "r");
-		if (!this->term_out || !this->term_in) {
-			throw NcursesException("Failed to open /dev/tty");
-		}
-		this->screen = newterm(nullptr, this->term_out, this->term_in);
-		if (!this->screen) {
-			throw NcursesException("Failed to create new Ncurses screen");
-		}
-		set_term(this->screen);
-		this->_window = newwin(LINES, COLS, 0, 0);
-		if (!this->_window) {
-			throw NcursesException("Failed to create main window");
-		}
+		this->_window = initscr();
 		start_color();
-		cbreak();
-		keypad(stdscr, TRUE);
+		if (this->_window == nullptr)
+			throw NcursesException("Error initializing ncurses");
+		int rows, cols;
+		getmaxyx(stdscr, rows, cols);
+		this->_header = subwin(stdscr, 3, cols, 0, 0);
+		if (!this->_header) {
+			endwin();
+			throw NcursesException("Error initializing Header ncurses");
+		}
+		this->_game = subwin(stdscr, rows - 4, cols, 3, 0);
+		if (!this->_game) {
+			delwin(this->_header);
+			endwin();
+			throw NcursesException("Error initializing Game ncurses");
+		}
 		noecho();
+		cbreak();
 		curs_set(0);
 		nodelay(stdscr, TRUE);
 		timeout(0);
+		keypad(stdscr, TRUE);
 		mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
 		mouseinterval(0);
-		int row, col;
-		(void) row;
-		getmaxyx(this->_window, row, col);
-		this->_header = subwin(this->_window, 3, col, 0, 0);
-		if (!this->_header)
-			throw NcursesException("Failed to create header window");
-		this->_game = subwin(this->_window, 20, col, 4, 0);
-		if (!this->_game)
-			throw NcursesException("Failed to create game window");
-		box(this->_header, 0, 0);
-		box(this->_game, 0, 0);
-		touchwin(this->_header);
-		touchwin(this->_game);
-		wnoutrefresh(this->_header);
-		wnoutrefresh(this->_game);
-		doupdate();
 		this->_isOpen = true;
 	}
 
 	NcursesEncapsulation::~NcursesEncapsulation() {
-		if (this->_header) {
+		if (this->_header)
 			delwin(this->_header);
-			this->_header = nullptr;
-		}
-		if (this->_game) {
+		if (this->_game)
 			delwin(this->_game);
-			this->_game = nullptr;
-		}
-		if (this->_window) {
-			delwin(this->_window);
-			this->_window = nullptr;
-		}
-
-		if (this->screen) {
+		if (!isendwin()) {
 			endwin();
-			delscreen(this->screen);
-			this->screen = nullptr;
-		}
-
-		if (this->term_out) {
-			fclose(this->term_out);
-			this->term_out = nullptr;
-		}
-		if (this->term_in) {
-			fclose(this->term_in);
-			this->term_in = nullptr;
 		}
 	}
 } // game
