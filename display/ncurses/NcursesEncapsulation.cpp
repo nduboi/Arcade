@@ -28,6 +28,8 @@ namespace Display {
 		getmaxyx(stdscr, rows, cols);
 		wresize(this->_header, 3, cols);
 		wresize(this->_game, rows - 4, cols);
+		wmove(this->_header, 0, 0);
+		wmove(this->_game, 3, 0);
 		box(this->_header, 0, 0);
 		box(this->_game, 0, 0);
 	}
@@ -76,8 +78,8 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		int startY = (getmaxy(this->_game) - mapSize.second) / 2;
-		int startX = (getmaxx(this->_game) - mapSize.first) / 2;
+		int startY = (getmaxy(this->_game) - mapSize.second - 4) / 2;
+		int startX = ((getmaxx(this->_game) - mapSize.first - 4) / 2);
 		currentPos.second += startY;
 		currentPos.first += startX;
 		for (int y = 0; y < size.second; y++) {
@@ -105,7 +107,7 @@ namespace Display {
 		(void)color;
 	}
 
-	void NcursesEncapsulation::drawCharacter(char character, const std::pair<int, int> &pos, const std::pair<int, int> &size, int color) const
+	void NcursesEncapsulation::drawCharacter(char character, const std::pair<int, int> &pos, const std::pair<int, int> &size, const std::pair<int, int> &mapSize, int color) const
 	{
 		short ncursesColor;
 		if (color == 0)
@@ -124,9 +126,14 @@ namespace Display {
 			init_pair(color, ncursesColor, COLOR_BLACK);
 			wattron(this->_game, COLOR_PAIR(color));
 		}
+		std::pair<int, int> currentPos = {pos};
+		int startY = (getmaxy(this->_game) - mapSize.second - 4) / 2;
+		int startX = ((getmaxx(this->_game) - mapSize.first - 4) / 2);
+		currentPos.second += startY;
+		currentPos.first += startX;
 		for (int y = 0; y < size.first; y++) {
 			for (int x = 0; x < size.second; x++) {
-				mvwaddch(this->_game, pos.second + x, pos.first + y, character | A_REVERSE);
+				mvwaddch(this->_game, currentPos.second + x, currentPos.first + y, character | A_REVERSE);
 			}
 		}
 		if (color > 0) {

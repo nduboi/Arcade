@@ -69,7 +69,7 @@ namespace Display {
 	void arcadeNcurses::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
 		(void) asset;
 		if (!text.empty())
-			this->_ncurses.drawCharacter(text[0], {static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, color);
+			this->_ncurses.drawCharacter(text[0], {static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
 		else
         	this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
 	}

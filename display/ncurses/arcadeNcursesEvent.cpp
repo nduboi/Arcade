@@ -2,9 +2,9 @@
 // Created by roussierenoa on 3/26/25.
 //
 
-#include "arcadeNcursesEvent.hpp"
 #include <iostream>
-
+#include "arcadeNcursesEvent.hpp"
+#include "arcadeNcurses.hpp"
 
 namespace Display {
 	void arcadeNcursesEvent::init() {
@@ -17,7 +17,7 @@ namespace Display {
 		MEVENT event;
 		if (ch == KEY_MOUSE) {
 			if (getmouse(&event) == OK) {
-				_mousePos = {event.x, event.y};
+				this->_mousePos = {event.x, event.y};
 
 				if (event.bstate & BUTTON1_PRESSED)
 					return IEvent::MOUSELEFTCLICK;
@@ -64,8 +64,15 @@ namespace Display {
 
 	std::pair<int, int> arcadeNcursesEvent::getMousePos() {
 		std::pair<int, int> tmp = this->_mousePos;
+		auto ncurses = std::dynamic_pointer_cast<arcadeNcurses>(this->_window);
+		if (!ncurses) {
+			throw std::runtime_error("Failed to cast _window to arcadeNcurses");
+		}
+		auto mapSize = ncurses->getMapSize();
+		int startY = (LINES - (mapSize.second + 2)) / 2;
 
-		tmp.second -= 4;
+		tmp.second -= startY;
+		tmp.first -= ((COLS - 2) - (mapSize.first + 2)) / 2;
 		tmp.first /= 2;
 		return tmp;
 	}
@@ -85,6 +92,6 @@ namespace Display {
 	}
 
 	arcadeNcursesEvent::arcadeNcursesEvent(std::shared_ptr<IWindow> window) {
-		(void) window;
+		this->_window = window;
 	}
 } // game
