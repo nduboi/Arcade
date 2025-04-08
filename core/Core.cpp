@@ -248,9 +248,6 @@ void Core::_processMenuClick()
 
     std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
-#ifdef _DEBUG
-	std::cout << "Selected value: " << selectedValue << std::endl;
-#endif
     if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {
             if (this->_displayLibsPaths[i].find(selectedValue) != std::string::npos) {
@@ -271,7 +268,7 @@ void Core::_processMenuClick()
             }
         }
     } else if (action == action_e::USERNAME) {
-		std::cout << "je suis ici" << std::endl;
+		//process username input of the menu here
 	}
 }
 
