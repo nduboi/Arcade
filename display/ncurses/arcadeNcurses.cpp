@@ -43,7 +43,11 @@ namespace Display {
 		(void) text;
 		(void) position;
 		(void) color;
-		(void)charSize;
+		(void) charSize;
+		if (text == "Arcade Games" || text == "Arcade" || text == "Arcade Menu" || text == "Menu") {
+			this->_ncurses.changeTitle(text);
+		} else
+			this->_ncurses.drawGame(text, {position.first * COLS / 1600, position.second * LINES / 900});
 	}
 
 	std::pair<int, int> arcadeNcurses::getWindowSize() {

@@ -55,7 +55,7 @@ namespace Display {
 
 	void NcursesEncapsulation::drawGame(const std::string &text, const std::pair<int, int> &pos) const
 	{
-		mvwprintw(this->_game, pos.first, pos.second, "%s", text.c_str());
+		mvwprintw(this->_game, pos.second, pos.first, "%s", text.c_str());
 	}
 
 	void NcursesEncapsulation::drawRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size,  const std::pair<int, int> &mapSize, int color) const

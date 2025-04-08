@@ -245,10 +245,10 @@ void Core::_processMenuClick()
 
     std::pair<int, int> mousePos = this->_event->getMousePos();
 
-    std::string selectedValue;
+	std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
 #ifdef _DEBUG
-	std::cout << "Selected value: " << selectedValue << std::endl;
+	std::cout << "Mouse POS value: x= "<< mousePos.first <<" y=" << mousePos.second << std::endl;
 #endif
 	if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {

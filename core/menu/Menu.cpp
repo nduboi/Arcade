@@ -255,7 +255,7 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
-            _currentGraphicLib = btn.value;
+            this->_currentGraphicLib = btn.value;
             selectedValue = btn.value;
             return btn.action;
         }
