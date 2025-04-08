@@ -203,6 +203,13 @@ void Core::_analyse() {
 		gridSize = this->_game->getGridSize();
 	IEvent::event_t event = this->_event->pollEvents(gridSize);
 	this->_lastEvent = event;
+
+	if (this->_menu.getIsWritting()) {
+		if (event == IEvent::event_t::MOUSELEFTCLICK)
+			this->_processMenuClick();
+		return;
+	}
+
 	if (event == IEvent::event_t::CLOSE)
 		this->_window->closeWindow();
 	if (event == IEvent::event_t::NEXTGRAPHIC)
@@ -213,13 +220,14 @@ void Core::_analyse() {
 		this->_switchGame();
 		this->_window->resizeWindow(800, 900);
 	}
-	if (event == IEvent::event_t::MENU) {
+	if (event == IEvent::event_t::MENU && this->_loadedModuleType != MENU) {
+		this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
 		this->_event->setMapSize({0, 0});
 	}
-	if (event == IEvent::event_t::ESCAPE) {
+	if (event == IEvent::event_t::ESCAPE  && this->_loadedModuleType != MENU) {
 		this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
@@ -268,8 +276,8 @@ void Core::_processMenuClick()
             }
         }
     } else if (action == action_e::USERNAME) {
-		//ici la logique pour catch les lettres
-		this->_menu.handleKeyInput(this->_getKeyPress());
+		this->_event->renderWrittiing();
+		this->_menu.setUsername(this->_event->getUsername());
 	}
 }
 
@@ -326,6 +334,8 @@ void Core::_displayMenu() {
 	if (this->_loadedModuleType == MENU) {
 		this->_menu.setSelectedGraphicLib(this->_displayLibsPaths[this->_indexDisplay]);
 		this->_menu.displayMenu(this->_windowPtr, this->_menu.getBoxPoses(), this->_displayLibsPaths, this->_gameLibsPaths);
+		if (this->_menu.getIsWritting())
+			this->_event->renderWrittiing();
 	}
 }
 
@@ -364,11 +374,6 @@ void Core::loop() {
 		this->_display();
 	}
 	this->_window->closeWindow();
-}
-
-char Core::_getKeyPress()
-{
-	return 'a';
 }
 
 Core::Core(std::string argv): _menu(this->_window), _saver("savefile.json") {
