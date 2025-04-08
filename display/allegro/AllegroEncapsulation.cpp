@@ -15,10 +15,10 @@ namespace Display {
         if (!al_init_image_addon())
             throw std::runtime_error("Failed to initialize Allegro image addon.");
 
+        al_set_new_display_flags(ALLEGRO_RESIZABLE);
         this->_display = al_create_display(800, 600);
         if (!this->_display)
             throw std::runtime_error("Failed to create Allegro display.");
-
         this->font = al_create_builtin_font();
         if (!this->font)
             throw std::runtime_error("Failed to create Allegro font.");
@@ -64,7 +64,8 @@ namespace Display {
     }
 
     void AllegroEncapsulation::resizeWindow(int width, int height) {
-        al_resize_display(this->_display, width, height);
+        if (this->_display)
+            al_resize_display(this->_display, width, height);
     }
 
     std::pair<int, int> AllegroEncapsulation::getWindowSize() {
