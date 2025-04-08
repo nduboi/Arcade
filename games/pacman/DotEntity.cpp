@@ -13,7 +13,7 @@
 DotEntity::DotEntity(std::pair<size_t, size_t> position)
 {
     this->_spriteName = "assets/pacman/other/dot.png";
-    this->_color = 1;
+    this->_color = 3;
     this->_text = "";
     this->_position = position;
     this->_isMovable = false;

@@ -11,10 +11,6 @@
 #include "AEntity.hpp"
 
 class DotEntity : public AEntity {
-    private:
-        int getNbVoidEntities(const grid_t &grid) const;
-        bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;
-
     public:
         DotEntity(std::pair<size_t, size_t> position);
         ~DotEntity() = default;

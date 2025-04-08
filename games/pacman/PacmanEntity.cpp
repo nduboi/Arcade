@@ -142,6 +142,25 @@ bool PacmanEntity::checkWallCollision(std::shared_ptr<IGameModule> gameModule, s
     return false;
 }
 
+void PacmanEntity::checkInteractions(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos)
+{
+    grid_t grid = gameModule->getEntities();
+
+    if (newPos.first == -1 && newPos.second == 11) {
+        newPos.first = gameModule->getGridSize().first - 1;
+    } else if (newPos.first == gameModule->getGridSize().first && newPos.second == 11) {
+        newPos.first = 0;
+    }
+    if (newPos.first >= gameModule->getGridSize().first || newPos.second >= gameModule->getGridSize().second
+        || newPos.first < 0 || newPos.second < 0)
+        return;
+
+    if (std::dynamic_pointer_cast<DotEntity>(grid[newPos.second][newPos.first][1])) {
+        grid[newPos.second][newPos.first][1]->onInteract(gameModule);
+        return;
+    }
+}
+
 void PacmanEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::pair<int, int> direction)
 {
     this->actualiseAnimation();
@@ -158,6 +177,7 @@ void PacmanEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::pair
 
     if (checkWallCollision(gameModule, nextPosition))
         return;
+    checkInteractions(gameModule, nextPosition);
 
     this->moveEntities(gameModule, this->_position, nextPosition);
 }

@@ -57,8 +57,8 @@ void PacmanGame::setLayerEntities()
     }
 
     this->setLayerWalls();
+    this->setLayerDot();
     this->_entities[14][12][1] = std::make_shared<PacmanEntity>(4, "", std::make_pair(12, 14));
-    // this->setLayerApple();
 }
 
 void PacmanGame::setLayerWalls()
@@ -200,6 +200,40 @@ void PacmanGame::setLayerModules()
     this->_entities[17][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(17, 17));
     this->_entities[18][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(16, 18));
     this->_entities[18][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(17, 18));
+
+    this->_entities[8][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(11, 8));
+    this->_entities[8][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(12, 8));
+    this->_entities[8][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(13, 8));
+    this->_entities[7][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(11, 7));
+    this->_entities[7][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(13, 7));
+    this->_entities[6][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(11, 6));
+    this->_entities[6][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(13, 6));
+    this->_entities[5][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(11, 5));
+    this->_entities[5][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(10, 5));
+    this->_entities[5][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(13, 5));
+    this->_entities[5][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(14, 5));
+    this->_entities[4][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(10, 5));
+    this->_entities[4][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(11, 5));
+    this->_entities[4][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(12, 5));
+    this->_entities[4][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(13, 5));
+    this->_entities[4][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(14, 5));
+
+    this->_entities[15][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(11, 15));
+    this->_entities[15][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(12, 15));
+    this->_entities[15][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(13, 15));
+    this->_entities[16][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(11, 16));
+    this->_entities[16][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(13, 16));
+    this->_entities[17][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(11, 17));
+    this->_entities[17][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(13, 17));
+    this->_entities[18][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(11, 18));
+    this->_entities[18][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(10, 18));
+    this->_entities[18][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(13, 18));
+    this->_entities[18][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(14, 18));
+    this->_entities[19][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(10, 18));
+    this->_entities[19][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(11, 19));
+    this->_entities[19][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(12, 19));
+    this->_entities[19][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(13, 19));
+    this->_entities[19][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(14, 19));
 }
 
 void PacmanGame::setLayerPortal()
@@ -233,16 +267,34 @@ void PacmanGame::setLayerPortal()
     this->_entities[12][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftdot.png", 1, "", std::make_pair(19, 12));
 }
 
-void PacmanGame::setLayerApple()
+void PacmanGame::setLayerDot()
 {
-    // Create apple at random position
-    srand(time(NULL));
-    std::pair<size_t, size_t> newPos = {rand() % MAP_WIDTH, rand() % MAP_HEIGHT};
-    while (!std::dynamic_pointer_cast<VoidEntity>(this->_entities[newPos.second][newPos.first][1])) {
-        newPos = {rand() % MAP_WIDTH, rand() % MAP_HEIGHT};
-    }
+    std::vector<std::pair<size_t, size_t>> positions = {
+        {1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 6}, {6, 7}, {6, 8}, {6, 9}, {6, 10},
+        {6, 11}, {5, 11}, {4, 11}, {3, 11}, {2, 11}, {1, 11}, {0, 11}, {6, 12}, {6, 13}, {6, 14}, {6, 15},
+        {6, 16}, {5, 16}, {4, 16}, {3, 16}, {2, 16}, {1, 16}, {1, 17}, {1, 18}, {1, 19}, {1, 20}, {1, 21},
 
-    this->_entities[newPos.second][newPos.first][1] = std::make_shared<DotEntity>(newPos);
+        {7, 11}, {8, 11}, {9, 11}, {9, 10}, {9, 9}, {10, 9}, {10, 8}, {10, 7}, {10, 6}, {9, 6}, {9, 5}, {9, 4},
+                          {9, 12}, {9, 13}, {9, 14}, {10, 14}, {10, 15}, {10, 16}, {10, 17}, {9, 17}, {9, 18}, {9, 19},
+        {17, 11}, {16, 11}, {15, 11}, {15, 10}, {15, 9}, {14, 9}, {14, 8}, {14, 7}, {14, 6}, {15, 6}, {15, 5}, {15, 4},
+                          {15, 12}, {15, 13}, {15, 14}, {14, 14}, {14, 15}, {14, 16}, {14, 17}, {15, 17}, {15, 18}, {15, 19},
+
+        {11, 9}, {12, 9}, {13, 9}, {11, 14}, {13, 14},
+
+        {24-1, 1}, {24-1, 2}, {24-1, 3}, {24-1, 4}, {24-1, 5}, {24-1, 6}, {24-2, 6}, {24-3, 6}, {24-4, 6}, {24-5, 6}, {24-6, 6}, {24-6, 7}, {24-6, 8}, {24-6, 9}, {24-6, 10},
+        {24-6, 11}, {24-5, 11}, {24-4, 11}, {24-3, 11}, {24-2, 11}, {24-1, 11}, {24-0, 11}, {24-6, 12}, {24-6, 13}, {24-6, 14}, {24-6, 15},
+        {24-6, 16}, {24-5, 16}, {24-4, 16}, {24-3, 16}, {24-2, 16}, {24-1, 16}, {24-1, 17}, {24-1, 18}, {24-1, 19}, {24-1, 20}, {24-1, 21},
+    };
+
+    for (const auto &pos : positions) {
+        this->_entities[pos.second][pos.first][1] = std::make_shared<DotEntity>(pos);
+    }
+    this->setLayerBigDot();
+}
+
+void PacmanGame::setLayerBigDot()
+{
+    // TODO
 }
 
 std::vector<std::shared_ptr<IEntity>> PacmanGame::getHUD() const
