@@ -15,6 +15,8 @@ namespace Display {
 
 	void NcursesEncapsulation::close() {
 		this->_isOpen = false;
+		reset_shell_mode();
+		reset_prog_mode();
 	}
 
 	void NcursesEncapsulation::clear() {
@@ -55,7 +57,7 @@ namespace Display {
 
 	void NcursesEncapsulation::drawGame(const std::string &text, const std::pair<int, int> &pos) const
 	{
-		mvwprintw(this->_game, pos.first, pos.second, "%s", text.c_str());
+		mvwprintw(this->_game, pos.second, pos.first, "%s", text.c_str());
 	}
 
 	void NcursesEncapsulation::drawRectangle(const std::pair<int, int> &pos, const std::pair<int, int> &size,  const std::pair<int, int> &mapSize, int color) const
@@ -78,8 +80,8 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		int startY = (getmaxy(this->_game)) / 2 - mapSize.second;
-		int startX = ((getmaxx(this->_game)) / 2 - mapSize.first * 2);
+		int startY = getmaxy(this->_game) / 2 - mapSize.second;
+		int startX = getmaxx(this->_game) / 2 - mapSize.first * 2;
 		for (int y = 0; y < size.second * 2; y++) {
 			for (int x = 0; x < size.first * 2; x++) {
 				mvwaddch(this->_game, currentPos.second * 2 + startY + y, currentPos.first * 2 + startX  + x, ' ' | A_REVERSE);
@@ -96,6 +98,15 @@ namespace Display {
 		(void)pos;
 		(void)color;
 		(void)thickness;
+		for (int y = 0; y < 3; y++) {
+			mvwprintw(this->_game, pos.second + y, pos.first, "|");
+			mvwprintw(this->_game, pos.second + y, pos.first + size.first, "|");
+			if (y != 0 && y != 2)
+				continue;
+			for (int x = 1; x < size.first - 1; x++) {
+				mvwprintw(this->_game, pos.second + y, pos.first + x, "-");
+			}
+		}
 	}
 
 	void NcursesEncapsulation::drawText(const std::string &text, const std::pair<int, int> &pos, int color) const
@@ -125,8 +136,8 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		int startY = (getmaxy(this->_game) - mapSize.second - 4) / 2;
-		int startX = ((getmaxx(this->_game) - mapSize.first - 4) / 2);
+		int startY = (getmaxy(this->_game) - mapSize.second) / 2;
+		int startX = (getmaxx(this->_game) - mapSize.first * 2) / 2;
 		currentPos.second += startY;
 		currentPos.first += startX;
 		for (int y = 0; y < size.first; y++) {
@@ -150,10 +161,16 @@ namespace Display {
 	}
 
 	NcursesEncapsulation::NcursesEncapsulation() {
+		reset_shell_mode();
+		reset_prog_mode();
 		this->_isOpen = false;
 		this->_header = nullptr;
 		this->_game = nullptr;
 		this->_window = nullptr;
+		FILE *input = stdin;
+		FILE *output = stdout;
+		this->_screen = newterm(nullptr, output, input);
+		set_term(this->_screen);
 
 		this->_window = initscr();
 		start_color();
@@ -178,18 +195,29 @@ namespace Display {
 		nodelay(stdscr, TRUE);
 		timeout(0);
 		keypad(stdscr, TRUE);
-		mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, NULL);
+		mousemask(ALL_MOUSE_EVENTS | REPORT_MOUSE_POSITION, nullptr);
 		mouseinterval(0);
 		this->_isOpen = true;
 	}
 
 	NcursesEncapsulation::~NcursesEncapsulation() {
-		if (this->_header)
-			delwin(this->_header);
-		if (this->_game)
+		if (this->_game) {
 			delwin(this->_game);
-		if (!isendwin()) {
-			endwin();
+			this->_game = nullptr;
 		}
+		if (this->_header) {
+			delwin(this->_header);
+			this->_header = nullptr;
+		}
+		if (this->_window) {
+			endwin();
+			delscreen(this->_screen);
+			set_term(nullptr);
+			this->_screen = nullptr;
+			this->_window = nullptr;
+		}
+		this->_isOpen = false;
+		reset_shell_mode();
+		reset_prog_mode();
 	}
 } // game
