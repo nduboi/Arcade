@@ -10,6 +10,7 @@
 #include "IGameModule.hpp"
 #include "PacmanGame.hpp"
 #include "DotEntity.hpp"
+#include "BigDotEntity.hpp"
 #include "WallEntity.hpp"
 
 #include <iostream>
@@ -156,6 +157,10 @@ void PacmanEntity::checkInteractions(std::shared_ptr<IGameModule> gameModule, st
         return;
 
     if (std::dynamic_pointer_cast<DotEntity>(grid[newPos.second][newPos.first][1])) {
+        grid[newPos.second][newPos.first][1]->onInteract(gameModule);
+        return;
+    }
+    if (std::dynamic_pointer_cast<BigDotEntity>(grid[newPos.second][newPos.first][1])) {
         grid[newPos.second][newPos.first][1]->onInteract(gameModule);
         return;
     }

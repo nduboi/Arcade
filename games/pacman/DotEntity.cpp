@@ -23,5 +23,5 @@ DotEntity::DotEntity(std::pair<size_t, size_t> position)
 
 void DotEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
 {
-    gameModule->setScore(gameModule->getScore() + 1);
+    gameModule->setScore(gameModule->getScore() + 10);
 }
