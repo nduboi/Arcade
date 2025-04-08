@@ -54,7 +54,7 @@ void Core::_saveScore() {
 		return;
 
 	std::size_t highScore = this->_game->getHighScore();
-	std::string username = "default";
+	std::string username = this->_menu.getUsername();
 	std::string game = this->_gameLibsPaths.at(this->_indexGame);
 
 	this->_saver.saveScore(highScore, username, game);
@@ -64,7 +64,7 @@ void Core::_setHighScore() {
 	if (this->_loadedModuleType != GAME)
 		return;
 
-	std::string username = "default";
+	std::string username = this->_menu.getUsername();
 	std::string game = this->_gameLibsPaths.at(this->_indexGame);
 
 	this->_game->setHighScore(this->_saver.getHighScore(username, game));
@@ -227,14 +227,14 @@ void Core::_analyse() {
 		this->_window->resizeWindow(800, 900);
 	}
 	if (event == IEvent::event_t::MENU && this->_loadedModuleType != MENU) {
-		this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
+		this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
 		this->_event->setMapSize({0, 0});
 	}
 	if (event == IEvent::event_t::ESCAPE  && this->_loadedModuleType != MENU) {
-		this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
+		this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
@@ -242,7 +242,7 @@ void Core::_analyse() {
 	}
 	if (event == IEvent::event_t::NEXTDIFFICULTY) {
 		if (this->_loadedModuleType == GAME) {
-			this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
+			this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 			this->_game->changeDifficulty();
 		}
 	}

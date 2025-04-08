@@ -21,7 +21,7 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
             return IEvent::CLOSE;
 
         if (event.type == sf::Event::TextEntered && this->_iswritting == true) {
-            if (event.text.unicode >= 32 && event.text.unicode <= 126 && _input.length() <= 20)
+            if (event.text.unicode >= 32 && event.text.unicode <= 126 && _input.length() <= 15)
                 _input += static_cast<char>(event.text.unicode);
             else if (event.text.unicode == 8 && !_input.empty())
                 _input.pop_back();
