@@ -45,6 +45,7 @@ class Menu : public IMenu {
 		// Getter
 		std::vector<Boxes> getBoxPoses() override;
 		std::string getUsername() override;
+		bool getIsWritting();
 
 		// Setter
 		void setUsername(std::string username) override;
@@ -66,6 +67,7 @@ class Menu : public IMenu {
 		std::vector<Button> _usernameButtons;
 		bool _showUsernameInput;
 		bool _showHighscores;
+		bool _isWritting;
 		std::string _inputUsername;
 		Boxes _usernameBox;
 		Boxes _highscoreBox;
