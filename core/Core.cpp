@@ -54,7 +54,7 @@ void Core::_saveScore() {
 		return;
 
 	std::size_t highScore = this->_game->getHighScore();
-	std::string username = "default";
+	std::string username = this->_menu.getUsername();
 	std::string game = this->_gameLibsPaths.at(this->_indexGame);
 
 	this->_saver.saveScore(highScore, username, game);
@@ -64,7 +64,7 @@ void Core::_setHighScore() {
 	if (this->_loadedModuleType != GAME)
 		return;
 
-	std::string username = "default";
+	std::string username = this->_menu.getUsername();
 	std::string game = this->_gameLibsPaths.at(this->_indexGame);
 
 	this->_game->setHighScore(this->_saver.getHighScore(username, game));
@@ -209,6 +209,13 @@ void Core::_analyse() {
 		gridSize = this->_game->getGridSize();
 	IEvent::event_t event = this->_event->pollEvents(gridSize);
 	this->_lastEvent = event;
+
+	if (this->_menu.getIsWritting()) {
+		if (event == IEvent::event_t::MOUSELEFTCLICK)
+			this->_processMenuClick();
+		return;
+	}
+
 	if (event == IEvent::event_t::CLOSE)
 		this->_window->closeWindow();
 	if (event == IEvent::event_t::NEXTGRAPHIC)
@@ -219,13 +226,15 @@ void Core::_analyse() {
 		this->_switchGame();
 		this->_window->resizeWindow(800, 900);
 	}
-	if (event == IEvent::event_t::MENU) {
+	if (event == IEvent::event_t::MENU && this->_loadedModuleType != MENU) {
+		this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
 		this->_event->setMapSize({0, 0});
 	}
-	if (event == IEvent::event_t::ESCAPE) {
+	if (event == IEvent::event_t::ESCAPE  && this->_loadedModuleType != MENU) {
+		this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
@@ -233,7 +242,7 @@ void Core::_analyse() {
 	}
 	if (event == IEvent::event_t::NEXTDIFFICULTY) {
 		if (this->_loadedModuleType == GAME) {
-			this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
+			this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 			this->_game->changeDifficulty();
 		}
 	}
@@ -253,10 +262,8 @@ void Core::_processMenuClick()
 
 	std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
-#ifdef _DEBUG
-	std::cout << "Mouse POS value: x= "<< mousePos.first <<" y=" << mousePos.second << std::endl;
-#endif
-	if (action == action_e::GRAPHICLIB) {
+
+    if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {
             if (this->_displayLibsPaths[i].find(selectedValue) != std::string::npos) {
                 this->_indexDisplay = i;
@@ -275,7 +282,10 @@ void Core::_processMenuClick()
                 break;
             }
         }
-    }
+    } else if (action == action_e::USERNAME) {
+		this->_event->renderWrittiing();
+		this->_menu.setUsername(this->_event->getUsername());
+	}
 }
 
 void Core::_compute() {
@@ -333,6 +343,8 @@ void Core::_displayMenu() {
 		this->_event->setMapSize({0, 0});
 		this->_window->setMapSize({0, 0});
 		this->_menu.displayMenu(this->_windowPtr, this->_menu.getBoxPoses(), this->_displayLibsPaths, this->_gameLibsPaths);
+		if (this->_menu.getIsWritting())
+			this->_event->renderWrittiing();
 	}
 }
 

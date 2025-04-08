@@ -8,7 +8,8 @@
 #include <memory>
 #include <utility>
 
-void arcadeSFMLEvent::init() {
+void arcadeSFMLEvent::init()
+{
 }
 
 IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
@@ -18,6 +19,14 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
     if (sfmlWindow->window .pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             return IEvent::CLOSE;
+
+        if (event.type == sf::Event::TextEntered && this->_iswritting == true) {
+            if (event.text.unicode >= 32 && event.text.unicode <= 126 && _input.length() <= 15)
+                _input += static_cast<char>(event.text.unicode);
+            else if (event.text.unicode == 8 && !_input.empty())
+                _input.pop_back();
+            return IEvent::NOTHING;
+        }
         if (event.type == sf::Event::KeyPressed) {
             switch (event.key.code) {
                 case sf::Keyboard::Up:
@@ -48,6 +57,8 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             this->_mousePos = {event.mouseButton.x, event.mouseButton.y};
+            if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 160)
+                this->_iswritting = true;
             if (event.mouseButton.button == sf::Mouse::Right)
                 return MOUSERIGHTCLICK;
             if (event.mouseButton.button == sf::Mouse::Left)
@@ -97,14 +108,23 @@ void arcadeSFMLEvent::setMapSize(std::pair<int, int> size) {
 void arcadeSFMLEvent::cleanup() {
 }
 
-std::string arcadeSFMLEvent::getUsername() {
-    return "";
+std::string arcadeSFMLEvent::getUsername()
+{
+    return _input;
 }
 
-void arcadeSFMLEvent::renderWrittiing() {
+void arcadeSFMLEvent::renderWrittiing()
+{
+    this->_window->drawTextMenu(
+        _input,
+        {685, 407},
+        {0, 0, 0},
+        24
+    );
 }
 
 arcadeSFMLEvent::arcadeSFMLEvent(std::shared_ptr<IWindow> window) : _window(window) {
     this->_mousePos = std::make_pair(0, 0);
     this->_mapSize = std::make_pair(0, 0);
+    this->_iswritting = false;
 }
