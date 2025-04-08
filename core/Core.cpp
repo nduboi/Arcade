@@ -277,6 +277,8 @@ void Core::_compute() {
 		std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->_game);
 		gameModule->update(gameModule);
 
+		if (gameModule->getGameState() != gameState_t::PLAYING)
+			return;
 		grid_t grid = gameModule->getEntities();
 		std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
 
@@ -355,7 +357,7 @@ void Core::_display() {
 }
 
 void Core::loop() {
-	while (this->_window->isOpen()) {
+	while (this->_window->isOpen() && this->_lastEvent != IEvent::CLOSE) {
 		this->_analyse();
 		if (!this->_window->isOpen())
 			break;
