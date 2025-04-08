@@ -60,8 +60,6 @@ private:
 
 	void _processMenuClick();
 
-	char _getKeyPress();
-
 	void _compute();
 	void _displayGame();
 	void _displayMenu();
