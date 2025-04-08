@@ -29,6 +29,7 @@ class PacmanGame : public GameTemplate {
         void setLayerPortal();
         void setLayerDot();
         void setLayerBigDot();
+        void setLayerSquareModules();
 };
 
 #endif /* !PACMANGAME_HPP_ */

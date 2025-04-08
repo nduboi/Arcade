@@ -67,6 +67,7 @@ void PacmanGame::setLayerWalls()
     this->setLayerBorders();
     this->setLayerPortal();
     this->setLayerModules();
+    this->setLayerSquareModules();
 }
 
 void PacmanGame::setLayerHub()
@@ -93,6 +94,61 @@ void PacmanGame::setLayerBorders()
         this->_entities[0][x][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontal.png", 1, "", std::make_pair(x, 0));
         this->_entities[MAP_HEIGHT - 1 - 2][x][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontal.png", 1, "", std::make_pair(x, MAP_HEIGHT - 1 - 2));
     }
+    this->_entities[0][7][1] = std::make_shared<WallEntity>("assets/pacman/walls/jointopright.png", 1, "", std::make_pair(7, 0));
+    this->_entities[0][8][1] = std::make_shared<WallEntity>("assets/pacman/walls/jointopleft.png", 1, "", std::make_pair(8, 0));
+    this->_entities[1][7][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(7, 1));
+    this->_entities[1][8][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(8, 1));
+    this->_entities[2][7][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(7, 2));
+    this->_entities[2][8][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(8, 2));
+    this->_entities[3][7][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(7, 3));
+    this->_entities[3][8][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(8, 3));
+
+    this->_entities[0][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/jointopright.png", 1, "", std::make_pair(16, 0));
+    this->_entities[0][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/jointopleft.png", 1, "", std::make_pair(17, 0));
+    this->_entities[1][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(16, 1));
+    this->_entities[1][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(17, 1));
+    this->_entities[2][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(16, 2));
+    this->_entities[2][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(17, 2));
+    this->_entities[3][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(16, 3));
+    this->_entities[3][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(17, 3));
+
+    this->_entities[0][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/jointopright.png", 1, "", std::make_pair(10, 0));
+    this->_entities[0][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/topbar.png", 1, "", std::make_pair(11, 0));
+    this->_entities[0][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/topbar.png", 1, "", std::make_pair(12, 0));
+    this->_entities[0][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/topbar.png", 1, "", std::make_pair(13, 0));
+    this->_entities[0][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/jointopleft.png", 1, "", std::make_pair(14, 0));
+    this->_entities[1][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(10, 1));
+    this->_entities[1][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(14, 1));
+    this->_entities[2][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(10, 2));
+    this->_entities[2][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(11, 2));
+    this->_entities[2][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(12, 2));
+    this->_entities[2][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(13, 2));
+    this->_entities[2][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(14, 2));
+
+    this->_entities[21][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(10, 0));
+    this->_entities[21][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(11, 21));
+    this->_entities[21][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(12, 21));
+    this->_entities[21][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(13, 21));
+    this->_entities[21][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(14, 21));
+    this->_entities[22][10][1] = std::make_shared<WallEntity>("assets/pacman/walls/joinbotright.png", 1, "", std::make_pair(10, 22));
+    this->_entities[22][11][1] = std::make_shared<WallEntity>("assets/pacman/walls/botbar.png", 1, "", std::make_pair(11, 22));
+    this->_entities[22][12][1] = std::make_shared<WallEntity>("assets/pacman/walls/botbar.png", 1, "", std::make_pair(12, 22));
+    this->_entities[22][13][1] = std::make_shared<WallEntity>("assets/pacman/walls/botbar.png", 1, "", std::make_pair(13, 22));
+    this->_entities[22][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/joinbotleft.png", 1, "", std::make_pair(14, 22));
+
+    this->_entities[20][7][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(7, 20));
+    this->_entities[20][8][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(8, 20));
+    this->_entities[21][7][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(7, 21));
+    this->_entities[21][8][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(8, 21));
+    this->_entities[22][7][1] = std::make_shared<WallEntity>("assets/pacman/walls/joinbotright.png", 1, "", std::make_pair(7, 22));
+    this->_entities[22][8][1] = std::make_shared<WallEntity>("assets/pacman/walls/joinbotleft.png", 1, "", std::make_pair(8, 22));
+
+    this->_entities[20][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(16, 20));
+    this->_entities[20][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(17, 20));
+    this->_entities[21][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(16, 21));
+    this->_entities[21][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(17, 21));
+    this->_entities[22][16][1] = std::make_shared<WallEntity>("assets/pacman/walls/joinbotright.png", 1, "", std::make_pair(16, 22));
+    this->_entities[22][17][1] = std::make_shared<WallEntity>("assets/pacman/walls/joinbotleft.png", 1, "", std::make_pair(17, 22));
 
     this->_entities[0][0][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftdouble.png", 1, "", std::make_pair(0, 0));
     for (int x = 1; x < 7; x++)
@@ -236,6 +292,61 @@ void PacmanGame::setLayerModules()
     this->_entities[19][14][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(14, 19));
 }
 
+void PacmanGame::setLayerSquareModules()
+{
+    this->_entities[5][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(2, 5));
+    this->_entities[4][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(2, 4));
+    this->_entities[5][3][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(3, 5));
+    this->_entities[5][4][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(4, 5));
+    this->_entities[5][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(2, 5));
+    this->_entities[4][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(2, 4));
+    this->_entities[3][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(2, 3));
+    this->_entities[2][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(2, 2));
+    this->_entities[2][3][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(3, 2));
+    this->_entities[2][4][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(4, 2));
+    this->_entities[3][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(2, 3));
+    this->_entities[2][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(2, 2));
+
+    this->_entities[17][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(2, 17));
+    this->_entities[18][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(2, 18));
+    this->_entities[17][3][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(3, 17));
+    this->_entities[17][4][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(4, 17));
+    this->_entities[17][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(2, 17));
+    this->_entities[18][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(2, 18));
+    this->_entities[19][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(2, 19));
+    this->_entities[20][2][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(2, 20));
+    this->_entities[20][3][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(3, 20));
+    this->_entities[20][4][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(4, 20));
+    this->_entities[19][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(2, 19));
+    this->_entities[20][5][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(2, 20));
+
+    this->_entities[4][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(19, 4));
+    this->_entities[5][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(19, 5));
+    this->_entities[5][20][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(20, 5));
+    this->_entities[5][21][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(21, 5));
+    this->_entities[5][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(22, 5));
+    this->_entities[4][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(22, 4));
+    this->_entities[3][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(19, 3));
+    this->_entities[2][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(19, 2));
+    this->_entities[2][20][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(20, 2));
+    this->_entities[2][21][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(21, 2));
+    this->_entities[3][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(22, 3));
+    this->_entities[2][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(22, 2));
+
+    this->_entities[17][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/botleftround.png", 1, "", std::make_pair(19, 17));
+    this->_entities[18][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(19, 18));
+    this->_entities[17][20][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(20, 17));
+    this->_entities[17][21][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontalsimple.png", 1, "", std::make_pair(21, 17));
+    this->_entities[17][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/botrightround.png", 1, "", std::make_pair(22, 17));
+    this->_entities[18][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(22, 18));
+    this->_entities[19][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/leftverticalsimple.png", 1, "", std::make_pair(19, 19));
+    this->_entities[20][19][1] = std::make_shared<WallEntity>("assets/pacman/walls/toprightround.png", 1, "", std::make_pair(19, 20));
+    this->_entities[20][20][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(20, 20));
+    this->_entities[20][21][1] = std::make_shared<WallEntity>("assets/pacman/walls/bothorizontalsimple.png", 1, "", std::make_pair(21, 20));
+    this->_entities[19][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/rightverticalsimple.png", 1, "", std::make_pair(22, 19));
+    this->_entities[20][22][1] = std::make_shared<WallEntity>("assets/pacman/walls/topleftround.png", 1, "", std::make_pair(22, 20));
+}
+
 void PacmanGame::setLayerPortal()
 {
     this->_entities[10][0][1] = std::make_shared<WallEntity>("assets/pacman/walls/tophorizontal.png", 1, "", std::make_pair(0, 10));
@@ -270,20 +381,31 @@ void PacmanGame::setLayerPortal()
 void PacmanGame::setLayerDot()
 {
     std::vector<std::pair<size_t, size_t>> positions = {
-        {1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}, {6, 6}, {6, 7}, {6, 8}, {6, 9}, {6, 10},
-        {6, 11}, {5, 11}, {4, 11}, {3, 11}, {2, 11}, {1, 11}, {0, 11}, {6, 12}, {6, 13}, {6, 14}, {6, 15},
-        {6, 16}, {5, 16}, {4, 16}, {3, 16}, {2, 16}, {1, 16}, {1, 17}, {1, 18}, {1, 19}, {1, 20}, {1, 21},
-
-        {7, 11}, {8, 11}, {9, 11}, {9, 10}, {9, 9}, {10, 9}, {10, 8}, {10, 7}, {10, 6}, {9, 6}, {9, 5}, {9, 4},
-                          {9, 12}, {9, 13}, {9, 14}, {10, 14}, {10, 15}, {10, 16}, {10, 17}, {9, 17}, {9, 18}, {9, 19},
-        {17, 11}, {16, 11}, {15, 11}, {15, 10}, {15, 9}, {14, 9}, {14, 8}, {14, 7}, {14, 6}, {15, 6}, {15, 5}, {15, 4},
-                          {15, 12}, {15, 13}, {15, 14}, {14, 14}, {14, 15}, {14, 16}, {14, 17}, {15, 17}, {15, 18}, {15, 19},
-
-        {11, 9}, {12, 9}, {13, 9}, {11, 14}, {13, 14},
-
-        {24-1, 1}, {24-1, 2}, {24-1, 3}, {24-1, 4}, {24-1, 5}, {24-1, 6}, {24-2, 6}, {24-3, 6}, {24-4, 6}, {24-5, 6}, {24-6, 6}, {24-6, 7}, {24-6, 8}, {24-6, 9}, {24-6, 10},
-        {24-6, 11}, {24-5, 11}, {24-4, 11}, {24-3, 11}, {24-2, 11}, {24-1, 11}, {24-0, 11}, {24-6, 12}, {24-6, 13}, {24-6, 14}, {24-6, 15},
-        {24-6, 16}, {24-5, 16}, {24-4, 16}, {24-3, 16}, {24-2, 16}, {24-1, 16}, {24-1, 17}, {24-1, 18}, {24-1, 19}, {24-1, 20}, {24-1, 21},
+        {0, 11},
+        {1, 1}, {1, 2}, {1, 3}, {1, 4}, {1, 5}, {1, 6}, {1, 11}, {1, 16}, {1, 17}, {1, 18}, {1, 19}, {1, 20}, {1, 21},
+        {2, 1}, {2, 6}, {2, 11}, {2, 16}, {2, 21},
+        {3, 1}, {3, 6}, {3, 11}, {3, 16}, {3, 21},
+        {4, 1}, {4, 6}, {4, 11}, {4, 16}, {4, 21},
+        {5, 1}, {5, 6}, {5, 11}, {5, 16}, {5, 21},
+        {6, 1}, {6, 2}, {6, 3}, {6, 4}, {6, 5}, {6, 6},{6, 7}, {6, 8}, {6, 9}, {6, 10}, {6, 11}, {6, 12}, {6, 13}, {6, 14}, {6, 15}, {6, 16}, {6, 17}, {6, 18}, {6, 19}, {6, 20}, {6, 21},
+        {7, 4}, {7, 11}, {7, 19},
+        {8, 4}, {8, 11}, {8, 19},
+        {9, 1}, {9, 2}, {9, 3}, {9, 4}, {9, 5}, {9, 6}, {9, 9}, {9, 10}, {9, 11}, {9, 12}, {9, 13}, {9, 14}, {9, 17}, {9, 18}, {9, 19}, {9, 20}, {9, 21},
+        {10, 3}, {10, 6}, {10, 7}, {10, 8}, {10, 9}, {10, 14}, {10, 15}, {10, 16}, {10, 17}, {10, 20},
+        {11, 3}, {11, 9}, {11, 14}, {11, 20},
+        {12, 3}, {12, 9}, {12, 20},
+        {13, 3}, {13, 9}, {13, 14}, {13, 20},
+        {14, 3}, {14, 6}, {14, 7}, {14, 8}, {14, 9}, {14, 14}, {14, 15}, {14, 16}, {14, 17}, {14, 20},
+        {15, 1}, {15, 2}, {15, 3}, {15, 4}, {15, 5}, {15, 6}, {15, 9}, {15, 10}, {15, 11}, {15, 12}, {15, 13}, {15, 14}, {15, 17}, {15, 18}, {15, 19}, {15, 20}, {15, 21},
+        {16, 4}, {16, 11}, {16, 19},
+        {17, 4}, {17, 11}, {17, 19},
+        {18, 1}, {18, 2}, {18, 3}, {18, 4}, {18, 5}, {18, 6}, {18, 7}, {18, 8}, {18, 9}, {18, 10}, {18, 11}, {18, 12}, {18, 13}, {18, 14}, {18, 15}, {18, 16}, {18, 17}, {18, 18},  {18, 19}, {18, 20}, {18, 21},
+        {19, 1}, {19, 6}, {19, 11}, {19, 16}, {19, 21},
+        {20, 1}, {20, 6}, {20, 11}, {20, 16}, {20, 21},
+        {21, 1}, {21, 6}, {21, 11}, {21, 16}, {21, 21},
+        {22, 1}, {22, 6}, {22, 11}, {22, 16}, {22, 21},
+        {23, 1}, {23, 1}, {23, 2}, {23, 3}, {23, 4}, {23, 5}, {23, 6}, {23, 11}, {23, 16}, {23, 17}, {23, 18}, {23, 19}, {23, 20}, {23, 21},
+        {24, 11},
     };
 
     for (const auto &pos : positions) {
