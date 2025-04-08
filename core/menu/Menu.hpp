@@ -41,20 +41,17 @@ class Menu : public IMenu {
 		void drawUsernameButton(const std::shared_ptr<IWindow> &window);
 		void drawHighscores(const std::shared_ptr<IWindow> &window);
 		void handleKeyInput(char key);
-		void clearTextInput();
 
 		// Getter
 		std::vector<Boxes> getBoxPoses() override;
 		std::string getUsername() override;
-		bool getShowUsernameInput();
 
 		// Setter
 		void setUsername(std::string username) override;
 		void setMenuTitle(const std::string& title,
 			const std::pair<int, int>& position = {200, 50}, int fontSize = 36);
-		void startUsernameInput();
-		void finishUsernameInput(bool save);
 		void setSelectedGraphicLib(const std::string& graphicLib);
+		void setInputUsername(const std::string& input);
 	private:
 		// Variable
 		std::string _username;

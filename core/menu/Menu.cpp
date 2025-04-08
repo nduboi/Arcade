@@ -530,20 +530,6 @@ void Menu::drawHighscores(const std::shared_ptr<IWindow> &window)
     }
 }
 
-bool Menu::getShowUsernameInput()
-{
-    return _showUsernameInput;
-}
-
-void Menu::startUsernameInput() {
-    this->_showUsernameInput = true;
-}
-
-void Menu::finishUsernameInput(bool save) {
-    this->_showUsernameInput = false;
-}
-
-void Menu::clearTextInput()
-{
-    _showUsernameInput = "";
+void Menu::setInputUsername(const std::string& input) {
+    _inputUsername = input;
 }
