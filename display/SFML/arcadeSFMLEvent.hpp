@@ -16,6 +16,9 @@ private:
 	std::shared_ptr<IWindow> _window;
 	std::pair<int, int> _mapSize;
 	std::pair<int, int> _mousePos;
+	std::string _input;
+	bool _iswritting;
+
 public:
 	void init() override;
 
