@@ -48,29 +48,6 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
     this->_gameTitle.draw(window);
 
     std::vector<Boxes> boxes = getBoxPoses();
-
-    for (const auto& box : boxes) {
-        std::vector<int> boxColor;
-
-        if (box.typesBoxes == action_e::GRAPHICLIB) {
-            boxColor = box.selected ? std::vector<int>{50, 150, 250} : std::vector<int>{100, 100, 250};
-        } else if (box.typesBoxes == action_e::GAMELIB) {
-            boxColor = box.selected ? std::vector<int>{250, 150, 50} : std::vector<int>{250, 100, 100};
-        } else {
-            boxColor = std::vector<int>{200, 200, 200};
-        }
-
-        std::pair<size_t, size_t> boxSize = {
-            static_cast<size_t>(box.posBottom.first - box.posTop.first),
-            static_cast<size_t>(box.posBottom.second - box.posTop.second)
-        };
-
-        window->drawRectangleMenu(
-            boxSize,
-            {static_cast<size_t>(box.posTop.first), static_cast<size_t>(box.posTop.second)},
-            {boxColor[0], boxColor[1], boxColor[2]}
-        );
-    }
     drawButtons(window);
 }
 
@@ -255,7 +232,7 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
-            _currentGraphicLib = btn.value;
+            this->_currentGraphicLib = btn.value;
             selectedValue = btn.value;
             return btn.action;
         }
