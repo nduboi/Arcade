@@ -116,7 +116,7 @@ void Core::_loadGameLib(const std::string &path) {
 	if (!this->_game) {
 		throw CoreException("Failed to load createDisplay symbol.");
 	}
-	this->_game->setHighScore(this->_saver.getHighScore("default", path));
+	this->_game->setHighScore(this->_saver.getHighScore(this->_menu.getUsername(), path));
 #ifdef _DEBUG
 	std::cout << "Display library loaded successfully: " << path << std::endl;
 #endif
