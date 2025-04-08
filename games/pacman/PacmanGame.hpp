@@ -22,14 +22,7 @@ class PacmanGame : public GameTemplate {
     private:
         void setLayerBackground();
         void setLayerEntities();
-        void setLayerWalls();
-        void setLayerHub();
-        void setLayerBorders();
-        void setLayerModules();
-        void setLayerPortal();
         void setLayerDot();
-        void setLayerBigDot();
-        void setLayerSquareModules();
 };
 
 #endif /* !PACMANGAME_HPP_ */
