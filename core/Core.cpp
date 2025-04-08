@@ -97,6 +97,10 @@ void Core::_loadDisplayLib(const std::string &path) {
 		throw CoreException("Failed to load createEvent symbol.");
 	}
 	this->_event->init();
+	if (this->_game) {
+		this->_window->setMapSize(this->_game->getGridSize());
+		this->_event->setMapSize(this->_game->getGridSize());
+	}
 #ifdef _DEBUG
 	std::cout << "Display library loaded successfully: " << path << std::endl;
 #endif
@@ -115,6 +119,8 @@ void Core::_loadGameLib(const std::string &path) {
 #ifdef _DEBUG
 	std::cout << "Display library loaded successfully: " << path << std::endl;
 #endif
+	this->_window->setMapSize(this->_game->getGridSize());
+	this->_event->setMapSize(this->_game->getGridSize());
 }
 
 void Core::_switchGraphic() {
@@ -254,14 +260,15 @@ void Core::_processMenuClick()
 
     std::pair<int, int> mousePos = this->_event->getMousePos();
 
-    std::string selectedValue;
+	std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
+
     if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {
             if (this->_displayLibsPaths[i].find(selectedValue) != std::string::npos) {
                 this->_indexDisplay = i;
                 this->_loadDisplayLib(this->_displayLibsPaths[i]);
-                break;
+            	break;
             }
         }
     } else if (action == action_e::GAMELIB) {
@@ -333,6 +340,8 @@ void Core::_displayGame() {
 void Core::_displayMenu() {
 	if (this->_loadedModuleType == MENU) {
 		this->_menu.setSelectedGraphicLib(this->_displayLibsPaths[this->_indexDisplay]);
+		this->_event->setMapSize({0, 0});
+		this->_window->setMapSize({0, 0});
 		this->_menu.displayMenu(this->_windowPtr, this->_menu.getBoxPoses(), this->_displayLibsPaths, this->_gameLibsPaths);
 		if (this->_menu.getIsWritting())
 			this->_event->renderWrittiing();

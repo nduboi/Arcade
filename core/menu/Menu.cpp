@@ -67,6 +67,7 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
     this->_gameTitle.draw(window);
 
     std::vector<Boxes> boxes = getBoxPoses();
+
     for (const auto& box : boxes) {
         std::vector<int> boxColor;
 
@@ -89,7 +90,6 @@ void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes
             {boxColor[0], boxColor[1], boxColor[2]}
         );
     }
-
     drawButtons(window);
     drawUsernameButton(window);
     drawHighscores(window);
@@ -324,7 +324,7 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
 
-            _currentGraphicLib = btn.value;
+            this->_currentGraphicLib = btn.value;
             selectedValue = btn.value;
             return btn.action;
         }
