@@ -55,7 +55,7 @@ namespace Display {
 				return IEvent::MOUSELEFTCLICK;
 			case BUTTON2_CLICKED:
 				return IEvent::MOUSERIGHTCLICK;
-			case KEY_ENTER:
+			case 10:
 				return IEvent::ENTER;
 			default:
 				return IEvent::NOTHING;
@@ -69,7 +69,7 @@ namespace Display {
 			throw std::runtime_error("Failed to cast _window to arcadeNcurses");
 		}
 		auto mapSize = ncurses->getMapSize();
-		if (this->_mapSize.first == 0 && this->_mapSize.second == 0) {
+		if (mapSize.first == 0 && mapSize.second == 0) {
 			tmp.second = (900 * (tmp.second) / (LINES - 4)) - 54;
 			tmp.first = (1600 * tmp.first / COLS);
 		} else {
@@ -78,6 +78,8 @@ namespace Display {
 			tmp.first -= ((COLS - 2)) / 2 - mapSize.first + 1;
 			tmp.first /= 2;
 		}
+		std::cout << "Mouse POS: x= " << tmp.first << " y=" << tmp.second << std::endl;
+		std::cout << "MAP SIZE: x= " << mapSize.first << " y=" << mapSize.second << std::endl;
 		return tmp;
 	}
 

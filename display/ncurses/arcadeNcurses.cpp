@@ -31,6 +31,7 @@ namespace Display {
 		(void) size;
 		(void) position;
 		(void) color;
+		this->_ncurses.drawThickRectangle({position.first * COLS / 1600, position.second * LINES / 900}, {size.first * COLS / 1600,  size.second * LINES / 900}, 1, 0);
 	}
 
 	void arcadeNcurses::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
@@ -51,7 +52,7 @@ namespace Display {
 	}
 
 	std::pair<int, int> arcadeNcurses::getWindowSize() {
-        return {COLS / 2, LINES - 4};
+        return {COLS * 7 , LINES * 14.5};
 	}
 
 	bool arcadeNcurses::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
@@ -72,7 +73,7 @@ namespace Display {
 
 	void arcadeNcurses::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
 		(void) asset;
-		if (!text.empty())
+		if (!text.empty() && (text.size() == 1 && (text != "a" && text != "b" && text != "h" && text != "#")) )
 			this->_ncurses.drawCharacter(text[0], {static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
 		else
         	this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
