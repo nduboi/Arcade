@@ -43,6 +43,7 @@ Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade 
     usernameBtn.action = action_e::USERNAME;
     usernameBtn.value = "username";
     this->_usernameButtons.push_back(usernameBtn);
+    this->_isWritting = false;
 }
 
 void Menu::displayMenu(const std::shared_ptr<IWindow> &window, std::vector<Boxes> _boxes,
@@ -276,38 +277,26 @@ void Menu::drawButtons(const std::shared_ptr<IWindow> &window)
     }
 }
 
-void Menu::handleKeyInput(char key)
-{
-    if (_showUsernameInput) {
-        if (key == 8 && !_inputUsername.empty()) {
-            _inputUsername.pop_back();
-        }
-        else if (_inputUsername.length() < 15 && ((key >= 'a' && key <= 'z') ||
-                 (key >= 'A' && key <= 'Z') || (key >= '0' && key <= '9') || key == '_')) {
-            _inputUsername += key;
-        }
-    }
-}
-
 action_e Menu::handleClick(int x, int y, std::string& selectedValue)
 {
     if (_showUsernameInput) {
-        if (x >= _usernameBox.posTop.first + 50 && x <= _usernameBox.posTop.first + 150 &&
+        if (x >= _usernameBox.posTop.first + 90 && x <= _usernameBox.posTop.first + 190 &&
             y >= _usernameBox.posTop.second + 120 && y <= _usernameBox.posTop.second + 160) {
 
             if (!_inputUsername.empty()) {
                 _username = _inputUsername;
                 _inputUsername = "";
             }
+            this->_isWritting = false;
             _showUsernameInput = false;
             selectedValue = _username;
             return action_e::USERNAME;
         }
 
-        if (x >= _usernameBox.posTop.first + 200 && x <= _usernameBox.posTop.first + 300 &&
+        if (x >= _usernameBox.posTop.first + 240 && x <= _usernameBox.posTop.first + 350 &&
             y >= _usernameBox.posTop.second + 120 && y <= _usernameBox.posTop.second + 160) {
-
             _inputUsername = "";
+            this->_isWritting = false;
             _showUsernameInput = false;
             return action_e::NOTHING;
         }
@@ -324,7 +313,6 @@ action_e Menu::handleClick(int x, int y, std::string& selectedValue)
     for (auto& btn : this->_usernameButtons) {
         if (x >= btn.posTop.first && x <= btn.posBottom.first &&
             y >= btn.posTop.second && y <= btn.posBottom.second) {
-
             if (btn.action == action_e::USERNAME) {
                 _showUsernameInput = true;
                 return action_e::USERNAME;
@@ -362,6 +350,7 @@ void Menu::setSelectedGraphicLib(const std::string& graphicLib)
 
 void Menu::drawUsernameInput(const std::shared_ptr<IWindow> &window)
 {
+    this->_isWritting = true;
     std::pair<size_t, size_t> boxSize = {
         static_cast<size_t>(_usernameBox.posBottom.first - _usernameBox.posTop.first),
         static_cast<size_t>(_usernameBox.posBottom.second - _usernameBox.posTop.second)
@@ -532,4 +521,9 @@ void Menu::drawHighscores(const std::shared_ptr<IWindow> &window)
 
 void Menu::setInputUsername(const std::string& input) {
     _inputUsername = input;
+}
+
+bool Menu::getIsWritting()
+{
+    return _isWritting;
 }
