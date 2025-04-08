@@ -374,7 +374,7 @@ void Menu::drawUsernameInput(const std::shared_ptr<IWindow> &window)
     );
 
     window->drawTextMenu(
-        "Enter   Username",
+        "Enter Username",
         {_usernameBox.posTop.first + 75, _usernameBox.posTop.second + 10},
         {255, 255, 255},
         28
@@ -472,10 +472,10 @@ void Menu::drawUsernameButton(const std::shared_ptr<IWindow> &window)
 
     if (!_username.empty()) {
         window->drawTextMenu(
-            "User: " + _username,
-            {1500, 50},
-            {255, 255, 255},
-            20
+            _username,
+            {1300, 50},
+            {253,176,42},
+            28
         );
     }
 }
@@ -528,4 +528,22 @@ void Menu::drawHighscores(const std::shared_ptr<IWindow> &window)
 
         y += 30;
     }
+}
+
+bool Menu::getShowUsernameInput()
+{
+    return _showUsernameInput;
+}
+
+void Menu::startUsernameInput() {
+    this->_showUsernameInput = true;
+}
+
+void Menu::finishUsernameInput(bool save) {
+    this->_showUsernameInput = false;
+}
+
+void Menu::clearTextInput()
+{
+    _showUsernameInput = "";
 }

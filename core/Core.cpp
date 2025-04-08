@@ -203,6 +203,33 @@ void Core::_analyse() {
 		gridSize = this->_game->getGridSize();
 	IEvent::event_t event = this->_event->pollEvents(gridSize);
 	this->_lastEvent = event;
+	if (this->_loadedModuleType == MENU && this->_menu.getShowUsernameInput()) {
+        this->_menu.startUsernameInput();
+
+        if (event == IEvent::ENTER) {
+            std::string username = this->_menu.getUsername();
+            if (!username.empty()) {
+                this->_menu.setUsername(username);
+                if (this->_game) {
+                    this->_saveScore();
+                    this->_setHighScore();
+                }
+            }
+            this->_menu.finishUsernameInput(false);
+            this->_menu.clearTextInput();
+            this->_menu.finishUsernameInput(true);
+        } else if (event == IEvent::ESCAPE) {
+            this->_menu.finishUsernameInput(true);
+            this->_menu.clearTextInput();
+            this->_menu.finishUsernameInput(false);
+        }
+		if (event == IEvent::event_t::MOUSELEFTCLICK) {
+			if (this->_loadedModuleType == MENU) {
+				this->_processMenuClick();
+			}
+		}
+        return;
+    }
 	if (event == IEvent::event_t::CLOSE)
 		this->_window->closeWindow();
 	if (event == IEvent::event_t::NEXTGRAPHIC)
@@ -268,7 +295,10 @@ void Core::_processMenuClick()
             }
         }
     } else if (action == action_e::USERNAME) {
-		//process username input of the menu here
+		this->_menu.startUsernameInput();
+        if (!this->_menu.getUsername().empty()) {
+            this->_menu.getShowUsernameInput();
+        }
 	}
 }
 
@@ -325,6 +355,9 @@ void Core::_displayMenu() {
 	if (this->_loadedModuleType == MENU) {
 		this->_menu.setSelectedGraphicLib(this->_displayLibsPaths[this->_indexDisplay]);
 		this->_menu.displayMenu(this->_windowPtr, this->_menu.getBoxPoses(), this->_displayLibsPaths, this->_gameLibsPaths);
+		if (this->_menu.getShowUsernameInput()) {
+			this->_event->renderWrittiing();
+		}
 	}
 }
 
@@ -358,11 +391,16 @@ void Core::loop() {
 	while (this->_window->isOpen()) {
 		this->_analyse();
 		if (!this->_window->isOpen())
-			break;
+		break;
 		this->_compute();
 		this->_display();
 	}
 	this->_window->closeWindow();
+}
+
+char Core::_getKeyPress()
+{
+	return 'a';
 }
 
 Core::Core(std::string argv): _menu(this->_window), _saver("savefile.json") {

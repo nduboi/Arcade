@@ -8,7 +8,10 @@
 #include <memory>
 #include <utility>
 
-void arcadeSFMLEvent::init() {
+void arcadeSFMLEvent::init()
+{
+    _textInput = "";
+    _isInputActive = false;
 }
 
 IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
@@ -16,6 +19,23 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
     auto sfmlWindow = std::dynamic_pointer_cast<arcadeSFML>(_window);
 
     if (sfmlWindow->window .pollEvent(event)) {
+        if (_isInputActive && event.type == sf::Event::TextEntered) {
+            if (event.text.unicode == 8 && !_textInput.empty()) {
+                removeLastChar();
+            }
+            else if (event.text.unicode >= 32 && event.text.unicode < 127) {
+                char character = static_cast<char>(event.text.unicode);
+                if ((character >= 'a' && character <= 'z') ||
+                    (character >= 'A' && character <= 'Z') ||
+                    (character >= '0' && character <= '9') ||
+                    character == '_') {
+                    if (_textInput.length() < 15) {
+                        addCharToInput(character);
+                    }
+                }
+            }
+            return IEvent::TYPING;
+        }
         if (event.type == sf::Event::Closed)
             return IEvent::CLOSE;
         if (event.type == sf::Event::KeyPressed) {
@@ -101,10 +121,51 @@ std::string arcadeSFMLEvent::getUsername() {
     return "";
 }
 
-void arcadeSFMLEvent::renderWrittiing() {
+std::string arcadeSFMLEvent::getTextInput()
+{
+    return _textInput;
+}
+
+void arcadeSFMLEvent::setTextInput(const std::string& text)
+{
+    _textInput = text;
+}
+
+void arcadeSFMLEvent::clearTextInput()
+{
+    _textInput.clear();
+}
+
+void arcadeSFMLEvent::addCharToInput(char c)
+{
+    _textInput += c;
+}
+
+void arcadeSFMLEvent::removeLastChar()
+{
+    if (!_textInput.empty()) {
+        _textInput.pop_back();
+    }
+}
+
+bool arcadeSFMLEvent::isInputActive() const
+{
+    return _isInputActive;
+}
+
+void arcadeSFMLEvent::setInputActive(bool active)
+{
+    _isInputActive = active;
+}
+
+void arcadeSFMLEvent::renderWrittiing()
+{
+    
 }
 
 arcadeSFMLEvent::arcadeSFMLEvent(std::shared_ptr<IWindow> window) : _window(window) {
     this->_mousePos = std::make_pair(0, 0);
     this->_mapSize = std::make_pair(0, 0);
+    this->_textInput = "";
+    this->_isInputActive = false;
 }

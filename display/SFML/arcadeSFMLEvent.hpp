@@ -16,6 +16,8 @@ private:
 	std::shared_ptr<IWindow> _window;
 	std::pair<int, int> _mapSize;
 	std::pair<int, int> _mousePos;
+	std::string _textInput;
+	bool _isInputActive;
 public:
 	void init() override;
 
@@ -26,6 +28,14 @@ public:
 	void setMapSize(std::pair<int, int> size) override;
 
 	void cleanup() override;
+
+	std::string getTextInput();
+    void setTextInput(const std::string& text);
+    void clearTextInput();
+    void addCharToInput(char c);
+    void removeLastChar();
+    bool isInputActive() const;
+    void setInputActive(bool active);
 
 	std::string getUsername();
 
