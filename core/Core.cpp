@@ -378,7 +378,7 @@ void Core::loop() {
 	while (this->_window->isOpen()) {
 		this->_analyse();
 		if (!this->_window->isOpen())
-		break;
+			break;
 		this->_compute();
 		this->_display();
 	}
