@@ -22,6 +22,10 @@ class RedGhost : public GhostEntity {
 
         int calculateManhattanDistance(const std::pair<size_t, size_t>& pos1, const std::pair<size_t, size_t>& pos2);
 
+        std::pair<size_t, size_t> findBestPathToTarget(std::shared_ptr<IGameModule> gameModule,
+                                                      const std::pair<size_t, size_t>& target,
+                                                      bool moveTowards);
+
     public:
         RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman);
         ~RedGhost() = default;
