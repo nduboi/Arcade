@@ -161,16 +161,10 @@ namespace Display {
 	}
 
 	NcursesEncapsulation::NcursesEncapsulation() {
-		reset_shell_mode();
-		reset_prog_mode();
 		this->_isOpen = false;
 		this->_header = nullptr;
 		this->_game = nullptr;
 		this->_window = nullptr;
-		FILE *input = stdin;
-		FILE *output = stdout;
-		this->_screen = newterm(nullptr, output, input);
-		set_term(this->_screen);
 
 		this->_window = initscr();
 		start_color();
@@ -209,15 +203,7 @@ namespace Display {
 			delwin(this->_header);
 			this->_header = nullptr;
 		}
-		if (this->_window) {
-			endwin();
-			delscreen(this->_screen);
-			set_term(nullptr);
-			this->_screen = nullptr;
-			this->_window = nullptr;
-		}
+		endwin();
 		this->_isOpen = false;
-		reset_shell_mode();
-		reset_prog_mode();
 	}
 } // game
