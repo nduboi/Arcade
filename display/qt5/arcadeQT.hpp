@@ -14,7 +14,10 @@
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 #include <string>
-#include <SFML/Graphics.hpp>
+#include <QApplication>
+#include <QMainWindow>
+#include <QWidget>
+#include <QPainter>
 
 /**
  * @class arcadeQT
@@ -27,12 +30,16 @@ class arcadeQT : public IWindow {
 	std::string _libName = "Arcade QT5"; ///< The name of the library.
 	std::pair<size_t, size_t> _mapSize; ///< The size of the map.
 private:
+	QApplication *_app;
+	QMainWindow *_window;
+	QWidget *_centralWidget;
+	bool _isOpen;
+
 	std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
-	void _resizeData(sf::Sprite &sprite, std::pair<int, int> position);
-	void _resizeData(sf::RectangleShape &sprite, std::pair<int, int> position);
+	// void _resizeData(sf::Sprite &sprite, std::pair<int, int> position);
+	// void _resizeData(sf::RectangleShape &sprite, std::pair<int, int> position);
 
 public:
-	sf::RenderWindow window;
 
 	void display() override;
 
@@ -66,7 +73,7 @@ public:
 
 	arcadeQT();
 
-	~arcadeQT() = default;
+	~arcadeQT();
 };
 
 #endif // arcadeQT_HPP

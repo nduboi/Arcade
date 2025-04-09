@@ -1,3 +1,11 @@
+# Find Qt5 packages
+find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+
+# Set Qt5 specific properties
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+
 add_library(arcade_qt5 SHARED
     main.cpp
     arcadeQT.cpp
@@ -6,7 +14,8 @@ add_library(arcade_qt5 SHARED
     arcadeQTEvent.hpp
 )
 
-target_link_libraries(arcade_qt5 sfml-graphics sfml-window sfml-system)
+# Link with Qt5 libraries instead of SFML
+target_link_libraries(arcade_qt5 Qt5::Core Qt5::Widgets)
 
 set_target_properties(arcade_qt5 PROPERTIES LINK_FLAGS "-Wl,--export-dynamic")
 
