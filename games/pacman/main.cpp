@@ -21,13 +21,13 @@ extern "C" {
 	__attribute__((constructor)) void construct()
 	{
 		#ifdef _DEBUG
-			std::cout << "Loaded dynamic lib: Lib SNAKE" << std::endl;
+			std::cout << "Loaded dynamic lib: Lib PACMAN" << std::endl;
 		#endif
 	}
 	__attribute__((destructor)) void deconstruct()
 	{
 		#ifdef _DEBUG
-			std::cout << "Unloaded dynamic lib: Lib SNAKE" << std::endl;
+			std::cout << "Unloaded dynamic lib: Lib PACMAN" << std::endl;
 		#endif
 	}
 }

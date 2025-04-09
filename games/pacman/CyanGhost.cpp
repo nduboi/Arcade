@@ -74,12 +74,14 @@ void CyanGhost::moveEntity(std::shared_ptr<IGameModule> gameModule)
         || this->getState() == GhostEntity::WAITING)
         return;
 
+    if (this->getState() == GhostEntity::TRAVELING) {
+        this->moveToSpawn(gameModule);
+        return;
+    }
     if (this->getState() == GhostEntity::CHASED)
         this->runAway(gameModule);
     if (this->getState() == GhostEntity::CHASING)
         this->moveToPacman(gameModule);
-    if (this->getState() == GhostEntity::TRAVELING)
-        this->moveToSpawn(gameModule);
     checkPacmanCollision(gameModule);
 }
 
