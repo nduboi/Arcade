@@ -42,7 +42,6 @@ NibblerGame::NibblerGame() : _currentLevel(1)
     this->setLayerBackground();
     this->setLayerWalls();
     this->setLayerEntities();
-    debugPrintMap();
 }
 
 void NibblerGame::setLayerBackground()
