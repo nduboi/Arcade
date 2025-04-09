@@ -127,7 +127,7 @@ void arcadeAllegro::drawText(std::string text, int color, std::pair<size_t, size
 }
 
 void arcadeAllegro::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) {
-    Display::Color allegroColor = {color.r, color.g, color.b, 255};
+    Display::Color allegroColor = {(uint8_t)(color.r), (uint8_t)(color.g), (uint8_t)(color.b), 255};
     this->allegro->drawText(text, position.first, position.second, allegroColor, charSize);
 }
 
@@ -151,4 +151,8 @@ bool arcadeAllegro::isMouseOver(std::pair<size_t, size_t> position, std::pair<si
             mouse_state.x <= static_cast<int>(position.first + size.first) &&
             mouse_state.y >= static_cast<int>(position.second) &&
             mouse_state.y <= static_cast<int>(position.second + size.second));
+}
+
+void arcadeAllegro::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+    this->allegro->drawThickRectangle(position, size, thickness);
 }

@@ -16,8 +16,8 @@ namespace Display {
             throw std::runtime_error("Failed to initialize Allegro mouse.");
         if (!al_init_image_addon())
             throw std::runtime_error("Failed to initialize Allegro image addon.");
-        al_set_new_display_flags(ALLEGRO_RESIZABLE);
         this->_display = al_create_display(1620, 900);
+        al_set_window_title(this->_display, "Arcade - Allegro");
         if (!this->_display)
             throw std::runtime_error("Failed to create Allegro display.");
         this->font = al_create_builtin_font();
@@ -79,10 +79,19 @@ namespace Display {
             allegroColor
         );
     }
-    void AllegroEncapsulation::drawText(const std::string& text, int x, int y,
-                               const Color& color, int fontSize) {
-        ALLEGRO_COLOR allegroColor = al_map_rgba(color.r, color.g, color.b, color.a);
 
+    void AllegroEncapsulation::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
+        ALLEGRO_COLOR outerColor = al_map_rgb(255, 255, 255);
+        al_draw_filled_rectangle(position.first, position.second,
+            position.first + size.first, position.second + size.second, outerColor);
+        ALLEGRO_COLOR innerColor = al_map_rgb(0, 0, 0);
+        al_draw_filled_rectangle(position.first + thickness, position.second + thickness,
+            position.first + size.first - thickness, position.second + size.second - thickness, innerColor);
+    }
+
+    void AllegroEncapsulation::drawText(const std::string& text, int x, int y,
+                                        const Color& color, int fontSize) {
+        ALLEGRO_COLOR allegroColor = al_map_rgba((uint8_t)color.r, (uint8_t)color.g, (uint8_t)color.b, (uint8_t)color.a);
         const char* fontPath = "assets/ARCADECLASSIC.TTF";
         if (!al_init_font_addon()) {
             std::cerr << "Failed to initialize font addon!" << std::endl;

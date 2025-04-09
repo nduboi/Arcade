@@ -33,6 +33,7 @@ namespace Display {
 
         void drawRectangleMenu(const std::pair<size_t, size_t> &size, const std::pair<size_t, size_t> &position,
                                const Color &color);
+        void drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness);
 
         void drawText(const std::string& text, int x, int y, const Color& color, int fontSize);
         void resizeWindow(int width, int height);
