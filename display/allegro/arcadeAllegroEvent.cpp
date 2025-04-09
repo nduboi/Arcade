@@ -18,7 +18,6 @@ IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize) {
                         this->_input.pop_back();
                     return IEvent::NOTHING;
                 }
-                std::cout << "Key pressed: " << event.keyboard.unichar << std::endl;
                 if (this->_input.length() <= 15 && event.keyboard.unichar >= 32 && event.keyboard.unichar <= 126) {
                     this->_input += static_cast<char>(event.keyboard.unichar);
                     return IEvent::NOTHING;
