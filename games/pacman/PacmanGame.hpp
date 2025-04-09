@@ -18,11 +18,18 @@ class PacmanGame : public GameTemplate {
 
         std::vector<std::shared_ptr<IEntity>> getHUD() const override;
 
+        void update(std::shared_ptr<IGameModule> gameModule) override;
+
     protected:
     private:
+        float _multiplier = 1.0f;
+        int _round = 1;
+
         void setLayerBackground();
         void setLayerEntities();
-        void setLayerDot();
+        void setLayerInteract();
+
+        void resetGame(std::shared_ptr<IGameModule> gameModule);
 };
 
 #endif /* !PACMANGAME_HPP_ */

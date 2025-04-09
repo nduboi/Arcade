@@ -4,7 +4,7 @@
 
 #include "SDLEncapsulation.hpp"
 
-namespace Display {
+namespace DisplayLib {
 	SDLEncapsulation::SDLEncapsulation() {
 #ifdef _DEBUG
 		std::cout << "Initializing SDL resources..." << std::endl;

@@ -10,13 +10,15 @@
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 
-namespace Display {
+namespace DisplayLib {
 
 	class arcadeNcursesEvent : public IEvent {
 	private:
 		std::shared_ptr<IWindow> _window;
 		std::pair<int, int> _mapSize;
 		std::pair<int, int> _mousePos;
+		bool _isWriting = false;
+		std::string _input;
 	public:
 		void init() override;
 

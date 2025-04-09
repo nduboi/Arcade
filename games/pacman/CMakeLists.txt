@@ -7,11 +7,17 @@ add_library(arcade_pacman SHARED
     ../entities/ScoreEntityHUD.cpp
     ../entities/HighScoreEntityHUD.cpp
     ../entities/TimeEntityHUD.cpp
+    ../entities/TextEntityHUD.cpp
     ../entities/BigTextEntityHUD.cpp
     WallEntity.cpp
     PacmanEntity.cpp
     DotEntity.cpp
     BigDotEntity.cpp
+    GhostEntity.cpp
+    RedGhost.cpp
+    PinkGhost.cpp
+    OrangeGhost.cpp
+    CyanGhost.cpp
 )
 
 add_custom_command(TARGET arcade_pacman POST_BUILD

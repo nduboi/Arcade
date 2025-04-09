@@ -4,7 +4,7 @@
 
 #include "arcadeNcurses.hpp"
 
-namespace Display {
+namespace DisplayLib {
 	void arcadeNcurses::display() {
 		this->_ncurses.display();
 	}
@@ -22,7 +22,10 @@ namespace Display {
 	}
 
 	void arcadeNcurses::drawRectangle(int color, std::pair<size_t, size_t> position) {
-        this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
+		if ((this->_mapSize.first == 9 && this->_mapSize.second == 9) || (this->_mapSize.first == 16 && this->_mapSize.second == 16) || (this->_mapSize.first == 30 && this->_mapSize.second == 30) || (this->_mapSize.first == 30 && this->_mapSize.second == 16))
+			this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
+		else
+			this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
 	}
 
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
@@ -31,7 +34,7 @@ namespace Display {
 		(void) size;
 		(void) position;
 		(void) color;
-		this->_ncurses.drawThickRectangle({position.first * COLS / 1600, position.second * LINES / 900}, {size.first * COLS / 1600,  size.second * LINES / 900}, 1, 0);
+		this->_ncurses.drawThickRectangle({position.first * COLS / 1620, position.second * LINES / 900}, {size.first * COLS / 1620,  size.second * LINES / 900}, 1, 0);
 	}
 
 	void arcadeNcurses::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {
