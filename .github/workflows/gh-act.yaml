@@ -32,7 +32,7 @@ jobs:
       - name: Install QT5 image development package
         run: |
           apt update
-          apt install qtbase5-dev
+          apt install -y qtbase5-dev
       - name: compilation_project
         run: |
           ./shell/cmpRelease.sh
