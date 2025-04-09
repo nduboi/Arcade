@@ -31,8 +31,6 @@ class GhostEntity : public AEntity {
         GhostState _state;
         std::size_t _waitingTime = 0;
         std::chrono::time_point<std::chrono::steady_clock> _waitingPoint;
-        std::size_t _chasedTime = 0;
-        std::chrono::time_point<std::chrono::steady_clock> _chasedPoint;
 
         std::shared_ptr<IEntity> _pacman;
 
@@ -40,6 +38,9 @@ class GhostEntity : public AEntity {
         std::chrono::time_point<std::chrono::steady_clock> _lastMove;
 
         bool moveToClosestFreeCell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos);
+
+        std::chrono::time_point<std::chrono::steady_clock> _chasedTime;
+        bool _wasGettingChased = false;
 
     public:
         ~GhostEntity() = default;
@@ -64,6 +65,9 @@ class GhostEntity : public AEntity {
         void updateWaitingTime(std::shared_ptr<IGameModule> gameModule);
 
         void onInteract(std::shared_ptr<IGameModule> gameModule);
+
+        void setWasGettingChased(bool wasGettingChased);
+        bool getWasGettingChased() const;
 
         std::shared_ptr<IEntity> getPacman();
 };

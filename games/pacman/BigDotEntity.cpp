@@ -39,6 +39,7 @@ void BigDotEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
             GhostEntity *ghost = dynamic_cast<GhostEntity *>(entity.get());
 
             if (ghost != nullptr) {
+                ghost->setWasGettingChased(true);
                 if (ghost->getPosition() == ghost->getSpawnPosition())
                     continue;
                 ghost->setState(GhostEntity::CHASED);

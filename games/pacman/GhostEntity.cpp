@@ -14,6 +14,8 @@ std::string GhostEntity::getSpriteName() const
         return this->_spriteChasedName;
     if (this->_state == TRAVELING)
         return this->_spriteEyeName;
+    if (this->_wasGettingChased)
+        return this->_spriteChasedName;
     return this->_spriteName;
 }
 
@@ -65,10 +67,20 @@ void GhostEntity::setWaitingTime(std::size_t waitingTime)
 
 void GhostEntity::updateWaitingTime(std::shared_ptr<IGameModule> gameModule)
 {
+    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSinceChased = currentTime - this->_chasedTime;
+
+
+    if (this->_state == CHASED && !this->getWasGettingChased()) {
+        this->_state = CHASING;
+        this->setSpeedTime(0.25f);
+    }
+    if (this->getWasGettingChased() && (elapsedSinceChased.count() > 10))
+        this->_wasGettingChased = false;
+
     if (this->_waitingTime == 0)
         return;
 
-    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsedTime = currentTime - this->_waitingPoint;
 
     if (elapsedTime.count() < this->_waitingTime)
@@ -83,6 +95,13 @@ void GhostEntity::updateWaitingTime(std::shared_ptr<IGameModule> gameModule)
         };
         this->_state = CHASING;
         this->setSpeedTime(0.25f);
+        if (this->_wasGettingChased) {
+            this->_state = CHASED;
+            this->setSpeedTime(0.5f);
+            this->setWaitingTime(10 - elapsedSinceChased.count());
+            if (this->_waitingTime < 0 || this->_waitingTime > 20)
+                this->_waitingTime = 0;
+        }
     }
     else if (this->_state == CHASED) {
         this->_state = CHASING;
@@ -129,4 +148,15 @@ std::shared_ptr<IEntity> GhostEntity::getPacman()
 std::size_t GhostEntity::getWaitingTime() const
 {
     return this->_waitingTime;
+}
+
+void GhostEntity::setWasGettingChased(bool wasGettingChased)
+{
+    this->_wasGettingChased = wasGettingChased;
+    this->_chasedTime = std::chrono::steady_clock::now();
+}
+
+bool GhostEntity::getWasGettingChased() const
+{
+    return this->_wasGettingChased;
 }

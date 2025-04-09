@@ -32,6 +32,8 @@ CyanGhost::CyanGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IE
 
     this->_waitingTime = 15;
     this->_waitingPoint = std::chrono::steady_clock::now();
+    this->_wasGettingChased = false;
+    this->_chasedTime = std::chrono::steady_clock::now();
 
     this->_speedTime = 0.25f;
     this->_lastMove = std::chrono::steady_clock::now();
