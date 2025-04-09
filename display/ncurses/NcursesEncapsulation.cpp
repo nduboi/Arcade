@@ -80,13 +80,24 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		int startY = getmaxy(this->_game) / 2 - mapSize.second;
-		int startX = getmaxx(this->_game) / 2 - mapSize.first * 2;
-		for (int y = 0; y < size.second * 2; y++) {
-			for (int x = 0; x < size.first * 2; x++) {
-				mvwaddch(this->_game, currentPos.second * 2 + startY + y, currentPos.first * 2 + startX  + x, ' ' | A_REVERSE);
+		if (mapSize == std::pair<size_t, size_t>{9, 9} || mapSize == std::pair<size_t, size_t>{16, 16} || mapSize == std::pair<size_t, size_t>{30, 30} || mapSize == std::pair<size_t, size_t>{30, 16}) {
+			int startY = getmaxy(this->_game) / 2 - (mapSize.second / 2);
+			int startX = getmaxx(this->_game) / 2 - mapSize.first;
+			for (int y = 0; y < size.second * 1; y++) {
+				for (int x = 0; x < size.first * 1; x++) {
+					mvwaddch(this->_game, currentPos.second * 1 + startY + y, currentPos.first * 1 + startX  + x, ' ' | A_REVERSE);
+				}
+			}
+		} else {
+			int startY = getmaxy(this->_game) / 2 - mapSize.second;
+			int startX = getmaxx(this->_game) / 2 - mapSize.first * 2;
+			for (int y = 0; y < size.second * 2; y++) {
+				for (int x = 0; x < size.first * 2; x++) {
+					mvwaddch(this->_game, currentPos.second * 2 + startY + y, currentPos.first * 2 + startX  + x, ' ' | A_REVERSE);
+				}
 			}
 		}
+
 		if (color > 0) {
 			wattroff(this->_game, COLOR_PAIR(color));
 		}

@@ -22,7 +22,10 @@ namespace Display {
 	}
 
 	void arcadeNcurses::drawRectangle(int color, std::pair<size_t, size_t> position) {
-        this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
+		if (this->_mapSize == std::pair<size_t, size_t>{9, 9} || this->_mapSize == std::pair<size_t, size_t>{16, 16} || this->_mapSize == std::pair<size_t, size_t>{30, 30} || this->_mapSize == std::pair<size_t, size_t>{30, 16})
+			this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
+		else
+			this->_ncurses.drawRectangle({static_cast<int>(position.first * 2), static_cast<int>(position.second)}, {2, 1}, this->_mapSize, color);
 	}
 
 	void arcadeNcurses::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
