@@ -24,7 +24,7 @@ jobs:
       - name: Install SDL2 image development package
         run: |
           apt update
-          apt install -y libsdl2-image-dev
+          apt install -y libsdl2-*
       - name: Install Allegro image development package
         run: |
           apt update

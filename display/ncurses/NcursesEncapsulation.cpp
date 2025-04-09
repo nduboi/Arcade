@@ -80,7 +80,7 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		if (mapSize == std::pair<size_t, size_t>{9, 9} || mapSize == std::pair<size_t, size_t>{16, 16} || mapSize == std::pair<size_t, size_t>{30, 30} || mapSize == std::pair<size_t, size_t>{30, 16}) {
+		if ((mapSize.first == 9 && mapSize.second == 9) || (mapSize.first == 16 && mapSize.second == 16) || (mapSize.first == 30 && mapSize.second == 30) || (mapSize.first == 30 && mapSize.second == 16)) {
 			int startY = getmaxy(this->_game) / 2 - (mapSize.second / 2);
 			int startX = getmaxx(this->_game) / 2 - mapSize.first;
 			for (int y = 0; y < size.second * 1; y++) {
