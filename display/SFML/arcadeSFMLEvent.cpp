@@ -53,6 +53,8 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::NEXTGAME;
                 case sf::Keyboard::H:
                     return IEvent::NEXTDIFFICULTY;
+                case sf::Keyboard::Q:
+                    return IEvent::CLOSE;
             }
         }
         if (event.type == sf::Event::MouseButtonPressed) {

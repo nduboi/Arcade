@@ -21,7 +21,7 @@ class Saver {
 
         void saveScore(int score, std::string username, std::string game);
         int getHighScore(std::string username, std::string game);
-        int getHighScore(std::string username);
+        std::pair<std::string, int> getHighScore(std::string game);
 };
 
 #endif /* !SAVER_HPP_ */

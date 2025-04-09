@@ -60,7 +60,7 @@ int Saver::getHighScore(std::string username, std::string game)
     return 0;
 }
 
-int Saver::getHighScore(std::string game)
+std::pair<std::string, int> Saver::getHighScore(std::string game)
 {
     nlohmann::json saveData;
     std::ifstream inFile(_savefile);
@@ -69,19 +69,21 @@ int Saver::getHighScore(std::string game)
         try {
             inFile >> saveData;
             int highScore = 0;
+            std::string highScoreUser = "";
             for (auto& user : saveData.items()) {
                 if (user.value().contains(game)) {
                     int score = user.value()[game].get<int>();
                     if (score > highScore) {
                         highScore = score;
+                        highScoreUser = user.key();
                     }
                 }
             }
-            return highScore;
+            return std::make_pair(highScoreUser, highScore);
         } catch (const std::exception& e) {
-            return 0;
+            return std::make_pair("", 0);
         }
         inFile.close();
     }
-    return 0;
+    return std::make_pair("", 0);
 }
