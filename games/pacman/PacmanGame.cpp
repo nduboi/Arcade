@@ -160,8 +160,8 @@ void PacmanGame::setLayerEntities()
         }
     }
 
-    this->setLayerDot();
     this->_entities[14][12][1] = std::make_shared<PacmanEntity>(4, "", std::make_pair(12, 14));
+    this->setLayerDot();
 }
 
 void PacmanGame::setLayerDot()
@@ -176,7 +176,28 @@ void PacmanGame::setLayerDot()
             if (DOTS[y][x] == "b")
                 this->_entities[y][x][1] = std::make_shared<BigDotEntity>(std::make_pair(x, y));
             if (DOTS[y][x] == "R") {
-                this->_entities[y][x][2] = std::make_shared<RedGhost>(std::make_pair(x, y));
+                this->_entities[y][x][2] = std::make_shared<RedGhost>(std::make_pair(x, y), this->_entities[14][12][1]);
+            }
+        }
+    }
+}
+
+void PacmanGame::update(std::shared_ptr<IGameModule> gameModule)
+{
+    if (this->getIsStarted() == false) {
+        grid_t grid = gameModule->getEntities();
+        std::pair<size_t, size_t> pos = gameModule->getGridSize();
+
+        for (int y = 0; y < pos.second; y++) {
+            for (int x = 0; x < pos.first; x++) {
+                if (grid[y][x][2] == nullptr)
+                    continue;
+
+                auto entity = grid[y][x][2];
+                GhostEntity *ghost = dynamic_cast<GhostEntity *>(entity.get());
+
+                if (ghost != nullptr)
+                    ghost->setWaitingTime(10);
             }
         }
     }

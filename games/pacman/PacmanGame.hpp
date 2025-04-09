@@ -18,6 +18,8 @@ class PacmanGame : public GameTemplate {
 
         std::vector<std::shared_ptr<IEntity>> getHUD() const override;
 
+        void update(std::shared_ptr<IGameModule> gameModule) override;
+
     protected:
     private:
         void setLayerBackground();
