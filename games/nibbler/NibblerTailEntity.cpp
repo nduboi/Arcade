@@ -21,14 +21,14 @@ NibblerTailEntity::NibblerTailEntity(std::size_t color, std::string text, std::p
 
     this->_assetsName = {
         {"horizontal", "assets/nibbler/Nibbler_tail_horizontal.png"},
-        {"vertical", "assets/nibbler/Nibbler_tail_vertical.png"},
-        {"corner_tl", "assets/nibbler/Nibbler_tail_horizontal.png"},
-        {"corner_tr", "assets/nibbler/Nibbler_tail_horizontal.png"},
-        {"corner_bl", "assets/nibbler/Nibbler_tail_horizontal.png"},
-        {"corner_br", "assets/nibbler/Nibbler_tail_horizontal.png"},
-        {"tail_up", "assets/nibbler/Nibbler_tail_vertical"},
-        {"tail_down", "assets/nibbler/Nibbler_tail_vertical.png"},
-        {"tail_left", "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"vertical",   "assets/nibbler/Nibbler_tail_vertical.png"},
+        {"corner_tl",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"corner_tr",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"corner_bl",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"corner_br",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"tail_up",    "assets/nibbler/Nibbler_tail_vertical.png"},
+        {"tail_down",  "assets/nibbler/Nibbler_tail_vertical.png"},
+        {"tail_left",  "assets/nibbler/Nibbler_tail_horizontal.png"},
         {"tail_right", "assets/nibbler/Nibbler_tail_horizontal.png"}
     };
 }
@@ -40,7 +40,6 @@ int NibblerTailEntity::getIndex() const
 
 void NibblerTailEntity::updateDirection(std::pair<size_t, size_t> current, std::pair<size_t, size_t> next, std::pair<size_t, size_t> prev)
 {
-    // Tail
     if (prev.first == 100 && prev.second == 100) {
         if (next.first > current.first)
             this->_spriteName = this->_assetsName["tail_left"];

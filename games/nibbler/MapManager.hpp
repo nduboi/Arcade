@@ -16,22 +16,30 @@
 
 class MapManager {
     public:
+        // Constructor
         MapManager();
+        ~MapManager();
 
+        // Method
+        void generateMap(int level);
+
+        // Getter
         std::vector<std::vector<int>> getMapLayout() const;
         std::string getSpriteFromId(int id);
         std::pair<size_t, size_t> getPlayerStartPosition() const;
         bool isWallAt(const std::pair<size_t, size_t>& position) const;
         std::vector<std::pair<int, int>> getValidDirections(const std::pair<size_t, size_t>& position) const;
-        void generateMap(int level);
-    
+
     private:
-        void createMap();
-    
-        std::unordered_map<int, std::string> _spriteMap;
-    void initSpriteMap();
-        std::vector<std::vector<int>> _mapLayout;
+        // Variable
         std::pair<size_t, size_t> _playerStartPosition;
+        std::unordered_map<int, std::string> _spriteMap;
+        std::vector<std::vector<int>> _mapLayout;
+
+        // Method
+        void createMap();
+        void initSpriteMap();
+
     };
 
 #endif /* !MAPMANAGER_HPP_ */

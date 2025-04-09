@@ -49,10 +49,10 @@ void NibblerHeadEntity::setDirection(std::pair<int, int> direction, std::shared_
         return;
     gameModule->setIsStarted(true);
 
-    if (this->_direction.first != 0 && direction.first != 0 && 
+    if (this->_direction.first != 0 && direction.first != 0 &&
         this->_direction.first + direction.first == 0)
         return;
-    if (this->_direction.second != 0 && direction.second != 0 && 
+    if (this->_direction.second != 0 && direction.second != 0 &&
         this->_direction.second + direction.second == 0)
         return;
 
@@ -378,42 +378,33 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
         this->_position.second + this->_direction.second
     };
 
-    // Vérification des collisions avec les murs
     if (this->checkCollisionWithWall(nextPosition, gameModule)) {
-        // Au lieu de perdre, essayons de tourner automatiquement
         auto nibblerGame = std::dynamic_pointer_cast<NibblerGame>(gameModule);
         if (!nibblerGame)
             return;
 
-        // Obtenir les directions valides à partir de la position actuelle
         auto validDirections = nibblerGame->getValidDirections(this->_position);
-        
-        // Filtrer pour ne garder que les directions perpendiculaires à la direction actuelle
+
         std::vector<std::pair<int, int>> possibleTurns;
         for (const auto& dir : validDirections) {
-            // Exclure la direction actuelle et la direction opposée
-            if ((dir.first != this->_direction.first || dir.second != this->_direction.second) && 
+            if ((dir.first != this->_direction.first || dir.second != this->_direction.second) &&
                 (dir.first != -this->_direction.first || dir.second != -this->_direction.second)) {
                 possibleTurns.push_back(dir);
             }
         }
-        
-        // Si une seule direction possible, tournez automatiquement
+
         if (possibleTurns.size() == 1) {
             this->_direction = possibleTurns[0];
-            this->_inputDirection = this->_direction; // Met à jour la direction d'entrée aussi
-            
-            // Recalculer la position suivante
+            this->_inputDirection = this->_direction;
+
             nextPosition = {
                 this->_position.first + this->_direction.first,
                 this->_position.second + this->_direction.second
             };
-        } 
-        // Si plus d'une option, s'arrêter
-        else if (possibleTurns.size() > 1) {
-            return; // Le serpent s'arrête, aucun mouvement n'est effectué
         }
-        // Si aucune option, perdre
+        else if (possibleTurns.size() > 1) {
+            return;
+        }
         else {
             gameModule->setGameState(gameState_t::LOSE);
             return;

@@ -16,6 +16,11 @@ MapManager::MapManager()
     initSpriteMap();
 }
 
+MapManager::~MapManager()
+{
+
+}
+
 void MapManager::initSpriteMap()
 {
     _spriteMap = {
@@ -106,8 +111,7 @@ bool MapManager::isWallAt(const std::pair<size_t, size_t>& position) const
         return true;
 
     int tileId = _mapLayout[position.second][position.first];
-    // Tu peux ajuster ici ce qui est considéré comme un mur
-    return (tileId >= 1 && tileId <= 12);
+    return (tileId >= 1 && tileId <= 14);
 }
 
 std::vector<std::pair<int, int>> MapManager::getValidDirections(const std::pair<size_t, size_t>& position) const
