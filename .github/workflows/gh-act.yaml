@@ -29,6 +29,10 @@ jobs:
         run: |
           apt update
           apt install -y liballegro*5.2 liballegro*5-dev
+      - name: Install QT5 image development package
+        run: |
+          apt update
+          apt install qt5-default qtcreator qtbase5-dev
       - name: compilation_project
         run: |
           ./shell/cmpRelease.sh
