@@ -17,9 +17,11 @@
 #include "TimeEntityHUD.hpp"
 #include "BigTextEntityHUD.hpp"
 
+#include "RedGhost.hpp"
+
 const int MAP_HEIGHT = 25;
 const int MAP_WIDTH = 25;
-const int MAP_LAYER = 2;
+const int MAP_LAYER = 3;
 
 const std::map<std::string, std::string> ASSETS = {
     {"a", "assets/pacman/walls/topleftdouble.png"},
@@ -95,7 +97,7 @@ const std::vector<std::vector<std::string>> DOTS = {
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", " ", "d", " ", " ", " ", "d", " ", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", "d", "d", "d", "d", "d", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
-    {"d", "d", "d", "d", "d", "d", "d", "d", "d", "d", " ", " ", " ", " ", " ", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d"},
+    {"d", "d", "d", "d", "d", "d", "d", "d", "d", "d", " ", "R", " ", " ", " ", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d"},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", "d", "d", " ", "d", "d", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
@@ -144,6 +146,7 @@ void PacmanGame::setLayerEntities()
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             this->_entities[y][x][1] = std::make_shared<VoidEntity>("assets/pacman/walls/void.png", 0, "", std::make_pair(x, y));
+            this->_entities[y][x][2] = nullptr;
         }
     }
 
@@ -172,6 +175,9 @@ void PacmanGame::setLayerDot()
                 this->_entities[y][x][1] = std::make_shared<DotEntity>(std::make_pair(x, y));
             if (DOTS[y][x] == "b")
                 this->_entities[y][x][1] = std::make_shared<BigDotEntity>(std::make_pair(x, y));
+            if (DOTS[y][x] == "R") {
+                this->_entities[y][x][2] = std::make_shared<RedGhost>(std::make_pair(x, y));
+            }
         }
     }
 }

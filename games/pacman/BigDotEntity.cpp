@@ -32,7 +32,10 @@ void BigDotEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
 
     for (int y = 0; y < pos.second; y++) {
         for (int x = 0; x < pos.first; x++) {
-            auto entity = grid[y][x][1];
+            if (grid[y][x][2] == nullptr)
+                continue;
+
+            auto entity = grid[y][x][2];
             GhostEntity *ghost = dynamic_cast<GhostEntity *>(entity.get());
 
             if (ghost != nullptr) {
