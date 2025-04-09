@@ -5,12 +5,26 @@
 void arcadeAllegroEvent::init() {
     // Initialize Allegro event handling
 }
-
 IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize) {
     ALLEGRO_EVENT event;
     auto allegroWindow = std::dynamic_pointer_cast<arcadeAllegro>(_window);
 
     if (allegroWindow && al_get_next_event(allegroWindow->allegro->eventQueue, &event)) {
+
+        if (this->_iswritting) {
+            if (event.type == ALLEGRO_EVENT_KEY_CHAR) {
+                if (event.keyboard.keycode == ALLEGRO_KEY_BACKSPACE) {
+                    if (!this->_input.empty())
+                        this->_input.pop_back();
+                    return IEvent::NOTHING;
+                }
+                std::cout << "Key pressed: " << event.keyboard.unichar << std::endl;
+                if (this->_input.length() <= 15 && event.keyboard.unichar >= 32 && event.keyboard.unichar <= 126) {
+                    this->_input += static_cast<char>(event.keyboard.unichar);
+                    return IEvent::NOTHING;
+                }
+            }
+        }
         if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
             return IEvent::CLOSE;
         if (event.type == ALLEGRO_EVENT_KEY_DOWN) {
@@ -29,12 +43,31 @@ IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize) {
                 case ALLEGRO_KEY_H: return IEvent::NEXTDIFFICULTY;
             }
         }
+        if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
+            this->_mousePos.first = event.mouse.x;
+            this->_mousePos.second = event.mouse.y;
+            if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 &&
+                this->_mousePos.second >= 120 && this->_mousePos.second <= 160) {
+                this->_iswritting = true;
+            }
+            switch (event.mouse.button) {
+                case 1: return IEvent::MOUSELEFTCLICK;    // Left button
+                case 2: return IEvent::MOUSERIGHTCLICK;   // Right button
+                case 3: return IEvent::MOUSECLICK;        // Middle button
+                default: return IEvent::MOUSECLICK;
+            }
+        }
     }
     return IEvent::NOTHING;
 }
 
 std::pair<int, int> arcadeAllegroEvent::getMousePos() {
-    return this->_mousePos;
+    if (!al_is_mouse_installed()) {
+        return std::make_pair(-1, -1);
+    }
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
+    return std::make_pair(mouse_state.x, mouse_state.y);
 }
 
 void arcadeAllegroEvent::setMapSize(std::pair<int, int> size) {
@@ -46,11 +79,16 @@ void arcadeAllegroEvent::cleanup() {
 }
 
 std::string arcadeAllegroEvent::getUsername() {
-    return "";
+    return this->_input;
 }
 
 void arcadeAllegroEvent::renderWrittiing() {
-    // Handle text input if needed
+    this->_window->drawTextMenu(
+        this->_input,
+        {685, 407},
+        {0, 0, 0},
+        24
+    );
 }
 
 arcadeAllegroEvent::arcadeAllegroEvent(std::shared_ptr<IWindow> window) : _window(window) {

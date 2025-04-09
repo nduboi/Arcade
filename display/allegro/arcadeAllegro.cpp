@@ -41,6 +41,11 @@ void arcadeAllegro::drawSprite(std::string asset, int color, std::string text, s
     al_destroy_bitmap(image);
 }
 
+void arcadeAllegro::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
+    color_t color) {
+    this->allegro->drawRectangleMenu(size, position, {static_cast<uint8_t>(color.r), static_cast<uint8_t>(color.g), static_cast<uint8_t>(color.b), 255});
+}
+
 void arcadeAllegro::drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) {
     ALLEGRO_BITMAP* image = al_load_bitmap(asset.c_str());
     if (!image) {
@@ -49,7 +54,7 @@ void arcadeAllegro::drawSpriteMenu(std::pair<float, float> size, std::string ass
     }
 
     al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image),
-                          position.first, position.second, size.first, size.second, 0);
+        position.first, position.second, size.first, size.second, 0);
     al_destroy_bitmap(image);
 }
 
@@ -94,4 +99,13 @@ void arcadeAllegro::resizeWindow(size_t x, size_t y) {
 
 std::pair<int, int> arcadeAllegro::getWindowSize() {
     return this->allegro->getWindowSize();
+}
+
+bool arcadeAllegro::isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) {
+    ALLEGRO_MOUSE_STATE mouse_state;
+    al_get_mouse_state(&mouse_state);
+    return (mouse_state.x >= static_cast<int>(position.first) &&
+            mouse_state.x <= static_cast<int>(position.first + size.first) &&
+            mouse_state.y >= static_cast<int>(position.second) &&
+            mouse_state.y <= static_cast<int>(position.second + size.second));
 }

@@ -3,8 +3,10 @@
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_font.h>
 #include <string>
+#include <unordered_map>
 #include <utility>
 
 namespace Display {
@@ -15,6 +17,7 @@ namespace Display {
     private:
         ALLEGRO_DISPLAY* _display;
         ALLEGRO_FONT* font;
+        std::unordered_map<int, ALLEGRO_FONT*> fontCache;
 
     public:
         ALLEGRO_EVENT_QUEUE *eventQueue;
@@ -26,6 +29,10 @@ namespace Display {
         void clear();
         void setColor(const Color& color);
         void drawRectangle(int x, int y, int width, int height);
+
+        void drawRectangleMenu(const std::pair<size_t, size_t> &size, const std::pair<size_t, size_t> &position,
+                               const Color &color);
+
         void drawText(const std::string& text, int x, int y, const Color& color, int fontSize);
         void resizeWindow(int width, int height);
         std::pair<int, int> getWindowSize();
