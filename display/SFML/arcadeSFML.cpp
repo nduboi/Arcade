@@ -180,6 +180,8 @@ void arcadeSFML::drawText(std::string text, int color, std::pair<size_t, size_t>
 		case 2: sfText.setFillColor(sf::Color::Red); break;
 		case 3: sfText.setFillColor(sf::Color::Green); break;
 		case 4: sfText.setFillColor(sf::Color::Blue); break;
+		case 5: sfText.setFillColor(sf::Color::Yellow); break;
+		case 6: sfText.setFillColor(sf::Color::Cyan); break;
 		default: sfText.setFillColor(sf::Color::Black); break;
 	}
 	switch (color)

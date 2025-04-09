@@ -110,6 +110,8 @@ void arcadeAllegro::drawRectangle(int color, std::pair<size_t, size_t> position)
         case 2: allegroColor = {255, 0, 0, 255}; break;  // Red
         case 3: allegroColor = {0, 255, 0, 255}; break;  // Green
         case 4: allegroColor = {0, 0, 255, 255}; break;  // Blue
+        case 5: allegroColor = {255, 255, 0, 255}; break;
+        case 6: allegroColor = {0, 255, 255, 255}; break;
     }
     this->allegro->setColor(allegroColor);
     this->allegro->drawRectangle(position.first, position.second, 50, 50);
@@ -123,6 +125,8 @@ void arcadeAllegro::drawText(std::string text, int color, std::pair<size_t, size
         case 2: allegroColor = {255, 0, 0, 255}; break;  // Red
         case 3: allegroColor = {0, 255, 0, 255}; break;  // Green
         case 4: allegroColor = {0, 0, 255, 255}; break;  // Blue
+        case 5: allegroColor = {255, 255, 0, 255}; break; // Yellow
+        case 6: allegroColor = {0, 255, 255, 255}; break; // Cyan
     }
     this->allegro->drawText(text, position.first, position.second, allegroColor, 20);
 }

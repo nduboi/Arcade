@@ -16,7 +16,7 @@
 BigDotEntity::BigDotEntity(std::pair<size_t, size_t> position)
 {
     this->_spriteName = "assets/pacman/other/strawberry.png";
-    this->_color = 2;
+    this->_color = 5;
     this->_text = "";
     this->_position = position;
     this->_isMovable = false;
