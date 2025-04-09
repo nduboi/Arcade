@@ -1,6 +1,5 @@
 #include "AllegroEncapsulation.hpp"
 #include <stdexcept>
-#include <allegro5/allegro_image.h>
 #include <iostream>
 
 namespace Display {

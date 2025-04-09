@@ -1,13 +1,14 @@
 #ifndef ALLEGROENCAPSULATION_HPP
 #define ALLEGROENCAPSULATION_HPP
 
-#include <allegro5/allegro.h>
-#include <allegro5/allegro_primitives.h>
-#include <allegro5/allegro_ttf.h>
-#include <allegro5/allegro_font.h>
 #include <string>
 #include <unordered_map>
 #include <utility>
+#include <allegro5/allegro.h>
+#include <allegro5/allegro_primitives.h>
+#include <allegro5/allegro_ttf.h>
+#include <allegro5/allegro_image.h>
+#include <allegro5/allegro_font.h>
 
 namespace Display {
     struct Color {

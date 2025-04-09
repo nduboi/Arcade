@@ -21,6 +21,11 @@ public:
     void closeWindow() override;
     bool isOpen() override;
     void clear() override;
+
+    std::pair<int, int> _resizeTexture(std::pair<int, int> position);
+
+    std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
+
     void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
     void drawRectangle(int color, std::pair<size_t, size_t> position) override;
     void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;

@@ -30,15 +30,58 @@ void arcadeAllegro::clear() {
         this->allegro->clear();
 }
 
+std::pair<int, int> arcadeAllegro::_resizeTexture(std::pair<int, int> position)
+{
+    std::pair<int, int> windowSize = this->allegro->getWindowSize();
+    windowSize.second -= 100;
+
+    int w = static_cast<int>(windowSize.first / static_cast<float>(this->_mapSize.first) + 0.1f);
+    int h = static_cast<int>(windowSize.second / static_cast<float>(this->_mapSize.second) + 0.1f);
+
+    return {w, h};
+}
+
+std::pair<int, int> arcadeAllegro::_getWindowPosition(std::pair<int, int> position)
+{
+    std::pair<int, int> windowPosition;
+    auto windowSize = this->allegro->getWindowSize();
+    const int hudOffset = 100;
+
+    windowPosition.first = (position.first * windowSize.first) / this->_mapSize.first;
+    windowPosition.second = hudOffset + (position.second * (windowSize.second - hudOffset)) / this->_mapSize.second;
+
+    return windowPosition;
+}
+
+
 void arcadeAllegro::drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) {
     ALLEGRO_BITMAP* image = al_load_bitmap(asset.c_str());
     if (!image) {
-        std::cerr << "Failed to load image: " << asset << std::endl;
+        this->drawRectangle(color, position);
         return;
     }
 
-    al_draw_bitmap(image, position.first, position.second, 0);
+    std::pair<int, int> windowPosition = this->_getWindowPosition(position);
+
+    int spriteWidth = al_get_bitmap_width(image);
+    int spriteHeight = al_get_bitmap_height(image);
+
+    ALLEGRO_TRANSFORM transform;
+    al_identity_transform(&transform);
+
+    std::pair<int, int> scaledSize = this->_resizeTexture(position);
+    float scaleX = static_cast<float>(scaledSize.first) / spriteWidth;
+    float scaleY = static_cast<float>(scaledSize.second) / spriteHeight;
+
+    al_scale_transform(&transform, scaleX, scaleY);
+    al_translate_transform(&transform, windowPosition.first, windowPosition.second);
+    al_use_transform(&transform);
+    al_draw_bitmap(image, 0, 0, 0);
+    al_identity_transform(&transform);
+    al_use_transform(&transform);
+
     al_destroy_bitmap(image);
+    (void)text;
 }
 
 void arcadeAllegro::drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position,
@@ -53,7 +96,7 @@ void arcadeAllegro::drawSpriteMenu(std::pair<float, float> size, std::string ass
         return;
     }
 
-    al_draw_scaled_bitmap(image, 0, 0, al_get_bitmap_width(image), al_get_bitmap_height(image),
+    al_draw_scaled_bitmap(image, position.first, position.second, al_get_bitmap_width(image), al_get_bitmap_height(image),
         position.first, position.second, size.first, size.second, 0);
     al_destroy_bitmap(image);
 }
