@@ -18,6 +18,7 @@
 #include <QMainWindow>
 #include <QWidget>
 #include <QPainter>
+#include <QEvent>
 
 /**
  * @class arcadeQT
@@ -27,53 +28,54 @@
  * including methods for initialization, stopping, and retrieving the module name.
  */
 class arcadeQT : public IWindow {
-	std::string _libName = "Arcade QT5"; ///< The name of the library.
-	std::pair<size_t, size_t> _mapSize; ///< The size of the map.
+    std::string _libName = "Arcade QT5"; ///< The name of the library.
+    std::pair<size_t, size_t> _mapSize; ///< The size of the map.
 private:
-	QApplication *_app;
-	QMainWindow *_window;
-	QWidget *_centralWidget;
-	bool _isOpen;
-
-	std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
-	// void _resizeData(sf::Sprite &sprite, std::pair<int, int> position);
-	// void _resizeData(sf::RectangleShape &sprite, std::pair<int, int> position);
+    bool _isOpen;
+    std::pair<int, int> _getWindowPosition(std::pair<int, int> position);
 
 public:
+    QApplication *_app;
+    QMainWindow *_window;
+    QWidget *_centralWidget;
+    struct EventData {
+        int type = -1;
+        int key = -1;
+        int mouseButton = -1;
+        int mouseX = -1;
+        int mouseY = -1;
+        bool processed = false;
+    };
 
-	void display() override;
+    EventData _lastEvent;
 
-	void closeWindow() override;
+    class EventHandler : public QObject {
+		public:
+			explicit EventHandler(arcadeQT* parent);
+			bool eventFilter(QObject *watched, QEvent *event) override;
+		private:
+			arcadeQT* _arcade;
+		};
+    EventHandler* _eventHandler;
 
-	bool isOpen() override;
+    void display() override;
+    void closeWindow() override;
+    bool isOpen() override;
+    void clear() override;
+    void drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) override;
+    void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
+    void drawRectangle(int color, std::pair<size_t, size_t> position) override;
+    void drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) override;
+    void drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) override;
+    void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
+    void drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) override;
+    void setMapSize(std::pair<size_t, size_t> size) override;
+    void resizeWindow(size_t x, size_t y) override;
+    std::pair<int, int> getWindowSize() override;
+    bool isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) override;
 
-	void clear() override;
-
-	void drawSpriteMenu(std::pair<float, float> size, std::string asset, std::pair<int, int> position) override;
-
-	void drawSprite(std::string asset, int color, std::string text, std::pair<size_t, size_t> position) override;
-
-	void drawRectangle(int color, std::pair<size_t, size_t> position) override;
-
-	void drawRectangleMenu(std::pair<size_t, size_t> size, std::pair<size_t, size_t> position, color_t color) override;
-
-	void drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) override;
-
-	void drawText(std::string text, int color, std::pair<size_t, size_t> position) override;
-
-	void drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) override;
-
-	void setMapSize(std::pair<size_t, size_t> size) override;
-
-	void resizeWindow(size_t x, size_t y) override;
-
-	std::pair<int, int> getWindowSize() override;
-
-	bool isMouseOver(std::pair<size_t, size_t> position, std::pair<size_t, size_t> size) override;
-
-	arcadeQT();
-
-	~arcadeQT();
+    arcadeQT();
+    ~arcadeQT();
 };
 
 #endif // arcadeQT_HPP
