@@ -32,6 +32,7 @@ void arcadeAllegro::clear() {
 
 std::pair<int, int> arcadeAllegro::_resizeTexture(std::pair<int, int> position)
 {
+    (void)position;
     std::pair<int, int> windowSize = this->allegro->getWindowSize();
     windowSize.second -= 100;
 

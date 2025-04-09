@@ -2,10 +2,13 @@
 #include "arcadeAllegro.hpp"
 #include <iostream>
 
-void arcadeAllegroEvent::init() {
-    // Initialize Allegro event handling
+void arcadeAllegroEvent::init()
+{
 }
-IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize) {
+
+IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize)
+{
+    (void)gridSize;
     ALLEGRO_EVENT event;
     auto allegroWindow = std::dynamic_pointer_cast<arcadeAllegro>(_window);
 
