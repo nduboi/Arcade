@@ -57,8 +57,11 @@ void NibblerHeadEntity::setDirection(std::pair<int, int> direction, std::shared_
         this->_direction.second + direction.second == 0)
         return;
 
-    this->_inputDirection = direction;
+    if (isDirectionValid(direction, gameModule)) {
+        this->_inputDirection = direction;
+    }
 }
+
 
 void NibblerHeadEntity::moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2)
 {
@@ -440,4 +443,18 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
 std::vector<std::pair<int, int>> NibblerHeadEntity::getValidDirections(const std::pair<size_t, size_t>& position) const
 {
     return _mapManager.getValidDirections(position);
+}
+
+bool NibblerHeadEntity::isDirectionValid(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule) const
+{
+    std::pair<size_t, size_t> nextPosition = {
+        this->_position.first + direction.first,
+        this->_position.second + direction.second
+    };
+
+    grid_t grid = gameModule->getEntities();
+    auto entity = grid[nextPosition.second][nextPosition.first][1];
+    auto wall = std::dynamic_pointer_cast<WallEntity>(entity);
+
+    return wall == nullptr;
 }

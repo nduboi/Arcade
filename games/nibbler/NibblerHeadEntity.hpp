@@ -65,6 +65,7 @@ class NibblerHeadEntity : public AEntity {
         void addPendingBodyPart(std::shared_ptr<IGameModule> gameModule);
         void ensurePreviousPositionsInitialized(std::shared_ptr<IGameModule> gameModule);
         std::vector<std::pair<int, int>> getValidDirections(const std::pair<size_t, size_t>& position) const;
+        bool isDirectionValid(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule) const;
     };
 
 #endif /* !NIBBLERHEADENTITY_HPP_ */
