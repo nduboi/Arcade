@@ -62,7 +62,6 @@ void NibblerGame::setLayerWalls()
         for (int x = 0; x < MAP_WIDTH && x < mapLayout[y].size(); x++) {
             if (mapLayout[y][x] >= 1 && mapLayout[y][x] <= 14) {
                 std::string wallSprite = _mapManager.getSpriteFromId(mapLayout[y][x]);
-                std::cout << "mur :" << mapLayout[y][x] << " sprite : " << wallSprite << std::endl;
                 this->_entities[y][x][1] = std::make_shared<WallEntity>(wallSprite, std::make_pair(x, y));
             }
         }
@@ -202,33 +201,4 @@ std::vector<std::shared_ptr<IEntity>> NibblerGame::getHUD() const
         hud.push_back(std::make_shared<BigTextEntityHUD>("You Win", std::make_pair(350, 850)));
 
     return hud;
-}
-
-void NibblerGame::debugPrintMap() const
-{
-    auto mapLayout = _mapManager.getMapLayout();
-    std::cout << "Map layout:" << std::endl;
-    for (const auto& row : mapLayout) {
-        for (int cell : row) {
-            std::cout << " " << cell;
-        }
-        std::cout << std::endl;
-    }
-
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        for (int x = 0; x < MAP_WIDTH; x++) {
-            auto entity = _entities[y][x][1];
-            if (std::dynamic_pointer_cast<NibblerHeadEntity>(entity))
-                std::cout << "H";
-            else if (std::dynamic_pointer_cast<NibblerTailEntity>(entity))
-                std::cout << "T";
-            else if (std::dynamic_pointer_cast<WallEntity>(entity))
-                std::cout << "#";
-            else if (std::dynamic_pointer_cast<FoodEntity>(entity))
-                std::cout << "F";
-            else
-                std::cout << ".";
-        }
-        std::cout << "\n";
-    }
 }

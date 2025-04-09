@@ -83,7 +83,7 @@ void MapManager::createMap()
         { 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6},
     };
 
-    _playerStartPosition = {5, 9};
+    _playerStartPosition = {9, 19};
 }
 
 std::vector<std::vector<int>> MapManager::getMapLayout() const
