@@ -91,8 +91,6 @@ std::pair<int, int> arcadeQT::_getWindowPosition(std::pair<int, int> position) {
     QSize windowSize = _window->size();
     const int hudOffset = 100;
 
-	std::cout << "Window size: " << windowSize.width() << ", " << windowSize.height() << std::endl;
-	std::cout << "Position: " << position.first << ", " << position.second << std::endl;
     windowPosition.first = (position.first * windowSize.width()) / this->_mapSize.first;
     windowPosition.second = hudOffset + (position.second * (windowSize.height() - hudOffset)) / this->_mapSize.second;
     return windowPosition;

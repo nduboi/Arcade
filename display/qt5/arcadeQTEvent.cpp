@@ -79,7 +79,7 @@ IEvent::event_t arcadeQTEvent::pollEvents(std::pair<int, int> gridSize) {
     } else if (eventData.type == QEvent::MouseButtonPress) {
         this->_mousePos = {eventData.mouseX, eventData.mouseY};
 
-        if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && 
+        if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 &&
             this->_mousePos.second >= 120 && this->_mousePos.second <= 160)
             this->_iswritting = true;
 
