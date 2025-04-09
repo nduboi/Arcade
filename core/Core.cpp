@@ -54,7 +54,7 @@ void Core::_saveScore() {
 		return;
 
 	std::size_t highScore = this->_game->getHighScore();
-	std::string username = "default";
+	std::string username = this->_menu.getUsername();
 	std::string game = this->_gameLibsPaths.at(this->_indexGame);
 
 	this->_saver.saveScore(highScore, username, game);
@@ -64,7 +64,7 @@ void Core::_setHighScore() {
 	if (this->_loadedModuleType != GAME)
 		return;
 
-	std::string username = "default";
+	std::string username = this->_menu.getUsername();
 	std::string game = this->_gameLibsPaths.at(this->_indexGame);
 
 	this->_game->setHighScore(this->_saver.getHighScore(username, game));
@@ -97,6 +97,10 @@ void Core::_loadDisplayLib(const std::string &path) {
 		throw CoreException("Failed to load createEvent symbol.");
 	}
 	this->_event->init();
+	if (this->_game) {
+		this->_window->setMapSize(this->_game->getGridSize());
+		this->_event->setMapSize(this->_game->getGridSize());
+	}
 #ifdef _DEBUG
 	std::cout << "Display library loaded successfully: " << path << std::endl;
 #endif
@@ -112,9 +116,12 @@ void Core::_loadGameLib(const std::string &path) {
 	if (!this->_game) {
 		throw CoreException("Failed to load createDisplay symbol.");
 	}
+	this->_game->setHighScore(this->_saver.getHighScore(this->_menu.getUsername(), path));
 #ifdef _DEBUG
 	std::cout << "Display library loaded successfully: " << path << std::endl;
 #endif
+	this->_window->setMapSize(this->_game->getGridSize());
+	this->_event->setMapSize(this->_game->getGridSize());
 }
 
 void Core::_switchGraphic() {
@@ -203,6 +210,13 @@ void Core::_analyse() {
 		gridSize = this->_game->getGridSize();
 	IEvent::event_t event = this->_event->pollEvents(gridSize);
 	this->_lastEvent = event;
+
+	if (this->_menu.getIsWritting()) {
+		if (event == IEvent::event_t::MOUSELEFTCLICK)
+			this->_processMenuClick();
+		return;
+	}
+
 	if (event == IEvent::event_t::CLOSE)
 		this->_window->closeWindow();
 	if (event == IEvent::event_t::NEXTGRAPHIC)
@@ -213,13 +227,15 @@ void Core::_analyse() {
 		this->_switchGame();
 		this->_window->resizeWindow(800, 900);
 	}
-	if (event == IEvent::event_t::MENU) {
+	if (event == IEvent::event_t::MENU && this->_loadedModuleType != MENU) {
+		this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
 		this->_event->setMapSize({0, 0});
 	}
-	if (event == IEvent::event_t::ESCAPE) {
+	if (event == IEvent::event_t::ESCAPE  && this->_loadedModuleType != MENU) {
+		this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 		this->_loadedModuleType = MENU;
 		this->_window->resizeWindow(1620, 900);
 		this->_window->setMapSize({0, 0});
@@ -227,7 +243,7 @@ void Core::_analyse() {
 	}
 	if (event == IEvent::event_t::NEXTDIFFICULTY) {
 		if (this->_loadedModuleType == GAME) {
-			this->_saver.saveScore(this->_game->getHighScore(), "default", this->_gameLibsPaths.at(this->_indexGame));
+			this->_saver.saveScore(this->_game->getHighScore(), this->_menu.getUsername(), this->_gameLibsPaths.at(this->_indexGame));
 			this->_game->changeDifficulty();
 		}
 	}
@@ -245,17 +261,15 @@ void Core::_processMenuClick()
 
     std::pair<int, int> mousePos = this->_event->getMousePos();
 
-    std::string selectedValue;
+	std::string selectedValue;
     action_e action = this->_menu.handleClick(mousePos.first, mousePos.second, selectedValue);
-#ifdef _DEBUG
-	std::cout << "Selected value: " << selectedValue << std::endl;
-#endif
-	if (action == action_e::GRAPHICLIB) {
+
+    if (action == action_e::GRAPHICLIB) {
         for (size_t i = 0; i < this->_displayLibsPaths.size(); i++) {
             if (this->_displayLibsPaths[i].find(selectedValue) != std::string::npos) {
                 this->_indexDisplay = i;
                 this->_loadDisplayLib(this->_displayLibsPaths[i]);
-                break;
+            	break;
             }
         }
     } else if (action == action_e::GAMELIB) {
@@ -269,7 +283,10 @@ void Core::_processMenuClick()
                 break;
             }
         }
-    }
+    } else if (action == action_e::USERNAME) {
+		this->_event->renderWrittiing();
+		this->_menu.setUsername(this->_event->getUsername());
+	}
 }
 
 void Core::_compute() {
@@ -277,6 +294,8 @@ void Core::_compute() {
 		std::shared_ptr<IGameModule> gameModule = std::static_pointer_cast<IGameModule>(this->_game);
 		gameModule->update(gameModule);
 
+		if (gameModule->getGameState() != gameState_t::PLAYING)
+			return;
 		grid_t grid = gameModule->getEntities();
 		std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
 
@@ -324,7 +343,11 @@ void Core::_displayGame() {
 void Core::_displayMenu() {
 	if (this->_loadedModuleType == MENU) {
 		this->_menu.setSelectedGraphicLib(this->_displayLibsPaths[this->_indexDisplay]);
+		this->_event->setMapSize({0, 0});
+		this->_window->setMapSize({0, 0});
 		this->_menu.displayMenu(this->_windowPtr, this->_menu.getBoxPoses(), this->_displayLibsPaths, this->_gameLibsPaths);
+		if (this->_menu.getIsWritting())
+			this->_event->renderWrittiing();
 	}
 }
 
@@ -355,7 +378,7 @@ void Core::_display() {
 }
 
 void Core::loop() {
-	while (this->_window->isOpen()) {
+	while (this->_window->isOpen() && this->_lastEvent != IEvent::CLOSE) {
 		this->_analyse();
 		if (!this->_window->isOpen())
 			break;

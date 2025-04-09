@@ -186,6 +186,8 @@ namespace Display {
             SDL_Log("Impossible de charger la police : %s", TTF_GetError());
             return;
         }
+        if (text.empty())
+            return;
         SDL_Color sdlColor = {
             static_cast<Uint8>(color.r),
             static_cast<Uint8>(color.g),

@@ -25,6 +25,19 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
     if (SDL_PollEvent(&event)) {
         if (event.type == SDL_QUIT)
             return IEvent::CLOSE;
+
+        if (this->_iswritting) {
+            if (event.type == SDL_TEXTINPUT) {
+                if (_input.length() <= 15)
+                    _input += event.text.text;
+                return IEvent::NOTHING;
+            }
+            else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE) {
+                if (!_input.empty())
+                    _input.pop_back();
+                return IEvent::NOTHING;
+            }
+        }
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
                 case SDLK_UP:
@@ -51,10 +64,14 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
                     return IEvent::MENU;
                 case SDLK_h:
                     return IEvent::NEXTDIFFICULTY;
+                case SDLK_q:
+                    return IEvent::CLOSE;
             }
         }
         if (event.type == SDL_MOUSEBUTTONDOWN) {
             SDL_GetMouseState(&this->_mousePos.first, &this->_mousePos.second);
+            if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 160)
+                this->_iswritting = true;
             switch (event.button.button) {
                 case SDL_BUTTON_LEFT:
                     return IEvent::MOUSELEFTCLICK;
@@ -108,14 +125,23 @@ void arcadeSDLEvent::setMapSize(std::pair<int, int> size) {
 void arcadeSDLEvent::cleanup() {
 }
 
-std::string arcadeSDLEvent::getUsername() {
-    return "";
+std::string arcadeSDLEvent::getUsername()
+{
+    return _input;
 }
 
-void arcadeSDLEvent::renderWrittiing() {
+void arcadeSDLEvent::renderWrittiing()
+{
+    this->_window->drawTextMenu(
+        _input,
+        {685, 407},
+        {0, 0, 0},
+        24
+    );
 }
 
 arcadeSDLEvent::arcadeSDLEvent(std::shared_ptr<IWindow> window) : _window(window) {
     this->_mousePos = std::make_pair(0, 0);
     this->_mapSize = std::make_pair(0, 0);
+    this->_iswritting = false;
 }
