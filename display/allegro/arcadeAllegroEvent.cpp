@@ -43,6 +43,7 @@ IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize)
                 case ALLEGRO_KEY_R: return IEvent::REFRESH;
                 case ALLEGRO_KEY_G: return IEvent::NEXTGAME;
                 case ALLEGRO_KEY_H: return IEvent::NEXTDIFFICULTY;
+                case ALLEGRO_KEY_Q: return IEvent::CLOSE;
             }
         }
         if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN) {
