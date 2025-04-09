@@ -302,6 +302,9 @@ void Core::_compute() {
 		for (int y = 0; y < gridSize.second; y++) {
 			for (int x = 0; x < gridSize.first; x++) {
 				for (int z = 0; z < grid[y][x].size(); z++) {
+					if (grid[y][x][z] == nullptr)
+						continue;
+
 					IEntity *entity = grid[y][x][z].get();
 					if (entity == nullptr)
 						continue;
@@ -331,7 +334,12 @@ void Core::_displayGame() {
 		for (int y = 0; y < gridSize.second; y++) {
 			for (int x = 0; x < gridSize.first; x++) {
 				for (int z = 0; z < grid[y][x].size(); z++) {
+					if (grid[y][x][z] == nullptr)
+						continue;
+
 					IEntity *entity = grid[y][x][z].get();
+					if (entity == nullptr)
+						continue;
 
 					this->_window->drawSprite(entity->getSpriteName(), entity->getColor(), entity->getText(), {x, y});
 				}

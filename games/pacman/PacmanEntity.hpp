@@ -35,6 +35,8 @@ class PacmanEntity : public AEntity {
 
         void checkInteractions(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos);
 
+        void checkGhostCollision(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos);
+
         bool isWall(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos);
 
     public:
