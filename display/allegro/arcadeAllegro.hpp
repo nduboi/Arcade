@@ -16,7 +16,7 @@ private:
     std::pair<size_t, size_t> _mapSize;
 
 public:
-    std::unique_ptr<Display::AllegroEncapsulation> allegro;
+    std::unique_ptr<DisplayLib::AllegroEncapsulation> allegro;
     void display() override;
     void closeWindow() override;
     bool isOpen() override;

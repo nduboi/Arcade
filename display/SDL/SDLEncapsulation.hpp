@@ -13,7 +13,7 @@
 #include <string>
 #include <utility>
 
-namespace Display {
+namespace DisplayLib {
 	struct Color {
         uint8_t r, g, b, a = 255;
     };

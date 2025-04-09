@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 
-namespace Display {
+namespace DisplayLib {
     AllegroEncapsulation::AllegroEncapsulation() {
         if (!al_init())
             throw std::runtime_error("Failed to initialize Allegro.");
@@ -55,7 +55,7 @@ namespace Display {
     }
 
     void AllegroEncapsulation::setColor(const Color& color) {
-        al_draw_filled_rectangle(0, 0, 0, 0, al_map_rgba(color.r, color.g, color.b, color.a)); // Placeholder
+        al_draw_filled_rectangle(0, 0, 0, 0, al_map_rgba(color.r, color.g, color.b, color.a));
     }
 
     void AllegroEncapsulation::drawRectangle(int x, int y, int width, int height) {
@@ -109,7 +109,7 @@ namespace Display {
         }
 
         al_draw_text(newFont, allegroColor, x, y, ALLEGRO_ALIGN_LEFT, text.c_str());
-        al_destroy_font(newFont); // Important to avoid memory leaks
+        al_destroy_font(newFont);
     }
 
     void AllegroEncapsulation::resizeWindow(int width, int height) {

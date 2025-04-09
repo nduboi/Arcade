@@ -10,7 +10,7 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 
-namespace Display {
+namespace DisplayLib {
     struct Color {
         uint8_t r, g, b, a = 255;
     };

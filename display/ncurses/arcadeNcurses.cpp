@@ -4,7 +4,7 @@
 
 #include "arcadeNcurses.hpp"
 
-namespace Display {
+namespace DisplayLib {
 	void arcadeNcurses::display() {
 		this->_ncurses.display();
 	}

@@ -4,7 +4,7 @@
 #include <iostream>
 
 arcadeAllegro::arcadeAllegro() {
-    this->allegro = std::make_unique<Display::AllegroEncapsulation>();
+    this->allegro = std::make_unique<DisplayLib::AllegroEncapsulation>();
     this->_mapSize = {0, 0};
 }
 
@@ -102,7 +102,7 @@ void arcadeAllegro::drawSpriteMenu(std::pair<float, float> size, std::string ass
 }
 
 void arcadeAllegro::drawRectangle(int color, std::pair<size_t, size_t> position) {
-    Display::Color allegroColor = {255, 255, 255, 255}; // Default to white
+    DisplayLib::Color allegroColor = {255, 255, 255, 255}; // Default to white
     switch (color) {
         case 0: allegroColor = {0, 0, 0, 255}; break;    // Black
         case 1: allegroColor = {255, 255, 255, 255}; break; // White
@@ -111,11 +111,11 @@ void arcadeAllegro::drawRectangle(int color, std::pair<size_t, size_t> position)
         case 4: allegroColor = {0, 0, 255, 255}; break;  // Blue
     }
     this->allegro->setColor(allegroColor);
-    this->allegro->drawRectangle(position.first, position.second, 50, 50); // Example size
+    this->allegro->drawRectangle(position.first, position.second, 50, 50);
 }
 
 void arcadeAllegro::drawText(std::string text, int color, std::pair<size_t, size_t> position) {
-    Display::Color allegroColor = {255, 255, 255, 255}; // Default to white
+    DisplayLib::Color allegroColor = {255, 255, 255, 255}; // Default to white
     switch (color) {
         case 0: allegroColor = {0, 0, 0, 255}; break;    // Black
         case 1: allegroColor = {255, 255, 255, 255}; break; // White
@@ -127,7 +127,7 @@ void arcadeAllegro::drawText(std::string text, int color, std::pair<size_t, size
 }
 
 void arcadeAllegro::drawTextMenu(std::string text, std::pair<size_t, size_t> position, color_t color, int charSize) {
-    Display::Color allegroColor = {(uint8_t)(color.r), (uint8_t)(color.g), (uint8_t)(color.b), 255};
+    DisplayLib::Color allegroColor = {(uint8_t)(color.r), (uint8_t)(color.g), (uint8_t)(color.b), 255};
     this->allegro->drawText(text, position.first, position.second, allegroColor, charSize);
 }
 

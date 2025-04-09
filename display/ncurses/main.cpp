@@ -10,10 +10,10 @@
 
 extern "C" {
 	IWindow *createInstance(void) {
-		return new Display::arcadeNcurses();
+		return new DisplayLib::arcadeNcurses();
 	}
 	IEvent *createEvent(std::shared_ptr<IWindow> Window) {
-		return new Display::arcadeNcursesEvent(Window);
+		return new DisplayLib::arcadeNcursesEvent(Window);
 	}
 	Loader::ModuleType_t getType(void) {
 		return Loader::ModuleType_t::DISPLAY_MODULE;

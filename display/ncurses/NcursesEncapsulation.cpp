@@ -8,7 +8,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-namespace Display {
+namespace DisplayLib {
 	bool NcursesEncapsulation::isOpen() const {
 		return this->_isOpen;
 	}

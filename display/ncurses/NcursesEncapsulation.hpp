@@ -8,7 +8,7 @@
 #include "ncurses.h"
 #include "Exception.hpp"
 
-namespace Display {
+namespace DisplayLib {
 
 	class NcursesEncapsulation {
 	private:
