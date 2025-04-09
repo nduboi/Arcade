@@ -47,6 +47,16 @@ float GhostEntity::getSpeedTime() const
     return this->_speedTime;
 }
 
+void GhostEntity::setMultiplier(float multiplier)
+{
+    this->_multiplier = multiplier;
+}
+
+float GhostEntity::getMultiplier() const
+{
+    return this->_multiplier;
+}
+
 void GhostEntity::setWaitingTime(std::size_t waitingTime)
 {
     this->_waitingTime = waitingTime;

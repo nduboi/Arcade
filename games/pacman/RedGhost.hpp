@@ -27,7 +27,7 @@ class RedGhost : public GhostEntity {
                                                       bool moveTowards);
 
     public:
-        RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman);
+        RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman, float multi);
         ~RedGhost() = default;
 
         void moveEntity(std::shared_ptr<IGameModule> gameModule) override;

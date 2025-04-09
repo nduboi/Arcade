@@ -22,9 +22,14 @@ class PacmanGame : public GameTemplate {
 
     protected:
     private:
+        float _multiplier = 1.0f;
+        int _round = 1;
+
         void setLayerBackground();
         void setLayerEntities();
-        void setLayerDot();
+        void setLayerInteract();
+
+        void resetGame(std::shared_ptr<IGameModule> gameModule);
 };
 
 #endif /* !PACMANGAME_HPP_ */

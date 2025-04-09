@@ -22,6 +22,7 @@ class GhostEntity : public AEntity {
         };
 
     protected:
+        float _multiplier = 1.0f;
         std::string _spriteName;
         std::string _spriteChasedName;
         std::string _spriteEyeName;
@@ -51,6 +52,9 @@ class GhostEntity : public AEntity {
 
         void setSpeedTime(float speedTime);
         float getSpeedTime() const;
+
+        void setMultiplier(float multiplier);
+        float getMultiplier() const;
 
         void setWaitingTime(std::size_t waitingTime);
 

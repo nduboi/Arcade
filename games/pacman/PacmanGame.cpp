@@ -15,6 +15,7 @@
 #include "ScoreEntityHUD.hpp"
 #include "HighScoreEntityHUD.hpp"
 #include "TimeEntityHUD.hpp"
+#include "TextEntityHUD.hpp"
 #include "BigTextEntityHUD.hpp"
 
 #include "RedGhost.hpp"
@@ -120,6 +121,8 @@ PacmanGame::PacmanGame()
     this->_isStarted = false;
     this->_gameState = PLAYING;
     this->_time = std::chrono::steady_clock::now();
+    this->_multiplier = 1.0f;
+    this->_round = 1;
 
     this->_entities.resize(MAP_HEIGHT);
     for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -143,6 +146,7 @@ void PacmanGame::setLayerBackground()
 
 void PacmanGame::setLayerEntities()
 {
+    // Background
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             this->_entities[y][x][1] = std::make_shared<VoidEntity>("assets/pacman/walls/void.png", 0, "", std::make_pair(x, y));
@@ -150,6 +154,7 @@ void PacmanGame::setLayerEntities()
         }
     }
 
+    // Walls
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
             if (MAP[y][x] == "" || MAP[y][x] == " ")
@@ -160,11 +165,14 @@ void PacmanGame::setLayerEntities()
         }
     }
 
+    // Player
     this->_entities[14][12][1] = std::make_shared<PacmanEntity>(4, "", std::make_pair(12, 14));
-    this->setLayerDot();
+
+    // Pacgums and Ghosts
+    this->setLayerInteract();
 }
 
-void PacmanGame::setLayerDot()
+void PacmanGame::setLayerInteract()
 {
     for (int y = 0; y < MAP_HEIGHT; y++) {
         for (int x = 0; x < MAP_WIDTH; x++) {
@@ -176,7 +184,7 @@ void PacmanGame::setLayerDot()
             if (DOTS[y][x] == "b")
                 this->_entities[y][x][1] = std::make_shared<BigDotEntity>(std::make_pair(x, y));
             if (DOTS[y][x] == "R") {
-                this->_entities[y][x][2] = std::make_shared<RedGhost>(std::make_pair(x, y), this->_entities[14][12][1]);
+                this->_entities[y][x][2] = std::make_shared<RedGhost>(std::make_pair(x, y), this->_entities[14][12][1], _multiplier);
             }
         }
     }
@@ -213,6 +221,10 @@ std::vector<std::shared_ptr<IEntity>> PacmanGame::getHUD() const
     std::size_t secondsElapsed = this->getTime();
     hud.push_back(std::make_shared<TimeEntityHUD>(secondsElapsed, std::make_pair(350, 35)));
 
+    std::string roundString = std::to_string(this->_round);
+    while (roundString.length() < 2)
+        roundString = "0" + roundString;
+    hud.push_back(std::make_shared<TextEntityHUD>("Round " + roundString, std::make_pair(675, 35)));
 
     if (this->getIsStarted() == false)
         hud.push_back(std::make_shared<BigTextEntityHUD>("Press any direction to start", std::make_pair(250, 850)));
@@ -221,4 +233,15 @@ std::vector<std::shared_ptr<IEntity>> PacmanGame::getHUD() const
     if (this->getGameState() == WIN)
         hud.push_back(std::make_shared<BigTextEntityHUD>("You Win", std::make_pair(350, 850)));
     return hud;
+}
+
+void PacmanGame::resetGame(std::shared_ptr<IGameModule> gameModule)
+{
+    this->_gameState = PLAYING;
+    this->_multiplier -= 0.1f;
+    if (this->_multiplier < 0.1f)
+        this->_multiplier = 0.1f;
+    this->_round++;
+
+    this->setLayerEntities();
 }

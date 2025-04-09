@@ -12,7 +12,7 @@
 #include <queue>
 #include <map>
 
-RedGhost::RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman)
+RedGhost::RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman, float multi)
 {
     this->_spriteName = "assets/pacman/ghosts/blinky.png";
     this->_spriteChasedName = "assets/pacman/ghosts/blue_ghost.png";
@@ -37,6 +37,7 @@ RedGhost::RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEnt
     this->_lastMove = std::chrono::steady_clock::now();
 
     this->_pacman = pacman;
+    this->_multiplier = multi;
 }
 
 void RedGhost::checkPacmanCollision(std::shared_ptr<IGameModule> gameModule)
@@ -63,7 +64,7 @@ void RedGhost::moveEntity(std::shared_ptr<IGameModule> gameModule)
 
     std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsedTime = currentTime - this->_lastMove;
-    if (elapsedTime.count() < this->_speedTime)
+    if (elapsedTime.count() < (this->_speedTime) * this->_multiplier)
         return;
     this->_lastMove = currentTime;
 
