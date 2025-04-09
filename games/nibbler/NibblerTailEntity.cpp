@@ -1,15 +1,15 @@
 /*
 ** EPITECH PROJECT, 2025
-** arcade
+** B-OOP-400-NAN-4-1-arcade-eliott.tesnier
 ** File description:
-** SnakeBodyEntity
+** NibblerTailEntity
 */
 
-#include "SnakeBodyEntity.hpp"
+#include "NibblerTailEntity.hpp"
 
-SnakeBodyEntity::SnakeBodyEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position, int index)
+NibblerTailEntity::NibblerTailEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position, int index)
 {
-    this->_spriteName = "assets/snake/body_horizontal.png";
+    this->_spriteName = "assets/nibbler/Nibbler_tail_horizontal.png";
     this->_color = color;
     this->_text = text;
     this->_position = position;
@@ -20,25 +20,25 @@ SnakeBodyEntity::SnakeBodyEntity(std::size_t color, std::string text, std::pair<
     this->_direction = {1, 0};
 
     this->_assetsName = {
-        {"horizontal", "assets/snake/body_horizontal.png"},
-        {"vertical", "assets/snake/body_vertical.png"},
-        {"corner_tl", "assets/snake/body_topleft.png"},
-        {"corner_tr", "assets/snake/body_topright.png"},
-        {"corner_bl", "assets/snake/body_bottomleft.png"},
-        {"corner_br", "assets/snake/body_bottomright.png"},
-        {"tail_up", "assets/snake/tail_up.png"},
-        {"tail_down", "assets/snake/tail_down.png"},
-        {"tail_left", "assets/snake/tail_left.png"},
-        {"tail_right", "assets/snake/tail_right.png"}
+        {"horizontal", "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"vertical",   "assets/nibbler/Nibbler_tail_vertical.png"},
+        {"corner_tl",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"corner_tr",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"corner_bl",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"corner_br",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"tail_up",    "assets/nibbler/Nibbler_tail_vertical.png"},
+        {"tail_down",  "assets/nibbler/Nibbler_tail_vertical.png"},
+        {"tail_left",  "assets/nibbler/Nibbler_tail_horizontal.png"},
+        {"tail_right", "assets/nibbler/Nibbler_tail_horizontal.png"}
     };
 }
 
-int SnakeBodyEntity::getIndex() const
+int NibblerTailEntity::getIndex() const
 {
     return this->_index;
 }
 
-void SnakeBodyEntity::updateDirection(std::pair<size_t, size_t> current, std::pair<size_t, size_t> next, std::pair<size_t, size_t> prev)
+void NibblerTailEntity::updateDirection(std::pair<size_t, size_t> current, std::pair<size_t, size_t> next, std::pair<size_t, size_t> prev)
 {
     if (prev.first == 100 && prev.second == 100) {
         if (next.first > current.first)
@@ -81,7 +81,7 @@ void SnakeBodyEntity::updateDirection(std::pair<size_t, size_t> current, std::pa
     }
 }
 
-std::string SnakeBodyEntity::getSpriteName() const
+std::string NibblerTailEntity::getSpriteName() const
 {
     return this->_spriteName;
 }

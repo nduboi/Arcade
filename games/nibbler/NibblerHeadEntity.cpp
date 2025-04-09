@@ -1,31 +1,34 @@
 /*
 ** EPITECH PROJECT, 2025
-** arcade
+** B-OOP-400-NAN-4-1-arcade-eliott.tesnier
 ** File description:
-** SnakeHeadEntity
+** NibblerHeadEntity
 */
 
-#include "SnakeHeadEntity.hpp"
+#include "NibblerHeadEntity.hpp"
 #include "VoidEntity.hpp"
 #include "IGameModule.hpp"
-#include "SnakeGame.hpp"
-#include "SnakeBodyEntity.hpp"
-#include "AppleEntity.hpp"
+#include "NibblerGame.hpp"
+#include "NibblerTailEntity.hpp"
+#include "FoodEntity.hpp"
+#include "WallEntity.hpp"
 #include <iostream>
 #include <bits/algorithmfwd.h>
 
-const double SNAKE_DELTATIME = 0.10;
+const double NIBBLER_DELTATIME = 0.08;
+const double NIBBLER_PAUSE_TIME = 0.3;
 
-SnakeHeadEntity::SnakeHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position)
+NibblerHeadEntity::NibblerHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position, MapManager& mapManager)
+    : _mapManager(mapManager)
 {
     this->_inputDirection = {1, 0};
     this->_direction = {1, 0};
-    this->_spriteName = "assets/snake/head_right.png";
+    this->_spriteName = "assets/nibbler/Nibbler_head_right.png";
     this->_assetsName = {
-        {{1, 0}, "assets/snake/head_right.png"},
-        {{-1, 0}, "assets/snake/head_left.png"},
-        {{0, 1}, "assets/snake/head_down.png"},
-        {{0, -1}, "assets/snake/head_up.png"},
+        {{1, 0}, "assets/nibbler/Nibbler_head_right.png"},
+        {{-1, 0}, "assets/nibbler/Nibbler_head_left.png"},
+        {{0, 1}, "assets/nibbler/Nibbler_head_bottom.png"},
+        {{0, -1}, "assets/nibbler/Nibbler_head_top.png"},
     };
     this->_color = color;
     this->_text = text;
@@ -35,21 +38,32 @@ SnakeHeadEntity::SnakeHeadEntity(std::size_t color, std::string text, std::pair<
     this->_hasCollisions = true;
     this->_previousPositions.push_back(position);
     this->_lastTime = std::chrono::steady_clock::now();
+    this->_pauseUntil = std::chrono::steady_clock::now();
     this->_pendingBodyPartAddition = false;
     this->_lastTailPosition = {0, 0};
+    this->_isPaused = false;
 }
 
-void SnakeHeadEntity::setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule)
+void NibblerHeadEntity::setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule)
 {
     if (direction.first == 0 && direction.second == 0)
         return;
     gameModule->setIsStarted(true);
-    if (this->_direction.first == direction.first * -1 && this->_direction.second == direction.second * -1)
+
+    if (this->_direction.first != 0 && direction.first != 0 &&
+        this->_direction.first + direction.first == 0)
         return;
-    this->_inputDirection = direction;
+    if (this->_direction.second != 0 && direction.second != 0 &&
+        this->_direction.second + direction.second == 0)
+        return;
+
+    if (isDirectionValid(direction, gameModule)) {
+        this->_inputDirection = direction;
+    }
 }
 
-void SnakeHeadEntity::moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2)
+
+void NibblerHeadEntity::moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2)
 {
     grid_t grid = gameModule->getEntities();
 
@@ -59,31 +73,48 @@ void SnakeHeadEntity::moveEntities(std::shared_ptr<IGameModule> gameModule, std:
     gameModule->setEntities(grid);
 }
 
-bool SnakeHeadEntity::lastTimePassed()
+bool NibblerHeadEntity::lastTimePassed()
 {
     std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
+
+    if (this->_isPaused) {
+        if (currentTime < this->_pauseUntil)
+            return false;
+        this->_isPaused = false;
+    }
+
     std::chrono::duration<double> elapsedTime = currentTime - this->_lastTime;
-    if (elapsedTime.count() < SNAKE_DELTATIME)
+    if (elapsedTime.count() < NIBBLER_DELTATIME)
         return false;
     this->_lastTime = currentTime;
     return true;
 }
 
-std::string SnakeHeadEntity::getSpriteName() const
+bool NibblerHeadEntity::isAtIntersection(std::shared_ptr<IGameModule> gameModule)
+{
+    auto nibblerGame = std::dynamic_pointer_cast<NibblerGame>(gameModule);
+    if (!nibblerGame)
+        return false;
+
+    auto validDirections = nibblerGame->getValidDirections(this->_position);
+    return validDirections.size() > 2;
+}
+
+std::string NibblerHeadEntity::getSpriteName() const
 {
     if (this->_assetsName.find(this->_direction) == this->_assetsName.end())
         return this->_spriteName;
     return this->_assetsName.at(this->_direction);
 }
 
-std::vector<std::shared_ptr<SnakeBodyEntity>> SnakeHeadEntity::findAndSortBodyParts(const grid_t &grid) const
+std::vector<std::shared_ptr<NibblerTailEntity>> NibblerHeadEntity::findAndSortBodyParts(const grid_t &grid) const
 {
-    std::vector<std::shared_ptr<SnakeBodyEntity>> bodyParts;
+    std::vector<std::shared_ptr<NibblerTailEntity>> bodyParts;
 
     for (size_t y = 0; y < grid.size(); y++) {
         for (size_t x = 0; x < grid[y].size(); x++) {
             auto entity = grid[y][x][1];
-            auto bodyPart = std::dynamic_pointer_cast<SnakeBodyEntity>(entity);
+            auto bodyPart = std::dynamic_pointer_cast<NibblerTailEntity>(entity);
             if (bodyPart) {
                 bodyParts.push_back(bodyPart);
             }
@@ -91,14 +122,14 @@ std::vector<std::shared_ptr<SnakeBodyEntity>> SnakeHeadEntity::findAndSortBodyPa
     }
 
     std::sort(bodyParts.begin(), bodyParts.end(),
-              [](const std::shared_ptr<SnakeBodyEntity>& a, const std::shared_ptr<SnakeBodyEntity>& b) {
+              [](const std::shared_ptr<NibblerTailEntity>& a, const std::shared_ptr<NibblerTailEntity>& b) {
                   return a->getIndex() < b->getIndex();
               });
 
     return bodyParts;
 }
 
-void SnakeHeadEntity::moveBodyParts(std::shared_ptr<IGameModule> gameModule)
+void NibblerHeadEntity::moveBodyParts(std::shared_ptr<IGameModule> gameModule)
 {
     grid_t grid = gameModule->getEntities();
     auto bodyParts = findAndSortBodyParts(grid);
@@ -114,8 +145,8 @@ void SnakeHeadEntity::moveBodyParts(std::shared_ptr<IGameModule> gameModule)
     moveBodyPartsToNewPositions(gameModule, bodyParts);
 }
 
-void SnakeHeadEntity::moveBodyPartsToNewPositions(std::shared_ptr<IGameModule> gameModule,
-    const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts)
+void NibblerHeadEntity::moveBodyPartsToNewPositions(std::shared_ptr<IGameModule> gameModule,
+    const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts)
 {
     for (size_t i = 0; i < bodyParts.size(); i++) {
         auto bodyPart = bodyParts[i];
@@ -126,13 +157,13 @@ void SnakeHeadEntity::moveBodyPartsToNewPositions(std::shared_ptr<IGameModule> g
     }
 }
 
-void SnakeHeadEntity::updateBodyPartDirections(std::shared_ptr<IGameModule> gameModule,
-    const std::vector<std::shared_ptr<SnakeBodyEntity>> &bodyParts)
+void NibblerHeadEntity::updateBodyPartDirections(std::shared_ptr<IGameModule> gameModule,
+    const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts)
 {
     grid_t grid = gameModule->getEntities();
 
     for (size_t i = 0; i < bodyParts.size(); i++) {
-        auto bodyPart = std::dynamic_pointer_cast<SnakeBodyEntity>(bodyParts[i]);
+        auto bodyPart = std::dynamic_pointer_cast<NibblerTailEntity>(bodyParts[i]);
         auto newPos = this->_previousPositions[this->_previousPositions.size() - 2 - i];
 
         std::pair<size_t, size_t> nextPos;
@@ -151,23 +182,32 @@ void SnakeHeadEntity::updateBodyPartDirections(std::shared_ptr<IGameModule> game
     }
 }
 
-bool SnakeHeadEntity::checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const
+bool NibblerHeadEntity::checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const
 {
     grid_t grid = gameModule->getEntities();
     auto entity = grid[nextPosition.second][nextPosition.first][1];
-    auto bodyPart = std::dynamic_pointer_cast<SnakeBodyEntity>(entity);
+    auto bodyPart = std::dynamic_pointer_cast<NibblerTailEntity>(entity);
 
     return bodyPart != nullptr;
 }
 
-gameState_t SnakeHeadEntity::appleCollision(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> nextPosition)
+bool NibblerHeadEntity::checkCollisionWithWall(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const
 {
     grid_t grid = gameModule->getEntities();
     auto entity = grid[nextPosition.second][nextPosition.first][1];
-    auto apple = std::dynamic_pointer_cast<AppleEntity>(entity);
+    auto wall = std::dynamic_pointer_cast<WallEntity>(entity);
 
-    if (apple) {
-        apple->onInteract(gameModule);
+    return wall != nullptr;
+}
+
+gameState_t NibblerHeadEntity::foodCollision(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> nextPosition)
+{
+    grid_t grid = gameModule->getEntities();
+    auto entity = grid[nextPosition.second][nextPosition.first][1];
+    auto food = std::dynamic_pointer_cast<FoodEntity>(entity);
+
+    if (food) {
+        food->onInteract(gameModule);
         this->addBodyPart(gameModule);
         return gameState_t::PLAYING;
     }
@@ -175,12 +215,12 @@ gameState_t SnakeHeadEntity::appleCollision(std::shared_ptr<IGameModule> gameMod
     return gameState_t::PLAYING;
 }
 
-size_t SnakeHeadEntity::getBodySize() const
+size_t NibblerHeadEntity::getBodySize() const
 {
     return this->_previousPositions.size() - 1;
 }
 
-void SnakeHeadEntity::addFirstBodyPart(std::shared_ptr<IGameModule> gameModule)
+void NibblerHeadEntity::addFirstBodyPart(std::shared_ptr<IGameModule> gameModule)
 {
     grid_t grid = gameModule->getEntities();
     int dx = -this->_direction.first;
@@ -195,7 +235,7 @@ void SnakeHeadEntity::addFirstBodyPart(std::shared_ptr<IGameModule> gameModule)
     };
 
     if (this->isValidPosition(newPos, grid)) {
-        auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "", newPos, 0);
+        auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, 0);
         newBodyPart->updateDirection(newPos, this->_position, {100, 100});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
@@ -203,7 +243,7 @@ void SnakeHeadEntity::addFirstBodyPart(std::shared_ptr<IGameModule> gameModule)
     }
 }
 
-void SnakeHeadEntity::addBodyPartToTail(std::shared_ptr<IGameModule> gameModule, size_t index,
+void NibblerHeadEntity::addBodyPartToTail(std::shared_ptr<IGameModule> gameModule, size_t index,
     const std::pair<size_t, size_t> &lastBodyPos, const std::pair<size_t, size_t> &beforeLastPos)
 {
     grid_t grid = gameModule->getEntities();
@@ -216,7 +256,7 @@ void SnakeHeadEntity::addBodyPartToTail(std::shared_ptr<IGameModule> gameModule,
     };
 
     if (this->isValidPosition(newPos, grid)) {
-        auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "", newPos, index);
+        auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, index);
         newBodyPart->updateDirection(newPos, lastBodyPos, {0, 0});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
@@ -228,18 +268,27 @@ void SnakeHeadEntity::addBodyPartToTail(std::shared_ptr<IGameModule> gameModule,
     }
 }
 
-bool SnakeHeadEntity::isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const
+bool NibblerHeadEntity::isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const
 {
-    return pos.first < grid[0].size() && pos.second < grid.size() &&
-           pos.first >= 0 && pos.second >= 0;
+    if (pos.first >= grid[0].size() || pos.second >= grid.size() ||
+        pos.first < 0 || pos.second < 0)
+        return false;
+
+    auto entity = grid[pos.second][pos.first][1];
+    auto bodyPart = std::dynamic_pointer_cast<NibblerTailEntity>(entity);
+
+    if (bodyPart)
+        return false;
+
+    return true;
 }
 
-void SnakeHeadEntity::addBodyPart(std::shared_ptr<IGameModule> gameModule)
+void NibblerHeadEntity::addBodyPart(std::shared_ptr<IGameModule> gameModule)
 {
     this->_pendingBodyPartAddition = true;
 }
 
-void SnakeHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModule)
+void NibblerHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModule)
 {
     if (!this->_pendingBodyPartAddition)
         return;
@@ -257,7 +306,7 @@ void SnakeHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModule
         };
 
         if (this->isValidPosition(newPos, grid)) {
-            auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "", newPos, 0);
+            auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, 0);
             newBodyPart->updateDirection(newPos, this->_position, {100, 100});
             grid[newPos.second][newPos.first][1] = newBodyPart;
             gameModule->setEntities(grid);
@@ -265,7 +314,7 @@ void SnakeHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModule
         }
     } else {
         if (this->isValidPosition(this->_lastTailPosition, grid)) {
-            auto newBodyPart = std::make_shared<SnakeBodyEntity>(3, "", this->_lastTailPosition, index);
+            auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", this->_lastTailPosition, index);
 
             std::pair<size_t, size_t> beforeTailPos;
             if (bodyParts.size() > 1)
@@ -282,7 +331,7 @@ void SnakeHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModule
     this->_pendingBodyPartAddition = false;
 }
 
-void SnakeHeadEntity::initializePreviousPositions(const std::vector<std::pair<size_t, size_t>>& positions)
+void NibblerHeadEntity::initializePreviousPositions(const std::vector<std::pair<size_t, size_t>>& positions)
 {
     this->_previousPositions.clear();
     for (const auto& pos : positions) {
@@ -290,7 +339,7 @@ void SnakeHeadEntity::initializePreviousPositions(const std::vector<std::pair<si
     }
 }
 
-void SnakeHeadEntity::ensurePreviousPositionsInitialized(std::shared_ptr<IGameModule> gameModule)
+void NibblerHeadEntity::ensurePreviousPositionsInitialized(std::shared_ptr<IGameModule> gameModule)
 {
     if (this->_previousPositions.size() > 1)
         return;
@@ -307,7 +356,7 @@ void SnakeHeadEntity::ensurePreviousPositionsInitialized(std::shared_ptr<IGameMo
     }
 }
 
-void SnakeHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::pair<int, int> direction)
+void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::pair<int, int> direction)
 {
     this->setDirection(direction, gameModule);
     this->ensurePreviousPositionsInitialized(gameModule);
@@ -316,12 +365,55 @@ void SnakeHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::p
         return;
     if (!this->lastTimePassed() || !gameModule->getIsStarted())
         return;
+
+    if (isAtIntersection(gameModule) && !this->_isPaused) {
+        if (this->_inputDirection != this->_direction) {
+            this->_isPaused = true;
+            this->_pauseUntil = std::chrono::steady_clock::now() +
+                               std::chrono::milliseconds(static_cast<int>(NIBBLER_PAUSE_TIME * 1000));
+            return;
+        }
+    }
+
     this->_direction = this->_inputDirection;
 
-    grid_t grid = gameModule->getEntities();
-    std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
-    std::pair<size_t, size_t> nextPosition = {this->_position.first + this->_direction.first, this->_position.second + this->_direction.second};
+    std::pair<size_t, size_t> nextPosition = {
+        this->_position.first + this->_direction.first,
+        this->_position.second + this->_direction.second
+    };
 
+    if (this->checkCollisionWithWall(nextPosition, gameModule)) {
+
+
+        auto validDirections = this->getValidDirections(this->_position);
+
+        std::vector<std::pair<int, int>> possibleTurns;
+        for (const auto& dir : validDirections) {
+            if ((dir.first != this->_direction.first || dir.second != this->_direction.second) &&
+                (dir.first != -this->_direction.first || dir.second != -this->_direction.second)) {
+                possibleTurns.push_back(dir);
+            }
+        }
+
+        if (possibleTurns.size() == 1) {
+            this->_direction = possibleTurns[0];
+            this->_inputDirection = this->_direction;
+
+            nextPosition = {
+                this->_position.first + this->_direction.first,
+                this->_position.second + this->_direction.second
+            };
+        }
+        else if (possibleTurns.size() > 1) {
+            return;
+        }
+        else {
+            gameModule->setGameState(gameState_t::LOSE);
+            return;
+        }
+    }
+
+    std::pair<size_t, size_t> gridSize = gameModule->getGridSize();
     if (nextPosition.first >= gridSize.first || nextPosition.second >= gridSize.second
         || nextPosition.first < 0 || nextPosition.second < 0) {
         gameModule->setGameState(gameState_t::LOSE);
@@ -333,7 +425,7 @@ void SnakeHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::p
         return;
     }
 
-    gameState_t state = this->appleCollision(gameModule, nextPosition);
+    gameState_t state = this->foodCollision(gameModule, nextPosition);
     if (state != gameState_t::PLAYING)
         return;
 
@@ -346,4 +438,23 @@ void SnakeHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::p
     this->moveBodyParts(gameModule);
     this->addPendingBodyPart(gameModule);
     this->updateBodyPartDirections(gameModule, findAndSortBodyParts(gameModule->getEntities()));
+}
+
+std::vector<std::pair<int, int>> NibblerHeadEntity::getValidDirections(const std::pair<size_t, size_t>& position) const
+{
+    return _mapManager.getValidDirections(position);
+}
+
+bool NibblerHeadEntity::isDirectionValid(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule) const
+{
+    std::pair<size_t, size_t> nextPosition = {
+        this->_position.first + direction.first,
+        this->_position.second + direction.second
+    };
+
+    grid_t grid = gameModule->getEntities();
+    auto entity = grid[nextPosition.second][nextPosition.first][1];
+    auto wall = std::dynamic_pointer_cast<WallEntity>(entity);
+
+    return wall == nullptr;
 }
