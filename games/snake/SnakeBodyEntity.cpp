@@ -17,9 +17,8 @@ SnakeBodyEntity::SnakeBodyEntity(std::size_t color, std::string text, std::pair<
     this->_isControlable = false;
     this->_hasCollisions = true;
     this->_index = index;
-    this->_direction = {1, 0}; // Default horizontal direction
+    this->_direction = {1, 0};
 
-    // Initialize asset name map for different body positions
     this->_assetsName = {
         {"horizontal", "assets/snake/body_horizontal.png"},
         {"vertical", "assets/snake/body_vertical.png"},
@@ -41,7 +40,6 @@ int SnakeBodyEntity::getIndex() const
 
 void SnakeBodyEntity::updateDirection(std::pair<size_t, size_t> current, std::pair<size_t, size_t> next, std::pair<size_t, size_t> prev)
 {
-    // Tail
     if (prev.first == 100 && prev.second == 100) {
         if (next.first > current.first)
             this->_spriteName = this->_assetsName["tail_left"];
@@ -54,7 +52,6 @@ void SnakeBodyEntity::updateDirection(std::pair<size_t, size_t> current, std::pa
         return;
     }
 
-    // Body
     int dx_next = next.first - current.first;
     int dy_next = next.second - current.second;
     int dx_prev = current.first - prev.first;

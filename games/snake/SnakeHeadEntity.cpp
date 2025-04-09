@@ -12,6 +12,7 @@
 #include "SnakeBodyEntity.hpp"
 #include "AppleEntity.hpp"
 #include <iostream>
+#include <bits/algorithmfwd.h>
 
 const double SNAKE_DELTATIME = 0.10;
 
