@@ -99,7 +99,9 @@ void ArcadeCanvas::paintEvent(QPaintEvent* event) {
                         pixmap = pixmap.scaled(width(), height(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
                         painter.drawPixmap(0, 0, pixmap);
                     } else {
-                        pixmap = pixmap.scaled(cmd.rect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+                        Qt::TransformationMode mode = (cmd.rect.width() < 100) ? Qt::FastTransformation : Qt::SmoothTransformation;
+                        pixmap = pixmap.scaled(cmd.rect.size(), Qt::KeepAspectRatio, mode);
+                        painter.setRenderHint(QPainter::SmoothPixmapTransform, mode == Qt::SmoothTransformation);
                         painter.drawPixmap(cmd.rect.topLeft(), pixmap);
                     }
                 } else {
