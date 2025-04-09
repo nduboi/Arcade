@@ -13,13 +13,13 @@
 #include <vector>
 
 #include "AEntity.hpp"
-
+#include "MapManager.hpp"
 class NibblerTailEntity;
 
 class NibblerHeadEntity : public AEntity {
     public:
         // Constructor
-        NibblerHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position);
+        NibblerHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position, MapManager& mapManager);
         ~NibblerHeadEntity() = default;
 
         // Method
@@ -42,6 +42,7 @@ class NibblerHeadEntity : public AEntity {
         std::vector<std::pair<size_t, size_t>> _previousPositions;
         bool _pendingBodyPartAddition;
         std::pair<size_t, size_t> _lastTailPosition;
+        MapManager& _mapManager;
 
         // Setter
         void setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule);
@@ -63,6 +64,7 @@ class NibblerHeadEntity : public AEntity {
         bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;
         void addPendingBodyPart(std::shared_ptr<IGameModule> gameModule);
         void ensurePreviousPositionsInitialized(std::shared_ptr<IGameModule> gameModule);
+        std::vector<std::pair<int, int>> getValidDirections(const std::pair<size_t, size_t>& position) const;
     };
 
 #endif /* !NIBBLERHEADENTITY_HPP_ */

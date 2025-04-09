@@ -18,7 +18,8 @@
 const double NIBBLER_DELTATIME = 0.08;
 const double NIBBLER_PAUSE_TIME = 0.3;
 
-NibblerHeadEntity::NibblerHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position)
+NibblerHeadEntity::NibblerHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position, MapManager& mapManager)
+    : _mapManager(mapManager)
 {
     this->_inputDirection = {1, 0};
     this->_direction = {1, 0};
@@ -379,11 +380,9 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
     };
 
     if (this->checkCollisionWithWall(nextPosition, gameModule)) {
-        auto nibblerGame = std::dynamic_pointer_cast<NibblerGame>(gameModule);
-        if (!nibblerGame)
-            return;
 
-        auto validDirections = nibblerGame->getValidDirections(this->_position);
+
+        auto validDirections = this->getValidDirections(this->_position);
 
         std::vector<std::pair<int, int>> possibleTurns;
         for (const auto& dir : validDirections) {
@@ -436,4 +435,9 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
     this->moveBodyParts(gameModule);
     this->addPendingBodyPart(gameModule);
     this->updateBodyPartDirections(gameModule, findAndSortBodyParts(gameModule->getEntities()));
+}
+
+std::vector<std::pair<int, int>> NibblerHeadEntity::getValidDirections(const std::pair<size_t, size_t>& position) const
+{
+    return _mapManager.getValidDirections(position);
 }

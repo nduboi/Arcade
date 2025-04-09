@@ -79,7 +79,7 @@ void NibblerGame::setLayerEntities()
     }
 
     auto startPos = _mapManager.getPlayerStartPosition();
-    this->_entities[startPos.second][startPos.first][1] = std::make_shared<NibblerHeadEntity>(4, "h", startPos);
+    this->_entities[startPos.second][startPos.first][1] = std::make_shared<NibblerHeadEntity>(4, "h", startPos, _mapManager);
     this->setNibblerBody();
     this->setLayerFood();
 }
