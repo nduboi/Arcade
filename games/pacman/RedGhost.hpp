@@ -18,6 +18,8 @@ class RedGhost : public GhostEntity {
 
         void moveTocell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos);
 
+        void checkPacmanCollision(std::shared_ptr<IGameModule> gameModule);
+
         int calculateManhattanDistance(const std::pair<size_t, size_t>& pos1, const std::pair<size_t, size_t>& pos2);
 
     public:

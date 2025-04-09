@@ -35,6 +35,24 @@ RedGhost::RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEnt
     this->_pacman = pacman;
 }
 
+void RedGhost::checkPacmanCollision(std::shared_ptr<IGameModule> gameModule)
+{
+    grid_t grid = gameModule->getEntities();
+    std::pair<size_t, size_t> pacmanPos = this->_pacman->getPosition();
+
+    if (this->_position == pacmanPos) {
+        if (this->_state == GhostEntity::CHASING) {
+            gameModule->setGameState(gameState_t::LOSE);
+            return;
+        }
+        if (this->_state == GhostEntity::CHASED) {
+            gameModule->setScore(gameModule->getScore() + 200);
+            this->_state = GhostEntity::TRAVELING;
+            this->setSpeedTime(0.15f);
+        }
+    }
+}
+
 void RedGhost::moveEntity(std::shared_ptr<IGameModule> gameModule)
 {
     this->updateWaitingTime(gameModule);
@@ -49,18 +67,13 @@ void RedGhost::moveEntity(std::shared_ptr<IGameModule> gameModule)
         || this->getState() == GhostEntity::WAITING)
         return;
 
-    if (this->getState() == GhostEntity::CHASED) {
+    if (this->getState() == GhostEntity::CHASED)
         this->runAway(gameModule);
-        return;
-    }
-    if (this->getState() == GhostEntity::CHASING) {
+    if (this->getState() == GhostEntity::CHASING)
         this->moveToPacman(gameModule);
-        return;
-    }
-    if (this->getState() == GhostEntity::TRAVELING) {
+    if (this->getState() == GhostEntity::TRAVELING)
         this->moveToSpawn(gameModule);
-        return;
-    }
+    checkPacmanCollision(gameModule);
 }
 
 void RedGhost::moveTocell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos)
