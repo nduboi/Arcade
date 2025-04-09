@@ -8,7 +8,7 @@
 #include <ncurses.h>
 #include <unistd.h>
 
-namespace Display {
+namespace DisplayLib {
 	bool NcursesEncapsulation::isOpen() const {
 		return this->_isOpen;
 	}
@@ -80,13 +80,24 @@ namespace Display {
 			wattron(this->_game, COLOR_PAIR(color));
 		}
 		std::pair<int, int> currentPos = {pos};
-		int startY = getmaxy(this->_game) / 2 - mapSize.second;
-		int startX = getmaxx(this->_game) / 2 - mapSize.first * 2;
-		for (int y = 0; y < size.second * 2; y++) {
-			for (int x = 0; x < size.first * 2; x++) {
-				mvwaddch(this->_game, currentPos.second * 2 + startY + y, currentPos.first * 2 + startX  + x, ' ' | A_REVERSE);
+		if ((mapSize.first == 9 && mapSize.second == 9) || (mapSize.first == 16 && mapSize.second == 16) || (mapSize.first == 30 && mapSize.second == 30) || (mapSize.first == 30 && mapSize.second == 16)) {
+			int startY = getmaxy(this->_game) / 2 - (mapSize.second / 2);
+			int startX = getmaxx(this->_game) / 2 - mapSize.first;
+			for (int y = 0; y < size.second * 1; y++) {
+				for (int x = 0; x < size.first * 1; x++) {
+					mvwaddch(this->_game, currentPos.second * 1 + startY + y, currentPos.first * 1 + startX  + x, ' ' | A_REVERSE);
+				}
+			}
+		} else {
+			int startY = getmaxy(this->_game) / 2 - mapSize.second;
+			int startX = getmaxx(this->_game) / 2 - mapSize.first * 2;
+			for (int y = 0; y < size.second * 2; y++) {
+				for (int x = 0; x < size.first * 2; x++) {
+					mvwaddch(this->_game, currentPos.second * 2 + startY + y, currentPos.first * 2 + startX  + x, ' ' | A_REVERSE);
+				}
 			}
 		}
+
 		if (color > 0) {
 			wattroff(this->_game, COLOR_PAIR(color));
 		}
@@ -98,10 +109,10 @@ namespace Display {
 		(void)pos;
 		(void)color;
 		(void)thickness;
-		for (int y = 0; y < 3; y++) {
+		for (int y = 0; y < size.second; y++) {
 			mvwprintw(this->_game, pos.second + y, pos.first, "|");
 			mvwprintw(this->_game, pos.second + y, pos.first + size.first, "|");
-			if (y != 0 && y != 2)
+			if (y != 0 && y != size.second - 1)
 				continue;
 			for (int x = 1; x < size.first - 1; x++) {
 				mvwprintw(this->_game, pos.second + y, pos.first + x, "-");
@@ -161,16 +172,10 @@ namespace Display {
 	}
 
 	NcursesEncapsulation::NcursesEncapsulation() {
-		reset_shell_mode();
-		reset_prog_mode();
 		this->_isOpen = false;
 		this->_header = nullptr;
 		this->_game = nullptr;
 		this->_window = nullptr;
-		FILE *input = stdin;
-		FILE *output = stdout;
-		this->_screen = newterm(nullptr, output, input);
-		set_term(this->_screen);
 
 		this->_window = initscr();
 		start_color();
@@ -209,15 +214,7 @@ namespace Display {
 			delwin(this->_header);
 			this->_header = nullptr;
 		}
-		if (this->_window) {
-			endwin();
-			delscreen(this->_screen);
-			set_term(nullptr);
-			this->_screen = nullptr;
-			this->_window = nullptr;
-		}
+		endwin();
 		this->_isOpen = false;
-		reset_shell_mode();
-		reset_prog_mode();
 	}
 } // game

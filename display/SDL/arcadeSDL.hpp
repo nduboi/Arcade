@@ -33,7 +33,7 @@ private:
 	void _resizeTexture(SDL_Rect &rect, std::pair<int, int> position);
 
 public:
-	std::unique_ptr<Display::SDLEncapsulation> sdl;
+	std::unique_ptr<DisplayLib::SDLEncapsulation> sdl;
 	void display() override;
 
 	void closeWindow() override;

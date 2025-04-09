@@ -8,11 +8,11 @@
 #include <IWindow.hpp>
 #include "NcursesEncapsulation.hpp"
 
-namespace Display {
+namespace DisplayLib {
 	class arcadeNcurses : public IWindow {
 	private:
 		std::pair<size_t, size_t> _mapSize;
-		Display::NcursesEncapsulation _ncurses;
+		DisplayLib::NcursesEncapsulation _ncurses;
 	public:
 
 		void display() override;

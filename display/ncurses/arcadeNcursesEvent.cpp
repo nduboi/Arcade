@@ -6,61 +6,91 @@
 #include "arcadeNcursesEvent.hpp"
 #include "arcadeNcurses.hpp"
 
-namespace Display {
+namespace DisplayLib {
 	void arcadeNcursesEvent::init() {
 	}
 
 	IEvent::event_t arcadeNcursesEvent::pollEvents(std::pair<int, int> gridSize) {
-		int ch = wgetch(stdscr);
-		(void)gridSize;
+        int ch = wgetch(stdscr);
+        (void)gridSize;
+		if (ch == -1)
+			return NOTHING;
 
-		MEVENT event;
-		if (ch == KEY_MOUSE) {
-			if (getmouse(&event) == OK) {
-				this->_mousePos = {event.x, event.y};
+        MEVENT event;
+        if (ch == KEY_MOUSE) {
+            if (getmouse(&event) == OK) {
+                this->_mousePos = {event.x, event.y};
+				auto pos = getMousePos();
 
-				if (event.bstate & BUTTON1_PRESSED)
-					return IEvent::MOUSELEFTCLICK;
-				if (event.bstate & BUTTON3_PRESSED)
-					return IEvent::MOUSERIGHTCLICK;
-			}
-		}
+                if (pos.first >= 725 && pos.first <= 900 &&
+                    pos.second >= 120 && pos.second <= 160) {
+                    this->_isWriting = true;
+                } else {
+                    this->_isWriting = false;
+                }
+            	if (event.bstate & BUTTON1_PRESSED)
+                    return IEvent::MOUSELEFTCLICK;
+                if (event.bstate & BUTTON3_PRESSED)
+                    return IEvent::MOUSERIGHTCLICK;
+            }
+        }
 
-		switch (ch) {
-			case 'n':
-				return IEvent::NEXTGRAPHIC;
-			case 'g':
-				return IEvent::NEXTGAME;
-			case 'r':
-				return IEvent::REFRESH;
-			case ' ':
-				return IEvent::SPACE;
-			case 'q':
-				return IEvent::CLOSE;
-			case 'm':
-				return IEvent::MENU;
-			case 'h':
-				return IEvent::NEXTDIFFICULTY;
-			case 0x1B:
-				return IEvent::ESCAPE;
-			case KEY_UP:
-				return IEvent::UP;
-			case KEY_DOWN:
-				return IEvent::DOWN;
-			case KEY_LEFT:
-				return IEvent::LEFT;
-			case KEY_RIGHT:
-				return IEvent::RIGHT;
-			case BUTTON1_CLICKED:
-				return IEvent::MOUSELEFTCLICK;
-			case BUTTON2_CLICKED:
-				return IEvent::MOUSERIGHTCLICK;
-			case 10:
-				return IEvent::ENTER;
-			default:
-				return IEvent::NOTHING;
-		}
-	}
+        if (this->_isWriting) {
+        	std::cout << "Char: " << ch << std::endl;
+            if (ch >= 32 && ch <= 126) {
+                if (this->_input.length() <= 15) {
+                    this->_input += static_cast<char>(ch);
+                }
+                return IEvent::NOTHING;
+            }
+            if (ch == 27) {
+                this->_input.clear();
+                return IEvent::NOTHING;
+            }
+            if (ch == 10) {
+                return IEvent::ENTER;
+            }
+            if (ch == KEY_BACKSPACE) {
+                if (!this->_input.empty()) {
+                    this->_input.pop_back();
+                }
+                return IEvent::NOTHING;
+            }
+        }
+
+        switch (ch) {
+            case 'n':
+                return IEvent::NEXTGRAPHIC;
+            case 'g':
+                return IEvent::NEXTGAME;
+            case 'r':
+                return IEvent::REFRESH;
+            case ' ':
+                return IEvent::SPACE;
+            case 'q':
+                return IEvent::CLOSE;
+            case 'm':
+                return IEvent::MENU;
+            case 'h':
+                return IEvent::NEXTDIFFICULTY;
+            case 0x1B:
+                return IEvent::ESCAPE;
+            case KEY_UP:
+                return IEvent::UP;
+            case KEY_DOWN:
+                return IEvent::DOWN;
+            case KEY_LEFT:
+                return IEvent::LEFT;
+            case KEY_RIGHT:
+                return IEvent::RIGHT;
+            case BUTTON1_CLICKED:
+                return IEvent::MOUSELEFTCLICK;
+            case BUTTON2_CLICKED:
+                return IEvent::MOUSERIGHTCLICK;
+            default:
+                return IEvent::NOTHING;
+        }
+    }
 
 	std::pair<int, int> arcadeNcursesEvent::getMousePos() {
 		std::pair<int, int> tmp = this->_mousePos;
@@ -78,8 +108,10 @@ namespace Display {
 			tmp.first -= ((COLS - 2)) / 2 - mapSize.first + 1;
 			tmp.first /= 2;
 		}
+#ifdef _DEBUG
 		std::cout << "Mouse POS: x= " << tmp.first << " y=" << tmp.second << std::endl;
 		std::cout << "MAP SIZE: x= " << mapSize.first << " y=" << mapSize.second << std::endl;
+#endif
 		return tmp;
 	}
 
@@ -91,10 +123,16 @@ namespace Display {
 	}
 
 	std::string arcadeNcursesEvent::getUsername() {
-		return "";
+		return this->_input;
 	}
 
 	void arcadeNcursesEvent::renderWrittiing() {
+		this->_window->drawTextMenu(
+			this->_input,
+			{685, 407},
+			{0, 0, 0},
+			24
+		);
 	}
 
 	arcadeNcursesEvent::arcadeNcursesEvent(std::shared_ptr<IWindow> window) {

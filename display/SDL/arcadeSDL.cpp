@@ -137,7 +137,7 @@ void arcadeSDL::resizeWindow(size_t x, size_t y) {
 
 arcadeSDL::arcadeSDL()
 {
-    this->sdl = std::make_unique<Display::SDLEncapsulation>();
+    this->sdl = std::make_unique<DisplayLib::SDLEncapsulation>();
     this->_mapSize = {0, 0};
 }
 

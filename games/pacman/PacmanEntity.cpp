@@ -12,6 +12,7 @@
 #include "DotEntity.hpp"
 #include "BigDotEntity.hpp"
 #include "WallEntity.hpp"
+#include "GhostEntity.hpp"
 
 #include <iostream>
 
@@ -156,6 +157,7 @@ void PacmanEntity::checkInteractions(std::shared_ptr<IGameModule> gameModule, st
         || newPos.first < 0 || newPos.second < 0)
         return;
 
+    checkGhostCollision(gameModule, newPos);
     if (std::dynamic_pointer_cast<DotEntity>(grid[newPos.second][newPos.first][1])) {
         grid[newPos.second][newPos.first][1]->onInteract(gameModule);
         return;
@@ -163,6 +165,17 @@ void PacmanEntity::checkInteractions(std::shared_ptr<IGameModule> gameModule, st
     if (std::dynamic_pointer_cast<BigDotEntity>(grid[newPos.second][newPos.first][1])) {
         grid[newPos.second][newPos.first][1]->onInteract(gameModule);
         return;
+    }
+}
+
+void PacmanEntity::checkGhostCollision(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos)
+{
+    grid_t grid = gameModule->getEntities();
+
+    if (std::dynamic_pointer_cast<GhostEntity>(grid[newPos.second][newPos.first][2])) {
+        auto entity = grid[newPos.second][newPos.first][2];
+
+        entity->onInteract(gameModule);
     }
 }
 
