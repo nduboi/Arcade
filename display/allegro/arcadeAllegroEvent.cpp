@@ -61,11 +61,21 @@ IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize) {
 }
 
 std::pair<int, int> arcadeAllegroEvent::getMousePos() {
+    auto allegroWindow = std::dynamic_pointer_cast<arcadeAllegro>(this->_window);
+    const int hudOffset = 100;
+
     if (!al_is_mouse_installed()) {
         return std::make_pair(-1, -1);
     }
     ALLEGRO_MOUSE_STATE mouse_state;
     al_get_mouse_state(&mouse_state);
+    if (this->_mapSize.first > 0 && this->_mapSize.second > 0) {
+        auto WinSize = allegroWindow->allegro->getWindowSize();
+        return {
+            (this->_mousePos.first * this->_mapSize.first) / WinSize.first,
+            ((this->_mousePos.second - hudOffset) * this->_mapSize.second) / (WinSize.second - hudOffset)
+        };
+    }
     return std::make_pair(mouse_state.x, mouse_state.y);
 }
 
@@ -74,7 +84,6 @@ void arcadeAllegroEvent::setMapSize(std::pair<int, int> size) {
 }
 
 void arcadeAllegroEvent::cleanup() {
-    // Cleanup Allegro event handling
 }
 
 std::string arcadeAllegroEvent::getUsername() {

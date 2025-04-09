@@ -28,13 +28,13 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
 
         if (this->_iswritting) {
             if (event.type == SDL_TEXTINPUT) {
-                if (_input.length() <= 15)
-                    _input += event.text.text;
+                if (this->_input.length() <= 15)
+                    this->_input += event.text.text;
                 return IEvent::NOTHING;
             }
             else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_BACKSPACE) {
-                if (!_input.empty())
-                    _input.pop_back();
+                if (!this->_input.empty())
+                    this->_input.pop_back();
                 return IEvent::NOTHING;
             }
         }
@@ -127,7 +127,7 @@ void arcadeSDLEvent::cleanup() {
 
 std::string arcadeSDLEvent::getUsername()
 {
-    return _input;
+    return this->_input;
 }
 
 void arcadeSDLEvent::renderWrittiing()
