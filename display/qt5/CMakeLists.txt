@@ -12,6 +12,8 @@ add_library(arcade_qt5 SHARED
     arcadeQT.hpp
     arcadeQTEvent.cpp
     arcadeQTEvent.hpp
+    ArcadeCanvas.cpp
+    ArcadeCanvas.hpp
 )
 
 # Link with Qt5 libraries instead of SFML
