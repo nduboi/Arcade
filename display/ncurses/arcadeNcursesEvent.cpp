@@ -78,8 +78,10 @@ namespace Display {
 			tmp.first -= ((COLS - 2)) / 2 - mapSize.first + 1;
 			tmp.first /= 2;
 		}
+#ifdef _DEBUG
 		std::cout << "Mouse POS: x= " << tmp.first << " y=" << tmp.second << std::endl;
 		std::cout << "MAP SIZE: x= " << mapSize.first << " y=" << mapSize.second << std::endl;
+#endif
 		return tmp;
 	}
 

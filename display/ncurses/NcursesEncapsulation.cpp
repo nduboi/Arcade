@@ -98,10 +98,10 @@ namespace Display {
 		(void)pos;
 		(void)color;
 		(void)thickness;
-		for (int y = 0; y < 3; y++) {
+		for (int y = 0; y < size.second; y++) {
 			mvwprintw(this->_game, pos.second + y, pos.first, "|");
 			mvwprintw(this->_game, pos.second + y, pos.first + size.first, "|");
-			if (y != 0 && y != 2)
+			if (y != 0 && y != size.second - 1)
 				continue;
 			for (int x = 1; x < size.first - 1; x++) {
 				mvwprintw(this->_game, pos.second + y, pos.first + x, "-");
@@ -161,16 +161,10 @@ namespace Display {
 	}
 
 	NcursesEncapsulation::NcursesEncapsulation() {
-		reset_shell_mode();
-		reset_prog_mode();
 		this->_isOpen = false;
 		this->_header = nullptr;
 		this->_game = nullptr;
 		this->_window = nullptr;
-		FILE *input = stdin;
-		FILE *output = stdout;
-		this->_screen = newterm(nullptr, output, input);
-		set_term(this->_screen);
 
 		this->_window = initscr();
 		start_color();
@@ -209,15 +203,7 @@ namespace Display {
 			delwin(this->_header);
 			this->_header = nullptr;
 		}
-		if (this->_window) {
-			endwin();
-			delscreen(this->_screen);
-			set_term(nullptr);
-			this->_screen = nullptr;
-			this->_window = nullptr;
-		}
+		endwin();
 		this->_isOpen = false;
-		reset_shell_mode();
-		reset_prog_mode();
 	}
 } // game

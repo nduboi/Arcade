@@ -203,7 +203,7 @@ void arcadeSFML::resizeWindow(size_t x, size_t y) {
 }
 
 arcadeSFML::arcadeSFML() :
-	window(sf::VideoMode(1620, 900), "SFML window", sf::Style::Titlebar | sf::Style::Close)
+	window(sf::VideoMode(1620, 900), "Arcade - SFML", sf::Style::Titlebar | sf::Style::Close)
 {
 	this->_mapSize = {0, 0};
 }
