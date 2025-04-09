@@ -77,8 +77,12 @@ void GhostEntity::updateWaitingTime(std::shared_ptr<IGameModule> gameModule)
     this->_waitingPoint = currentTime;
 
     if (this->_state == WAITING) {
+        if (!this->moveToClosestFreeCell(gameModule, this->_begPoint)) {
+            this->setWaitingTime(1);
+            return;
+        };
+        std::cout << "Move to spawn for " << this->_spriteName << std::endl;
         this->_state = CHASING;
-        this->moveToClosestFreeCell(gameModule, this->_begPoint);
         this->setSpeedTime(0.25f);
     }
     else if (this->_state == CHASED) {
@@ -87,32 +91,45 @@ void GhostEntity::updateWaitingTime(std::shared_ptr<IGameModule> gameModule)
     }
 }
 
-void GhostEntity::moveToClosestFreeCell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos)
+bool GhostEntity::moveToClosestFreeCell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos)
 {
     grid_t grid = gameModule->getEntities();
 
-    for (int y = newPos.second; y >= 0; y--) {
-        for (int x = newPos.first; x >= 0; x--) {
-            if ((y == 14 || y == 15) && (x == 11 || x == 12 || x == 13))
-                continue;
+    if (grid[newPos.second][newPos.first][2] != nullptr)
+        return false;
+    if (std::dynamic_pointer_cast<WallEntity>(grid[newPos.second][newPos.first][1]))
+        return false;
 
-            if (grid[y][x][1] == nullptr)
-                continue;
-            if (grid[y][x][2] != nullptr)
-                continue;
+    grid[newPos.second][newPos.first][2] = grid[_position.second][_position.first][2];
+    grid[_position.second][_position.first][2] = nullptr;
+    this->_position = std::make_pair(newPos.first, newPos.second);
+    std::cout << "Move to " << newPos.first << ", " << newPos.second << " for " << this->_spriteName << std::endl;
+    gameModule->setEntities(grid);
+
+    return true;
+
+    // for (int y = newPos.second; y >= 0; y--) {
+    //     for (int x = newPos.first; x >= 0; x--) {
+    //         if ((y == 14 || y == 15) && (x == 11 || x == 12 || x == 13))
+    //             continue;
+
+    //         if (grid[y][x][1] == nullptr)
+    //             continue;
+    //         if (grid[y][x][2] != nullptr)
+    //             continue;
 
 
-            if (std::dynamic_pointer_cast<WallEntity>(grid[y][x][1]) != nullptr)
-                continue;
+    //         if (std::dynamic_pointer_cast<WallEntity>(grid[y][x][1]) != nullptr)
+    //             continue;
 
-            grid[y][x][2] = grid[_position.second][_position.first][2];
-            grid[_position.second][_position.first][2] = nullptr;
-            this->_position = std::make_pair(x, y);
-            gameModule->setEntities(grid);
+    //         grid[y][x][2] = grid[_position.second][_position.first][2];
+    //         grid[_position.second][_position.first][2] = nullptr;
+    //         this->_position = std::make_pair(x, y);
+    //         gameModule->setEntities(grid);
 
-            return;
-        }
-    }
+    //         return;
+    //     }
+    // }
 }
 
 void GhostEntity::onInteract(std::shared_ptr<IGameModule> gameModule)

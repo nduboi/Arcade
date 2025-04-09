@@ -37,7 +37,7 @@ class GhostEntity : public AEntity {
         float _speedTime;
         std::chrono::time_point<std::chrono::steady_clock> _lastMove;
 
-        void moveToClosestFreeCell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos);
+        bool moveToClosestFreeCell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos);
 
     public:
         ~GhostEntity() = default;

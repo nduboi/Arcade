@@ -19,6 +19,7 @@
 #include "BigTextEntityHUD.hpp"
 
 #include "RedGhost.hpp"
+#include "PinkGhost.hpp"
 
 const int MAP_HEIGHT = 25;
 const int MAP_WIDTH = 25;
@@ -99,7 +100,7 @@ const std::vector<std::vector<std::string>> DOTS = {
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", "d", "d", "d", "d", "d", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {"d", "d", "d", "d", "d", "d", "d", "d", "d", "d", " ", "R", " ", " ", " ", "d", "d", "d", "d", "d", "d", "d", "d", "d", "d"},
-    {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
+    {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", "P", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", "d", "d", "d", " ", "d", "d", "d", " ", " ", "d", " ", " ", " ", " ", " ", " "},
     {" ", " ", " ", " ", " ", " ", "d", " ", " ", " ", "d", " ", " ", " ", "d", " ", " ", " ", "d", " ", " ", " ", " ", " ", " "},
@@ -183,9 +184,10 @@ void PacmanGame::setLayerInteract()
                 this->_entities[y][x][1] = std::make_shared<DotEntity>(std::make_pair(x, y));
             if (DOTS[y][x] == "b")
                 this->_entities[y][x][1] = std::make_shared<BigDotEntity>(std::make_pair(x, y));
-            if (DOTS[y][x] == "R") {
+            if (DOTS[y][x] == "R")
                 this->_entities[y][x][2] = std::make_shared<RedGhost>(std::make_pair(x, y), this->_entities[14][12][1], _multiplier);
-            }
+            if (DOTS[y][x] == "P")
+                this->_entities[y][x][2] = std::make_shared<PinkGhost>(std::make_pair(x, y), this->_entities[14][12][1], _multiplier);
         }
     }
 }
@@ -204,6 +206,7 @@ void PacmanGame::update(std::shared_ptr<IGameModule> gameModule)
                 auto entity = grid[y][x][2];
                 GhostEntity *ghost = dynamic_cast<GhostEntity *>(entity.get());
 
+                std::cout << "Reset ghost " << ghost->getSpriteName() << std::endl;
                 if (ghost != nullptr)
                     ghost->setWaitingTime(10);
             }

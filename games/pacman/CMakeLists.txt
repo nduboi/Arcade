@@ -15,6 +15,7 @@ add_library(arcade_pacman SHARED
     BigDotEntity.cpp
     GhostEntity.cpp
     RedGhost.cpp
+    PinkGhost.cpp
 )
 
 add_custom_command(TARGET arcade_pacman POST_BUILD

@@ -2,19 +2,19 @@
 ** EPITECH PROJECT, 2025
 ** arcade
 ** File description:
-** RedGhost
+** PinkGhost
 */
 
-#include "RedGhost.hpp"
+#include "PinkGhost.hpp"
 #include "WallEntity.hpp"
 
 #include <iostream>
 #include <queue>
 #include <map>
 
-RedGhost::RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman, float multi)
+PinkGhost::PinkGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman, float multi)
 {
-    this->_spriteName = "assets/pacman/ghosts/blinky.png";
+    this->_spriteName = "assets/pacman/ghosts/pinky.png";
     this->_spriteChasedName = "assets/pacman/ghosts/blue_ghost.png";
     this->_spriteEyeName = "assets/pacman/ghosts/eyes.png";
 
@@ -40,7 +40,7 @@ RedGhost::RedGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEnt
     this->_multiplier = multi;
 }
 
-void RedGhost::checkPacmanCollision(std::shared_ptr<IGameModule> gameModule)
+void PinkGhost::checkPacmanCollision(std::shared_ptr<IGameModule> gameModule)
 {
     grid_t grid = gameModule->getEntities();
     std::pair<size_t, size_t> pacmanPos = this->_pacman->getPosition();
@@ -58,7 +58,7 @@ void RedGhost::checkPacmanCollision(std::shared_ptr<IGameModule> gameModule)
     }
 }
 
-void RedGhost::moveEntity(std::shared_ptr<IGameModule> gameModule)
+void PinkGhost::moveEntity(std::shared_ptr<IGameModule> gameModule)
 {
     this->updateWaitingTime(gameModule);
 
@@ -81,7 +81,7 @@ void RedGhost::moveEntity(std::shared_ptr<IGameModule> gameModule)
     checkPacmanCollision(gameModule);
 }
 
-void RedGhost::moveTocell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos)
+void PinkGhost::moveTocell(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> newPos)
 {
     grid_t grid = gameModule->getEntities();
 
@@ -95,7 +95,7 @@ void RedGhost::moveTocell(std::shared_ptr<IGameModule> gameModule, std::pair<siz
     gameModule->setEntities(grid);
 }
 
-void RedGhost::moveToSpawn(std::shared_ptr<IGameModule> gameModule)
+void PinkGhost::moveToSpawn(std::shared_ptr<IGameModule> gameModule)
 {
     if (this->_position.first == this->_begPoint.first &&
         this->_position.second == this->_begPoint.second) {
@@ -144,7 +144,7 @@ void RedGhost::moveToSpawn(std::shared_ptr<IGameModule> gameModule)
     this->moveTocell(gameModule, closestCell);
 }
 
-void RedGhost::moveToPacman(std::shared_ptr<IGameModule> gameModule)
+void PinkGhost::moveToPacman(std::shared_ptr<IGameModule> gameModule)
 {
     std::pair<size_t, size_t> pacmanPos = this->_pacman->getPosition();
     std::pair<size_t, size_t> nextMove = findBestPathToTarget(gameModule, pacmanPos, true);
@@ -153,7 +153,7 @@ void RedGhost::moveToPacman(std::shared_ptr<IGameModule> gameModule)
         this->moveTocell(gameModule, nextMove);
 }
 
-void RedGhost::runAway(std::shared_ptr<IGameModule> gameModule)
+void PinkGhost::runAway(std::shared_ptr<IGameModule> gameModule)
 {
     std::pair<size_t, size_t> pacmanPos = this->_pacman->getPosition();
     std::pair<size_t, size_t> nextMove = findBestPathToTarget(gameModule, pacmanPos, false);
@@ -162,7 +162,7 @@ void RedGhost::runAway(std::shared_ptr<IGameModule> gameModule)
         this->moveTocell(gameModule, nextMove);
 }
 
-std::pair<size_t, size_t> RedGhost::findBestPathToTarget(std::shared_ptr<IGameModule> gameModule,
+std::pair<size_t, size_t> PinkGhost::findBestPathToTarget(std::shared_ptr<IGameModule> gameModule,
                                                          const std::pair<size_t, size_t>& target, bool moveTowards)
 {
     grid_t grid = gameModule->getEntities();
@@ -171,7 +171,7 @@ std::pair<size_t, size_t> RedGhost::findBestPathToTarget(std::shared_ptr<IGameMo
     std::queue<std::pair<size_t, size_t>> queue;
     std::map<std::pair<size_t, size_t>, std::pair<size_t, size_t>> parent;
     std::map<std::pair<size_t, size_t>, int> distances;
-    const int MAX_DEPTH = 8;
+    const int MAX_DEPTH = 2;
 
     queue.push(this->_position);
     parent[this->_position] = {SIZE_MAX, SIZE_MAX};
@@ -264,7 +264,7 @@ std::pair<size_t, size_t> RedGhost::findBestPathToTarget(std::shared_ptr<IGameMo
     return current;
 }
 
-int RedGhost::calculateManhattanDistance(const std::pair<size_t, size_t>& pos1, const std::pair<size_t, size_t>& pos2) {
+int PinkGhost::calculateManhattanDistance(const std::pair<size_t, size_t>& pos1, const std::pair<size_t, size_t>& pos2) {
     int dx = static_cast<int>(pos1.first) - static_cast<int>(pos2.first);
     int dy = static_cast<int>(pos1.second) - static_cast<int>(pos2.second);
     return std::abs(dx) + std::abs(dy);
