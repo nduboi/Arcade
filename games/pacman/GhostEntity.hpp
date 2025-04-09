@@ -31,6 +31,8 @@ class GhostEntity : public AEntity {
         GhostState _state;
         std::size_t _waitingTime = 0;
         std::chrono::time_point<std::chrono::steady_clock> _waitingPoint;
+        std::size_t _chasedTime = 0;
+        std::chrono::time_point<std::chrono::steady_clock> _chasedPoint;
 
         std::shared_ptr<IEntity> _pacman;
 
@@ -57,6 +59,7 @@ class GhostEntity : public AEntity {
         float getMultiplier() const;
 
         void setWaitingTime(std::size_t waitingTime);
+        std::size_t getWaitingTime() const;
 
         void updateWaitingTime(std::shared_ptr<IGameModule> gameModule);
 
