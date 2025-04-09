@@ -15,7 +15,6 @@ namespace Display {
 		WINDOW *_window = nullptr;
 		WINDOW *_header = nullptr;
 		WINDOW *_game = nullptr;
-		SCREEN *_screen = nullptr;
 		bool _isOpen;
 		std::string _appTitle = "Arcade";
 

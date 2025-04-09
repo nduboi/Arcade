@@ -37,7 +37,7 @@ Menu::Menu(const std::shared_ptr<IWindow> &window) : _menuTitle(window, "Arcade 
 
     Button usernameBtn;
     usernameBtn.posTop = {725, 120};
-    usernameBtn.posBottom = {900, 160};
+    usernameBtn.posBottom = {900, 180};
     usernameBtn.text = "Set Username";
     usernameBtn.selected = false;
     usernameBtn.action = action_e::USERNAME;
