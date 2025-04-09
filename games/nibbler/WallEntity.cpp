@@ -11,7 +11,7 @@ WallEntity::WallEntity(const std::string& spriteName, std::pair<size_t, size_t> 
 {
     this->_spriteName = spriteName;
     this->_color = 5;
-    this->_text = "#";
+    this->_text = "";
     this->_position = position;
     this->_isMovable = false;
     this->_isControlable = false;

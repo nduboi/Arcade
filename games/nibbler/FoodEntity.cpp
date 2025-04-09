@@ -14,7 +14,7 @@ FoodEntity::FoodEntity(std::pair<size_t, size_t> position)
 {
     this->_spriteName = "assets/nibbler/Food.png";
     this->_color = 2;
-    this->_text = "f";
+    this->_text = "";
     this->_position = position;
     this->_isMovable = false;
     this->_isControlable = false;
