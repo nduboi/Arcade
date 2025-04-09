@@ -31,7 +31,7 @@ namespace Display {
 		(void) size;
 		(void) position;
 		(void) color;
-		this->_ncurses.drawThickRectangle({position.first * COLS / 1600, position.second * LINES / 900}, {size.first * COLS / 1600,  size.second * LINES / 900}, 1, 0);
+		this->_ncurses.drawThickRectangle({position.first * COLS / 1620, position.second * LINES / 900}, {size.first * COLS / 1620,  size.second * LINES / 900}, 1, 0);
 	}
 
 	void arcadeNcurses::drawThickRectangle(std::pair<int, int> position, std::pair<int, int> size, int thickness) {

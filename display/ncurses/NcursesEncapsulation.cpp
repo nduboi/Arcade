@@ -98,10 +98,10 @@ namespace Display {
 		(void)pos;
 		(void)color;
 		(void)thickness;
-		for (int y = 0; y < 3; y++) {
+		for (int y = 0; y < size.second; y++) {
 			mvwprintw(this->_game, pos.second + y, pos.first, "|");
 			mvwprintw(this->_game, pos.second + y, pos.first + size.first, "|");
-			if (y != 0 && y != 2)
+			if (y != 0 && y != size.second - 1)
 				continue;
 			for (int x = 1; x < size.first - 1; x++) {
 				mvwprintw(this->_game, pos.second + y, pos.first + x, "-");
