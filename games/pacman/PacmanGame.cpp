@@ -209,6 +209,24 @@ void PacmanGame::update(std::shared_ptr<IGameModule> gameModule)
             }
         }
     }
+
+    bool hasWon = true;
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        if (hasWon == false)
+            break;
+
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            if (hasWon == false)
+                break;
+
+            if (this->_entities[y][x][1] == nullptr)
+                continue;
+            if (std::dynamic_pointer_cast<DotEntity>(this->_entities[y][x][1]) != nullptr)
+                hasWon = false;
+        }
+    }
+    if (hasWon)
+        this->resetGame(gameModule);
 }
 
 std::vector<std::shared_ptr<IEntity>> PacmanGame::getHUD() const
