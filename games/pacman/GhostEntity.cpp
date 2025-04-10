@@ -12,25 +12,33 @@ std::string GhostEntity::getSpriteName() const
 {
     if (this->_state == TRAVELING)
         return this->_spriteEyeName;
+
+    bool alternate = false;
+    std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsedSinceBeg = currentTime - this->_animationTime;
+
+    if (static_cast<int>(elapsedSinceBeg.count() * 10) % 6 > 2)
+        alternate = true;
+
     if (this->_state == CHASED || this->_wasGettingChased) {
-        std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
         std::chrono::duration<double> elapsedSinceChased = currentTime - this->_chasedTime;
 
         if (elapsedSinceChased.count() < 7)
-            return this->_spriteChasedName;
+            return this->_spriteChasedNames[0 + alternate];
         if (elapsedSinceChased.count() < 7.5)
-            return this->_spriteChasedName2;
+            return this->_spriteChasedNames[2 + alternate];
         if (elapsedSinceChased.count() < 8)
-            return this->_spriteChasedName;
+            return this->_spriteChasedNames[0 + alternate];
         if (elapsedSinceChased.count() < 8.5)
-            return this->_spriteChasedName2;
+            return this->_spriteChasedNames[2 + alternate];
         if (elapsedSinceChased.count() < 9)
-            return this->_spriteChasedName;
+            return this->_spriteChasedNames[0 + alternate];
         if (elapsedSinceChased.count() < 9.5)
-            return this->_spriteChasedName2;
-        return this->_spriteChasedName;
+            return this->_spriteChasedNames[2 + alternate];
+        return this->_spriteChasedNames[0 + alternate];
     }
-    return this->_spriteName;
+
+    return this->_spriteNames[alternate];
 }
 
 void GhostEntity::setState(GhostState state)
