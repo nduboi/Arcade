@@ -10,12 +10,26 @@
 
 std::string GhostEntity::getSpriteName() const
 {
-    if (this->_state == CHASED)
-        return this->_spriteChasedName;
     if (this->_state == TRAVELING)
         return this->_spriteEyeName;
-    if (this->_wasGettingChased)
+    if (this->_state == CHASED || this->_wasGettingChased) {
+        std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
+        std::chrono::duration<double> elapsedSinceChased = currentTime - this->_chasedTime;
+
+        if (elapsedSinceChased.count() < 7)
+            return this->_spriteChasedName;
+        if (elapsedSinceChased.count() < 7.5)
+            return this->_spriteChasedName2;
+        if (elapsedSinceChased.count() < 8)
+            return this->_spriteChasedName;
+        if (elapsedSinceChased.count() < 8.5)
+            return this->_spriteChasedName2;
+        if (elapsedSinceChased.count() < 9)
+            return this->_spriteChasedName;
+        if (elapsedSinceChased.count() < 9.5)
+            return this->_spriteChasedName2;
         return this->_spriteChasedName;
+    }
     return this->_spriteName;
 }
 

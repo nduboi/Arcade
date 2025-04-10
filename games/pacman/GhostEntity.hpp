@@ -25,6 +25,7 @@ class GhostEntity : public AEntity {
         float _multiplier = 1.0f;
         std::string _spriteName;
         std::string _spriteChasedName;
+        std::string _spriteChasedName2;
         std::string _spriteEyeName;
         std::pair<size_t, size_t> _spawnPosition;
         std::pair<size_t, size_t> _begPoint;

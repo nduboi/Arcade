@@ -16,6 +16,7 @@ PinkGhost::PinkGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IE
 {
     this->_spriteName = "assets/pacman/ghosts/pinky.png";
     this->_spriteChasedName = "assets/pacman/ghosts/blue_ghost.png";
+    this->_spriteChasedName2 = "assets/pacman/ghosts/white_ghost.png";
     this->_spriteEyeName = "assets/pacman/ghosts/eyes.png";
 
     this->_spawnPosition = spawnPosition;
