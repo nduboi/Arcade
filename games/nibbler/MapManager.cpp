@@ -45,16 +45,21 @@ void MapManager::initSpriteMap()
         {18, "assets/nibbler/Nibbler_head_top.png"},
         {19, "assets/nibbler/Nibbler_tail_horizontal.png"},
         {20, "assets/nibbler/Nibbler_tail_vertical.png"},
-        {21, "assets/nibbler/Food.png"}
+        {21, "assets/nibbler/Food.png"},
+        {22, "assets/nibbler/Floor.png"},
     };
 }
 
 void MapManager::generateMap(int level)
 {
-    createMap();
+    switch (level) {
+        case 1: createMapOne(); break;
+        case 2: createMapTwo(); break;
+        default: createMapOne(); break;
+    }
 }
 
-void MapManager::createMap()
+void MapManager::createMapOne()
 {
     const int height = 21;
     const int width = 21;
@@ -84,6 +89,36 @@ void MapManager::createMap()
     };
 
     _playerStartPosition = {9, 19};
+}
+
+void MapManager::createMapTwo()
+{
+    const int height = 19;
+    const int width = 19;
+
+    _mapLayout = {
+        { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2, 0, 3, 1, 4, 0, 8, 0, 9, 1,10, 0, 8, 0, 3, 1, 4, 0, 2},
+        { 2, 0, 2,22, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2,22, 2, 0, 2},
+        { 2, 0, 5, 1, 6, 0, 2, 0, 8, 0, 8, 0, 2, 0, 5, 1, 6, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2},
+        { 2, 0, 3, 1, 1, 1, 6, 0, 7, 0, 7, 0, 5, 1, 1, 1, 4, 0, 2},
+        { 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2},
+        { 2, 0, 7, 0, 9, 1, 1, 1,10, 0, 9, 1, 1, 1,10, 0, 7, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2, 0, 9, 1, 1, 1,10, 0, 3, 1, 4, 0, 9, 1, 1, 1,10, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 2,22, 2, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2, 0, 3, 1, 4, 0, 8, 0, 5, 1, 6, 0, 8, 0, 3, 1, 4, 0, 2},
+        { 2, 0, 2,22, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2,22, 2, 0, 2},
+        { 2, 0, 5, 1, 6, 0, 2, 0, 3, 1, 4, 0, 2, 0, 5, 1, 6, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 2, 0, 2,22, 2, 0, 2, 0, 0, 0, 0, 0, 2},
+        { 2, 0, 9, 1, 1, 1, 6, 0, 5, 1, 6, 0, 5, 1, 1, 1,10, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6},
+    };
+
+    _playerStartPosition = {10, 17};
 }
 
 std::vector<std::vector<int>> MapManager::getMapLayout() const
