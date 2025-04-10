@@ -59,11 +59,26 @@ void SnakeHeadEntity::moveEntities(std::shared_ptr<IGameModule> gameModule, std:
     gameModule->setEntities(grid);
 }
 
-bool SnakeHeadEntity::lastTimePassed()
+float SnakeHeadEntity::getSpeedMultiplier(std::shared_ptr<IGameModule> gameModule) const
+{
+    size_t elapsedTime = gameModule->getTime();
+
+    if (elapsedTime < 15)
+        return 1.2f;
+    if (elapsedTime < 30)
+        return 1.1f;
+    if (elapsedTime < 45)
+        return 1.0f;
+    if (elapsedTime < 60)
+        return 0.9f;
+    return 0.8f;
+}
+
+bool SnakeHeadEntity::lastTimePassed(std::shared_ptr<IGameModule> gameModule)
 {
     std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsedTime = currentTime - this->_lastTime;
-    if (elapsedTime.count() < SNAKE_DELTATIME)
+    if (elapsedTime.count() < (SNAKE_DELTATIME * this->getSpeedMultiplier(gameModule)))
         return false;
     this->_lastTime = currentTime;
     return true;
@@ -314,7 +329,7 @@ void SnakeHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::p
 
     if (gameModule->getGameState() != gameState_t::PLAYING)
         return;
-    if (!this->lastTimePassed() || !gameModule->getIsStarted())
+    if (!this->lastTimePassed(gameModule) || !gameModule->getIsStarted())
         return;
     this->_direction = this->_inputDirection;
 

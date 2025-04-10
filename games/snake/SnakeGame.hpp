@@ -18,12 +18,16 @@ class SnakeGame : public GameTemplate {
 
         std::vector<std::shared_ptr<IEntity>> getHUD() const override;
 
+        void changeDifficulty() override;
+
     protected:
     private:
         void setLayerBackground();
         void setLayerEntities();
         void setSnakeBody();
         void setLayerApple();
+
+        int _difficulty;
 };
 
 #endif /* !SNAKEGAME_HPP_ */

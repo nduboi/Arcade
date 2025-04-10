@@ -15,7 +15,7 @@
 #include <iostream>
 #include <bits/algorithmfwd.h>
 
-const double NIBBLER_DELTATIME = 0.08;
+const double NIBBLER_DELTATIME = 0.12;
 const double NIBBLER_PAUSE_TIME = 0.3;
 
 NibblerHeadEntity::NibblerHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position, MapManager& mapManager)
@@ -38,10 +38,8 @@ NibblerHeadEntity::NibblerHeadEntity(std::size_t color, std::string text, std::p
     this->_hasCollisions = true;
     this->_previousPositions.push_back(position);
     this->_lastTime = std::chrono::steady_clock::now();
-    this->_pauseUntil = std::chrono::steady_clock::now();
     this->_pendingBodyPartAddition = false;
     this->_lastTailPosition = {0, 0};
-    this->_isPaused = false;
 }
 
 void NibblerHeadEntity::setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule)
@@ -76,28 +74,12 @@ void NibblerHeadEntity::moveEntities(std::shared_ptr<IGameModule> gameModule, st
 bool NibblerHeadEntity::lastTimePassed()
 {
     std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
-
-    if (this->_isPaused) {
-        if (currentTime < this->_pauseUntil)
-            return false;
-        this->_isPaused = false;
-    }
-
     std::chrono::duration<double> elapsedTime = currentTime - this->_lastTime;
     if (elapsedTime.count() < NIBBLER_DELTATIME)
         return false;
     this->_lastTime = currentTime;
+
     return true;
-}
-
-bool NibblerHeadEntity::isAtIntersection(std::shared_ptr<IGameModule> gameModule)
-{
-    auto nibblerGame = std::dynamic_pointer_cast<NibblerGame>(gameModule);
-    if (!nibblerGame)
-        return false;
-
-    auto validDirections = nibblerGame->getValidDirections(this->_position);
-    return validDirections.size() > 2;
 }
 
 std::string NibblerHeadEntity::getSpriteName() const
@@ -157,31 +139,6 @@ void NibblerHeadEntity::moveBodyPartsToNewPositions(std::shared_ptr<IGameModule>
     }
 }
 
-void NibblerHeadEntity::updateBodyPartDirections(std::shared_ptr<IGameModule> gameModule,
-    const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts)
-{
-    grid_t grid = gameModule->getEntities();
-
-    for (size_t i = 0; i < bodyParts.size(); i++) {
-        auto bodyPart = std::dynamic_pointer_cast<NibblerTailEntity>(bodyParts[i]);
-        auto newPos = this->_previousPositions[this->_previousPositions.size() - 2 - i];
-
-        std::pair<size_t, size_t> nextPos;
-        std::pair<size_t, size_t> prevPos = {100, 100};
-
-        if (i > 0) {
-            nextPos = bodyParts[i-1]->getPosition();
-        } else {
-            nextPos = this->_position;
-        }
-
-        if (i < bodyParts.size() - 1)
-            prevPos = bodyParts[i+1]->getPosition();
-
-        bodyPart->updateDirection(newPos, nextPos, prevPos);
-    }
-}
-
 bool NibblerHeadEntity::checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const
 {
     grid_t grid = gameModule->getEntities();
@@ -236,7 +193,6 @@ void NibblerHeadEntity::addFirstBodyPart(std::shared_ptr<IGameModule> gameModule
 
     if (this->isValidPosition(newPos, grid)) {
         auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, 0);
-        newBodyPart->updateDirection(newPos, this->_position, {100, 100});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
         this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -257,7 +213,6 @@ void NibblerHeadEntity::addBodyPartToTail(std::shared_ptr<IGameModule> gameModul
 
     if (this->isValidPosition(newPos, grid)) {
         auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, index);
-        newBodyPart->updateDirection(newPos, lastBodyPos, {0, 0});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
         this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -307,7 +262,6 @@ void NibblerHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModu
 
         if (this->isValidPosition(newPos, grid)) {
             auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, 0);
-            newBodyPart->updateDirection(newPos, this->_position, {100, 100});
             grid[newPos.second][newPos.first][1] = newBodyPart;
             gameModule->setEntities(grid);
             this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -321,7 +275,6 @@ void NibblerHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModu
                 beforeTailPos = bodyParts[bodyParts.size() - 2]->getPosition();
             else
                 beforeTailPos = this->_position;
-            newBodyPart->updateDirection(this->_lastTailPosition, beforeTailPos, {100, 100});
             grid[this->_lastTailPosition.second][this->_lastTailPosition.first][1] = newBodyPart;
             gameModule->setEntities(grid);
             this->_previousPositions.insert(this->_previousPositions.begin(), this->_lastTailPosition);
@@ -365,15 +318,6 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
         return;
     if (!this->lastTimePassed() || !gameModule->getIsStarted())
         return;
-
-    if (isAtIntersection(gameModule) && !this->_isPaused) {
-        if (this->_inputDirection != this->_direction) {
-            this->_isPaused = true;
-            this->_pauseUntil = std::chrono::steady_clock::now() +
-                               std::chrono::milliseconds(static_cast<int>(NIBBLER_PAUSE_TIME * 1000));
-            return;
-        }
-    }
 
     this->_direction = this->_inputDirection;
 
@@ -437,7 +381,6 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
     this->moveEntities(gameModule, this->_position, nextPosition);
     this->moveBodyParts(gameModule);
     this->addPendingBodyPart(gameModule);
-    this->updateBodyPartDirections(gameModule, findAndSortBodyParts(gameModule->getEntities()));
 }
 
 std::vector<std::pair<int, int>> NibblerHeadEntity::getValidDirections(const std::pair<size_t, size_t>& position) const

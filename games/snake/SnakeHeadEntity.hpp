@@ -28,7 +28,7 @@ class SnakeHeadEntity : public AEntity {
 
         void setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule);
         void moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2);
-        bool lastTimePassed();
+        bool lastTimePassed(std::shared_ptr<IGameModule> gameModule);
         void moveBodyParts(std::shared_ptr<IGameModule> gameModule);
         bool checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const;
         gameState_t appleCollision(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> nextPosition);
@@ -41,6 +41,8 @@ class SnakeHeadEntity : public AEntity {
         bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;
         void addPendingBodyPart(std::shared_ptr<IGameModule> gameModule);
         void ensurePreviousPositionsInitialized(std::shared_ptr<IGameModule> gameModule);
+
+        float getSpeedMultiplier(std::shared_ptr<IGameModule> gameModule) const;
 
     public:
         SnakeHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position);

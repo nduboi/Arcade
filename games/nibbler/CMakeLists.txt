@@ -7,6 +7,7 @@ add_library(arcade_nibbler SHARED
         ../entities/ScoreEntityHUD.cpp
         ../entities/HighScoreEntityHUD.cpp
         ../entities/TimeEntityHUD.cpp
+        ../entities/TextEntityHUD.cpp
         ../entities/BigTextEntityHUD.cpp
         NibblerHeadEntity.cpp
         NibblerTailEntity.cpp

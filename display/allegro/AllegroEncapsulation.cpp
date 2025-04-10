@@ -58,8 +58,8 @@ namespace DisplayLib {
         al_draw_filled_rectangle(0, 0, 0, 0, al_map_rgba(color.r, color.g, color.b, color.a));
     }
 
-    void AllegroEncapsulation::drawRectangle(int x, int y, int width, int height) {
-        al_draw_filled_rectangle(x, y, x + width, y + height, al_map_rgb(255, 255, 255));
+    void AllegroEncapsulation::drawRectangle(int x, int y, int width, int height, const Color& color) {
+        al_draw_filled_rectangle(x, y, x + width, y + height, al_map_rgb(color.r, color.g, color.b));
     }
 
     void AllegroEncapsulation::drawRectangleMenu(const std::pair<size_t, size_t>& size,

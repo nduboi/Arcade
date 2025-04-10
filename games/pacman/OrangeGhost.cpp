@@ -14,8 +14,12 @@
 
 OrangeGhost::OrangeGhost(std::pair<size_t, size_t> spawnPosition, std::shared_ptr<IEntity> pacman, float multi)
 {
-    this->_spriteName = "assets/pacman/ghosts/clyde.png";
-    this->_spriteChasedName = "assets/pacman/ghosts/blue_ghost.png";
+    this->_spriteNames[0] = "assets/pacman/ghosts/clyde.png";
+    this->_spriteNames[1] = "assets/pacman/ghosts/clyde2.png";
+    this->_spriteChasedNames[0] = "assets/pacman/ghosts/blue_ghost.png";
+    this->_spriteChasedNames[1] = "assets/pacman/ghosts/blue_ghost2.png";
+    this->_spriteChasedNames[2] = "assets/pacman/ghosts/white_ghost.png";
+    this->_spriteChasedNames[3] = "assets/pacman/ghosts/white_ghost2.png";
     this->_spriteEyeName = "assets/pacman/ghosts/eyes.png";
 
     this->_spawnPosition = spawnPosition;

@@ -23,8 +23,9 @@ class GhostEntity : public AEntity {
 
     protected:
         float _multiplier = 1.0f;
-        std::string _spriteName;
-        std::string _spriteChasedName;
+        std::chrono::time_point<std::chrono::steady_clock> _animationTime;
+        std::array<std::string, 2> _spriteNames;
+        std::array<std::string, 4> _spriteChasedNames;
         std::string _spriteEyeName;
         std::pair<size_t, size_t> _spawnPosition;
         std::pair<size_t, size_t> _begPoint;

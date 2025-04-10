@@ -20,6 +20,8 @@ class NibblerGame : public GameTemplate {
 
         // Method
         std::vector<std::shared_ptr<IEntity>> getHUD() const override;
+        void changeDifficulty() override;
+
         bool isWallAt(const std::pair<size_t, size_t>& position) const;
         std::vector<std::pair<int, int>> getValidDirections(const std::pair<size_t, size_t>& position) const;
 
@@ -27,6 +29,8 @@ class NibblerGame : public GameTemplate {
         // Variable
         MapManager _mapManager;
         int _currentLevel;
+        int _MAP_HEIGHT;
+        int _MAP_WIDTH;
 
         // Method
         void setLayerBackground();
@@ -35,6 +39,7 @@ class NibblerGame : public GameTemplate {
         void setLayerFood();
         void setLayerWalls();
         std::pair<size_t, size_t> findFoodPosition() const;
+
 };
 
 #endif /* !NIBBLERGAME_HPP_ */

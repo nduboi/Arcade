@@ -15,11 +15,10 @@
 #include "ScoreEntityHUD.hpp"
 #include "HighScoreEntityHUD.hpp"
 #include "TimeEntityHUD.hpp"
+#include "TextEntityHUD.hpp"
 #include "BigTextEntityHUD.hpp"
 #include <bits/algorithmfwd.h>
 
-const int MAP_HEIGHT = 21;
-const int MAP_WIDTH = 21;
 const int MAP_LAYER = 2;
 
 NibblerGame::NibblerGame() : _currentLevel(1)
@@ -31,11 +30,13 @@ NibblerGame::NibblerGame() : _currentLevel(1)
     this->_time = std::chrono::steady_clock::now();
 
     _mapManager.generateMap(_currentLevel);
+    this->_MAP_HEIGHT = _mapManager.getMapLayout().size();
+    this->_MAP_WIDTH = _mapManager.getMapLayout()[0].size();
 
-    this->_entities.resize(MAP_HEIGHT);
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        this->_entities[y].resize(MAP_WIDTH);
-        for (int x = 0; x < MAP_WIDTH; x++) {
+    this->_entities.resize(_MAP_HEIGHT);
+    for (int y = 0; y < _MAP_HEIGHT; y++) {
+        this->_entities[y].resize(_MAP_WIDTH);
+        for (int x = 0; x < _MAP_WIDTH; x++) {
             this->_entities[y][x].resize(MAP_LAYER);
         }
     }
@@ -46,8 +47,8 @@ NibblerGame::NibblerGame() : _currentLevel(1)
 
 void NibblerGame::setLayerBackground()
 {
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        for (int x = 0; x < MAP_WIDTH; x++) {
+    for (int y = 0; y < _MAP_HEIGHT; y++) {
+        for (int x = 0; x < _MAP_WIDTH; x++) {
             this->_entities[y][x][0] = std::make_shared<VoidEntity>("assets/nibbler/Floor.png", 1, "", std::make_pair(x, y));
         }
     }
@@ -57,9 +58,9 @@ void NibblerGame::setLayerWalls()
 {
     auto mapLayout = _mapManager.getMapLayout();
 
-    for (int y = 0; y < MAP_HEIGHT && y < mapLayout.size(); y++) {
-        for (int x = 0; x < MAP_WIDTH && x < mapLayout[y].size(); x++) {
-            if (mapLayout[y][x] >= 1 && mapLayout[y][x] <= 14) {
+    for (int y = 0; y < _MAP_HEIGHT && y < mapLayout.size(); y++) {
+        for (int x = 0; x < _MAP_WIDTH && x < mapLayout[y].size(); x++) {
+            if ((mapLayout[y][x] >= 1 && mapLayout[y][x] <= 14) || mapLayout[y][x] == 22) {
                 std::string wallSprite = _mapManager.getSpriteFromId(mapLayout[y][x]);
                 this->_entities[y][x][1] = std::make_shared<WallEntity>(wallSprite, std::make_pair(x, y));
             }
@@ -69,8 +70,8 @@ void NibblerGame::setLayerWalls()
 
 void NibblerGame::setLayerEntities()
 {
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        for (int x = 0; x < MAP_WIDTH; x++) {
+    for (int y = 0; y < _MAP_HEIGHT; y++) {
+        for (int x = 0; x < _MAP_WIDTH; x++) {
             if (!this->_entities[y][x][1] || !std::dynamic_pointer_cast<WallEntity>(this->_entities[y][x][1]))
                 this->_entities[y][x][1] = std::make_shared<VoidEntity>(this->_entities[y][x][0]->getSpriteName(), 1, "", std::make_pair(x, y));
         }
@@ -101,7 +102,7 @@ void NibblerGame::setNibblerBody()
             currentPos.second + bodyDirection.second
         };
 
-        if (nextPos.first >= MAP_WIDTH || nextPos.second >= MAP_HEIGHT ||
+        if (nextPos.first >= _MAP_WIDTH || nextPos.second >= _MAP_HEIGHT ||
             nextPos.first < 0 || nextPos.second < 0 ||
             _mapManager.isWallAt(nextPos))
             break;
@@ -113,29 +114,6 @@ void NibblerGame::setNibblerBody()
     for (size_t i = 0; i < bodyPositions.size(); i++) {
         auto pos = bodyPositions[i];
         this->_entities[pos.second][pos.first][1] = std::make_shared<NibblerTailEntity>(3, "b", pos, i);
-    }
-
-    if (bodyPositions.size() >= 1) {
-        auto body1 = std::dynamic_pointer_cast<NibblerTailEntity>(this->_entities[bodyPositions[0].second][bodyPositions[0].first][1]);
-        if (body1) {
-            std::pair<size_t, size_t> nextPos = bodyPositions.size() >= 2 ? bodyPositions[1] : std::pair<size_t, size_t>{100, 100};
-            body1->updateDirection(bodyPositions[0], startPos, nextPos);
-        }
-    }
-
-    if (bodyPositions.size() >= 2) {
-        auto body2 = std::dynamic_pointer_cast<NibblerTailEntity>(this->_entities[bodyPositions[1].second][bodyPositions[1].first][1]);
-        if (body2) {
-            std::pair<size_t, size_t> nextPos = bodyPositions.size() >= 3 ? bodyPositions[2] : std::pair<size_t, size_t>{100, 100};
-            body2->updateDirection(bodyPositions[1], bodyPositions[0], nextPos);
-        }
-    }
-
-    if (bodyPositions.size() >= 3) {
-        auto body3 = std::dynamic_pointer_cast<NibblerTailEntity>(this->_entities[bodyPositions[2].second][bodyPositions[2].first][1]);
-        if (body3) {
-            body3->updateDirection(bodyPositions[2], bodyPositions[1], std::make_pair(100, 100));
-        }
     }
 
     auto head = std::dynamic_pointer_cast<NibblerHeadEntity>(this->_entities[startPos.second][startPos.first][1]);
@@ -151,8 +129,8 @@ std::pair<size_t, size_t> NibblerGame::findFoodPosition() const
 {
     std::vector<std::pair<size_t, size_t>> emptyPositions;
 
-    for (int y = 0; y < MAP_HEIGHT; y++) {
-        for (int x = 0; x < MAP_WIDTH; x++) {
+    for (int y = 0; y < _MAP_HEIGHT; y++) {
+        for (int x = 0; x < _MAP_WIDTH; x++) {
             if (std::dynamic_pointer_cast<VoidEntity>(this->_entities[y][x][1])) {
                 emptyPositions.push_back(std::make_pair(x, y));
             }
@@ -192,6 +170,11 @@ std::vector<std::shared_ptr<IEntity>> NibblerGame::getHUD() const
     std::size_t secondsElapsed = this->getTime();
     hud.push_back(std::make_shared<TimeEntityHUD>(secondsElapsed, std::make_pair(350, 35)));
 
+    std::string levelString = std::to_string(this->_currentLevel);
+    while (levelString.length() < 2)
+        levelString = "0" + levelString;
+    hud.push_back(std::make_shared<TextEntityHUD>("Level " + levelString, std::make_pair(675, 35)));
+
     if (this->getIsStarted() == false)
         hud.push_back(std::make_shared<BigTextEntityHUD>("Press any direction to start", std::make_pair(250, 850)));
     if (this->getGameState() == LOSE)
@@ -200,4 +183,31 @@ std::vector<std::shared_ptr<IEntity>> NibblerGame::getHUD() const
         hud.push_back(std::make_shared<BigTextEntityHUD>("You Win", std::make_pair(350, 850)));
 
     return hud;
+}
+
+void NibblerGame::changeDifficulty()
+{
+    this->_score = 0;
+    this->_isStarted = false;
+    this->_gameState = PLAYING;
+    this->_time = std::chrono::steady_clock::now();
+    this->_currentLevel += 1;
+    if (_currentLevel > 2)
+        this->_currentLevel = 1;
+
+    _mapManager.generateMap(_currentLevel);
+    this->_MAP_HEIGHT = _mapManager.getMapLayout().size();
+    this->_MAP_WIDTH = _mapManager.getMapLayout()[0].size();
+
+    this->_entities.clear();
+    this->_entities.resize(_MAP_HEIGHT);
+    for (int y = 0; y < _MAP_HEIGHT; y++) {
+        this->_entities[y].resize(_MAP_WIDTH);
+        for (int x = 0; x < _MAP_WIDTH; x++) {
+            this->_entities[y][x].resize(MAP_LAYER);
+        }
+    }
+    this->setLayerBackground();
+    this->setLayerWalls();
+    this->setLayerEntities();
 }

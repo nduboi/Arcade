@@ -37,8 +37,11 @@ class MapManager {
         std::vector<std::vector<int>> _mapLayout;
 
         // Method
-        void createMap();
         void initSpriteMap();
+
+        // Maps
+        void createMapOne();
+        void createMapTwo();
 
     };
 

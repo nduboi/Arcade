@@ -34,8 +34,6 @@ class NibblerHeadEntity : public AEntity {
     private:
         // Variable
         std::chrono::time_point<std::chrono::steady_clock> _lastTime;
-        std::chrono::time_point<std::chrono::steady_clock> _pauseUntil;
-        bool _isPaused;
         std::pair<int, int> _inputDirection;
         std::pair<int, int> _direction;
         std::map<std::pair<int, int>, std::string> _assetsName;
@@ -50,7 +48,6 @@ class NibblerHeadEntity : public AEntity {
         // Method
         void moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2);
         bool lastTimePassed();
-        bool isAtIntersection(std::shared_ptr<IGameModule> gameModule);
         void moveBodyParts(std::shared_ptr<IGameModule> gameModule);
         bool checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const;
         bool checkCollisionWithWall(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const;
@@ -58,7 +55,6 @@ class NibblerHeadEntity : public AEntity {
 
         std::vector<std::shared_ptr<NibblerTailEntity>> findAndSortBodyParts(const grid_t &grid) const;
         void moveBodyPartsToNewPositions(std::shared_ptr<IGameModule> gameModule, const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts);
-        void updateBodyPartDirections(std::shared_ptr<IGameModule> gameModule, const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts);
         void addFirstBodyPart(std::shared_ptr<IGameModule> gameModule);
         void addBodyPartToTail(std::shared_ptr<IGameModule> gameModule, size_t index, const std::pair<size_t, size_t> &lastBodyPos, const std::pair<size_t, size_t> &beforeLastPos);
         bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;

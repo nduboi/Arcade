@@ -119,7 +119,7 @@ int MinesweeperGame::getNbMines() const
     if (this->_width == 16 && this->_height == 16)
         return 40;
     if (this->_width == 30 && this->_height == 30)
-        return 200;
+        return 150;
     return static_cast<int>(this->_width * this->_height * 0.15);
 }
 
