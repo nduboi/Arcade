@@ -139,31 +139,6 @@ void NibblerHeadEntity::moveBodyPartsToNewPositions(std::shared_ptr<IGameModule>
     }
 }
 
-void NibblerHeadEntity::updateBodyPartDirections(std::shared_ptr<IGameModule> gameModule,
-    const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts)
-{
-    grid_t grid = gameModule->getEntities();
-
-    for (size_t i = 0; i < bodyParts.size(); i++) {
-        auto bodyPart = std::dynamic_pointer_cast<NibblerTailEntity>(bodyParts[i]);
-        auto newPos = this->_previousPositions[this->_previousPositions.size() - 2 - i];
-
-        std::pair<size_t, size_t> nextPos;
-        std::pair<size_t, size_t> prevPos = {100, 100};
-
-        if (i > 0) {
-            nextPos = bodyParts[i-1]->getPosition();
-        } else {
-            nextPos = this->_position;
-        }
-
-        if (i < bodyParts.size() - 1)
-            prevPos = bodyParts[i+1]->getPosition();
-
-        bodyPart->updateDirection(newPos, nextPos, prevPos);
-    }
-}
-
 bool NibblerHeadEntity::checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const
 {
     grid_t grid = gameModule->getEntities();
@@ -218,7 +193,6 @@ void NibblerHeadEntity::addFirstBodyPart(std::shared_ptr<IGameModule> gameModule
 
     if (this->isValidPosition(newPos, grid)) {
         auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, 0);
-        newBodyPart->updateDirection(newPos, this->_position, {100, 100});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
         this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -239,7 +213,6 @@ void NibblerHeadEntity::addBodyPartToTail(std::shared_ptr<IGameModule> gameModul
 
     if (this->isValidPosition(newPos, grid)) {
         auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, index);
-        newBodyPart->updateDirection(newPos, lastBodyPos, {0, 0});
         grid[newPos.second][newPos.first][1] = newBodyPart;
         gameModule->setEntities(grid);
         this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -289,7 +262,6 @@ void NibblerHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModu
 
         if (this->isValidPosition(newPos, grid)) {
             auto newBodyPart = std::make_shared<NibblerTailEntity>(3, "", newPos, 0);
-            newBodyPart->updateDirection(newPos, this->_position, {100, 100});
             grid[newPos.second][newPos.first][1] = newBodyPart;
             gameModule->setEntities(grid);
             this->_previousPositions.insert(this->_previousPositions.begin(), newPos);
@@ -303,7 +275,6 @@ void NibblerHeadEntity::addPendingBodyPart(std::shared_ptr<IGameModule> gameModu
                 beforeTailPos = bodyParts[bodyParts.size() - 2]->getPosition();
             else
                 beforeTailPos = this->_position;
-            newBodyPart->updateDirection(this->_lastTailPosition, beforeTailPos, {100, 100});
             grid[this->_lastTailPosition.second][this->_lastTailPosition.first][1] = newBodyPart;
             gameModule->setEntities(grid);
             this->_previousPositions.insert(this->_previousPositions.begin(), this->_lastTailPosition);
@@ -410,7 +381,6 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
     this->moveEntities(gameModule, this->_position, nextPosition);
     this->moveBodyParts(gameModule);
     this->addPendingBodyPart(gameModule);
-    this->updateBodyPartDirections(gameModule, findAndSortBodyParts(gameModule->getEntities()));
 }
 
 std::vector<std::pair<int, int>> NibblerHeadEntity::getValidDirections(const std::pair<size_t, size_t>& position) const

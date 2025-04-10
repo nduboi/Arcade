@@ -23,7 +23,6 @@ class NibblerTailEntity : public AEntity {
 
         std::string getSpriteName() const override;
         int getIndex() const;
-        void updateDirection(std::pair<size_t, size_t> current, std::pair<size_t, size_t> next, std::pair<size_t, size_t> prev);
 };
 
 #endif /* !NIBBLERTAILENTITY_HPP_ */

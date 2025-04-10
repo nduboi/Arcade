@@ -115,29 +115,6 @@ void NibblerGame::setNibblerBody()
         this->_entities[pos.second][pos.first][1] = std::make_shared<NibblerTailEntity>(3, "b", pos, i);
     }
 
-    if (bodyPositions.size() >= 1) {
-        auto body1 = std::dynamic_pointer_cast<NibblerTailEntity>(this->_entities[bodyPositions[0].second][bodyPositions[0].first][1]);
-        if (body1) {
-            std::pair<size_t, size_t> nextPos = bodyPositions.size() >= 2 ? bodyPositions[1] : std::pair<size_t, size_t>{100, 100};
-            body1->updateDirection(bodyPositions[0], startPos, nextPos);
-        }
-    }
-
-    if (bodyPositions.size() >= 2) {
-        auto body2 = std::dynamic_pointer_cast<NibblerTailEntity>(this->_entities[bodyPositions[1].second][bodyPositions[1].first][1]);
-        if (body2) {
-            std::pair<size_t, size_t> nextPos = bodyPositions.size() >= 3 ? bodyPositions[2] : std::pair<size_t, size_t>{100, 100};
-            body2->updateDirection(bodyPositions[1], bodyPositions[0], nextPos);
-        }
-    }
-
-    if (bodyPositions.size() >= 3) {
-        auto body3 = std::dynamic_pointer_cast<NibblerTailEntity>(this->_entities[bodyPositions[2].second][bodyPositions[2].first][1]);
-        if (body3) {
-            body3->updateDirection(bodyPositions[2], bodyPositions[1], std::make_pair(100, 100));
-        }
-    }
-
     auto head = std::dynamic_pointer_cast<NibblerHeadEntity>(this->_entities[startPos.second][startPos.first][1]);
     if (head) {
         std::vector<std::pair<size_t, size_t>> allPositions = bodyPositions;

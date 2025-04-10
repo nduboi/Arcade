@@ -55,7 +55,6 @@ class NibblerHeadEntity : public AEntity {
 
         std::vector<std::shared_ptr<NibblerTailEntity>> findAndSortBodyParts(const grid_t &grid) const;
         void moveBodyPartsToNewPositions(std::shared_ptr<IGameModule> gameModule, const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts);
-        void updateBodyPartDirections(std::shared_ptr<IGameModule> gameModule, const std::vector<std::shared_ptr<NibblerTailEntity>> &bodyParts);
         void addFirstBodyPart(std::shared_ptr<IGameModule> gameModule);
         void addBodyPartToTail(std::shared_ptr<IGameModule> gameModule, size_t index, const std::pair<size_t, size_t> &lastBodyPos, const std::pair<size_t, size_t> &beforeLastPos);
         bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;
