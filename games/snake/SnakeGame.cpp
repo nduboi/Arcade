@@ -14,6 +14,7 @@
 #include "ScoreEntityHUD.hpp"
 #include "HighScoreEntityHUD.hpp"
 #include "TimeEntityHUD.hpp"
+#include "TextEntityHUD.hpp"
 #include "BigTextEntityHUD.hpp"
 
 const int MAP_HEIGHT = 17;
@@ -27,6 +28,7 @@ SnakeGame::SnakeGame()
     this->_isStarted = false;
     this->_gameState = PLAYING;
     this->_time = std::chrono::steady_clock::now();
+    this->_difficulty = 0;
 
     this->_entities.resize(MAP_HEIGHT);
     for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -110,6 +112,10 @@ std::vector<std::shared_ptr<IEntity>> SnakeGame::getHUD() const
     std::size_t secondsElapsed = this->getTime();
     hud.push_back(std::make_shared<TimeEntityHUD>(secondsElapsed, std::make_pair(350, 35)));
 
+    std::string appleString = std::to_string(this->_difficulty + 1);
+    while (appleString.length() < 2)
+        appleString = "0" + appleString;
+    hud.push_back(std::make_shared<TextEntityHUD>("Apple " + appleString, std::make_pair(675, 35)));
 
     if (this->getIsStarted() == false)
         hud.push_back(std::make_shared<BigTextEntityHUD>("Press any direction to start", std::make_pair(250, 850)));
@@ -118,4 +124,29 @@ std::vector<std::shared_ptr<IEntity>> SnakeGame::getHUD() const
     if (this->getGameState() == WIN)
         hud.push_back(std::make_shared<BigTextEntityHUD>("You Win", std::make_pair(350, 850)));
     return hud;
+}
+
+void SnakeGame::changeDifficulty()
+{
+    this->_score = 0;
+    this->_isStarted = false;
+    this->_gameState = PLAYING;
+    this->_time = std::chrono::steady_clock::now();
+    this->_difficulty += 1;
+    if (_difficulty > 9)
+        this->_difficulty = 0;
+
+    this->_entities.resize(MAP_HEIGHT);
+    for (int y = 0; y < MAP_HEIGHT; y++) {
+        this->_entities[y].resize(MAP_WIDTH);
+        for (int x = 0; x < MAP_WIDTH; x++) {
+            this->_entities[y][x].resize(MAP_LAYER);
+        }
+    }
+    this->setLayerBackground();
+    this->setLayerEntities();
+
+    for (int i = 0; i < _difficulty; i++) {
+        this->setLayerApple();
+    }
 }
