@@ -29,7 +29,7 @@ namespace DisplayLib {
         bool isOpen();
         void clear();
         void setColor(const Color& color);
-        void drawRectangle(int x, int y, int width, int height);
+        void drawRectangle(int x, int y, int width, int height, const Color& color);
 
         void drawRectangleMenu(const std::pair<size_t, size_t> &size, const std::pair<size_t, size_t> &position,
                                const Color &color);
