@@ -72,6 +72,8 @@ namespace DisplayLib {
 			case 2: ncursesColor = COLOR_RED; break;
 			case 3: ncursesColor = COLOR_GREEN; break;
 			case 4: ncursesColor = COLOR_BLUE; break;
+			case 5: ncursesColor = COLOR_YELLOW; break;
+			case 6: ncursesColor = COLOR_CYAN; break;
 			default: ncursesColor = COLOR_BLACK; break;
 		}
 
@@ -139,6 +141,8 @@ namespace DisplayLib {
 			case 2: ncursesColor = COLOR_RED; break;
 			case 3: ncursesColor = COLOR_GREEN; break;
 			case 4: ncursesColor = COLOR_BLUE; break;
+			case 5: ncursesColor = COLOR_YELLOW; break;
+			case 6: ncursesColor = COLOR_CYAN; break;
 			default: ncursesColor = COLOR_BLACK; break;
 		}
 

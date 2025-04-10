@@ -79,6 +79,8 @@ namespace DisplayLib {
 			case 2: SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 255); break;    // Red
 			case 3: SDL_SetRenderDrawColor(this->renderer, 0, 255, 0, 255); break;    // Green
 			case 4: SDL_SetRenderDrawColor(this->renderer, 0, 0, 255, 255); break;    // Blue
+			case 5: SDL_SetRenderDrawColor(this->renderer, 255, 255, 0, 255); break; // Yellow
+			case 6: SDL_SetRenderDrawColor(this->renderer, 0, 255, 255, 255); break; // Cyan
 			default: SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255); break;     // Default Black
 		}
 	}
@@ -231,8 +233,10 @@ namespace DisplayLib {
             case 0: sdlColor = {0, 0, 0, 255}; break;      // Black
             case 1: sdlColor = {255, 255, 255, 255}; break; // White
             case 2: sdlColor = {255, 0, 0, 255}; break;    // Red
-            case 3: sdlColor = {0, 255, 0, 255}; break;    // Green
-            case 4: sdlColor = {0, 0, 255, 255}; break;    // Blue
+        	case 3: sdlColor = {0, 255, 0, 255}; break;    // Green
+        	case 4: sdlColor = {0, 0, 255, 255}; break;    // Blue
+        	case 5: sdlColor = {255, 255, 0, 255}; break; // Yellow
+        	case 6: sdlColor = {0, 255, 255, 255}; break; // Cyan
         }
         SDL_Surface* surface = TTF_RenderText_Blended(defaultFont, text.c_str(), sdlColor);
         if (!surface) {
