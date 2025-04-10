@@ -39,6 +39,7 @@ void Cell::onClick(std::shared_ptr<IGameModule> gameModule, clickType_t type)
                         continue;
                     auto cell = std::dynamic_pointer_cast<Cell>(grid[y][x][0]);
                     cell->_firstClick = false;
+                    cell->_isFlagged = false;
                 }
             }
             placeMines(gameModule);
@@ -78,7 +79,7 @@ size_t Cell::createNumberMines(std::pair<size_t, size_t> map)
     if (map.first == 16 && map.second == 16)
         return 40;
     if (map.first == 30 && map.second == 30)
-        return 200;
+        return 150;
     return static_cast<size_t>(totalCells * 0.15);
 }
 
