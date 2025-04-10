@@ -15,7 +15,7 @@
 #include <iostream>
 #include <bits/algorithmfwd.h>
 
-const double NIBBLER_DELTATIME = 0.08;
+const double NIBBLER_DELTATIME = 0.12;
 const double NIBBLER_PAUSE_TIME = 0.3;
 
 NibblerHeadEntity::NibblerHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position, MapManager& mapManager)
@@ -38,10 +38,8 @@ NibblerHeadEntity::NibblerHeadEntity(std::size_t color, std::string text, std::p
     this->_hasCollisions = true;
     this->_previousPositions.push_back(position);
     this->_lastTime = std::chrono::steady_clock::now();
-    this->_pauseUntil = std::chrono::steady_clock::now();
     this->_pendingBodyPartAddition = false;
     this->_lastTailPosition = {0, 0};
-    this->_isPaused = false;
 }
 
 void NibblerHeadEntity::setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule)
@@ -76,28 +74,12 @@ void NibblerHeadEntity::moveEntities(std::shared_ptr<IGameModule> gameModule, st
 bool NibblerHeadEntity::lastTimePassed()
 {
     std::chrono::time_point<std::chrono::steady_clock> currentTime = std::chrono::steady_clock::now();
-
-    if (this->_isPaused) {
-        if (currentTime < this->_pauseUntil)
-            return false;
-        this->_isPaused = false;
-    }
-
     std::chrono::duration<double> elapsedTime = currentTime - this->_lastTime;
     if (elapsedTime.count() < NIBBLER_DELTATIME)
         return false;
     this->_lastTime = currentTime;
+
     return true;
-}
-
-bool NibblerHeadEntity::isAtIntersection(std::shared_ptr<IGameModule> gameModule)
-{
-    auto nibblerGame = std::dynamic_pointer_cast<NibblerGame>(gameModule);
-    if (!nibblerGame)
-        return false;
-
-    auto validDirections = nibblerGame->getValidDirections(this->_position);
-    return validDirections.size() > 2;
 }
 
 std::string NibblerHeadEntity::getSpriteName() const
@@ -365,15 +347,6 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
         return;
     if (!this->lastTimePassed() || !gameModule->getIsStarted())
         return;
-
-    if (isAtIntersection(gameModule) && !this->_isPaused) {
-        if (this->_inputDirection != this->_direction) {
-            this->_isPaused = true;
-            this->_pauseUntil = std::chrono::steady_clock::now() +
-                               std::chrono::milliseconds(static_cast<int>(NIBBLER_PAUSE_TIME * 1000));
-            return;
-        }
-    }
 
     this->_direction = this->_inputDirection;
 

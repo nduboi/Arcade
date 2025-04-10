@@ -34,8 +34,6 @@ class NibblerHeadEntity : public AEntity {
     private:
         // Variable
         std::chrono::time_point<std::chrono::steady_clock> _lastTime;
-        std::chrono::time_point<std::chrono::steady_clock> _pauseUntil;
-        bool _isPaused;
         std::pair<int, int> _inputDirection;
         std::pair<int, int> _direction;
         std::map<std::pair<int, int>, std::string> _assetsName;
@@ -50,7 +48,6 @@ class NibblerHeadEntity : public AEntity {
         // Method
         void moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2);
         bool lastTimePassed();
-        bool isAtIntersection(std::shared_ptr<IGameModule> gameModule);
         void moveBodyParts(std::shared_ptr<IGameModule> gameModule);
         bool checkCollisionWithBody(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const;
         bool checkCollisionWithWall(std::pair<size_t, size_t> nextPosition, std::shared_ptr<IGameModule> gameModule) const;
