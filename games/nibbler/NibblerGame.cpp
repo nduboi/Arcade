@@ -158,6 +158,14 @@ std::vector<std::shared_ptr<IEntity>> NibblerGame::getHUD() const
 
 void NibblerGame::changeDifficulty()
 {
+    for (int y = 0; y < _MAP_HEIGHT; y++) {
+        for (int x = 0; x < _MAP_WIDTH; x++) {
+            this->_entities[y][x].clear();
+        }
+        this->_entities[y].clear();
+    }
+    this->_entities.clear();
+
     if (_gameState != WIN) {
         this->_score = 0;
         this->_time = std::chrono::steady_clock::now();
@@ -172,12 +180,13 @@ void NibblerGame::changeDifficulty()
     this->_MAP_HEIGHT = _mapManager.getMapLayout().size();
     this->_MAP_WIDTH = _mapManager.getMapLayout()[0].size();
 
-    this->_entities.clear();
     this->_entities.resize(_MAP_HEIGHT);
     for (int y = 0; y < _MAP_HEIGHT; y++) {
         this->_entities[y].resize(_MAP_WIDTH);
         for (int x = 0; x < _MAP_WIDTH; x++) {
             this->_entities[y][x].resize(MAP_LAYER);
+            this->_entities[y][x][0] = nullptr;
+            this->_entities[y][x][1] = nullptr;
         }
     }
     this->setLayerBackground();

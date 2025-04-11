@@ -165,6 +165,8 @@ gameState_t NibblerHeadEntity::foodCollision(std::shared_ptr<IGameModule> gameMo
 
     if (food) {
         food->onInteract(gameModule);
+        if (gameModule->getGameState() != PLAYING)
+            return gameState_t::WIN;
         this->addBodyPart(gameModule);
         return gameState_t::PLAYING;
     }
@@ -370,8 +372,10 @@ void NibblerHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std:
     }
 
     gameState_t state = this->foodCollision(gameModule, nextPosition);
-    if (state != gameState_t::PLAYING)
+    if (state != gameState_t::PLAYING) {
+        gameModule->changeDifficulty();
         return;
+    }
 
     this->_previousPositions.push_back(nextPosition);
     while (this->_previousPositions.size() > this->getBodySize() + 2) {

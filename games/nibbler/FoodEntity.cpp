@@ -46,9 +46,8 @@ void FoodEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
     int nbFoodEntities = getNbFoodEntities(grid);
 
     if (nbFoodEntities == 1) {
+        gameModule->setScore(gameModule->getScore() + 110);
         gameModule->setGameState(gameState_t::WIN);
-        gameModule->setScore(gameModule->getScore() + 100);
-        gameModule->changeDifficulty();
         return;
     }
     gameModule->setScore(gameModule->getScore() + 10);
