@@ -36,9 +36,7 @@ class NibblerGame : public GameTemplate {
         void setLayerBackground();
         void setLayerEntities();
         void setNibblerBody();
-        void setLayerFood();
         void setLayerWalls();
-        std::pair<size_t, size_t> findFoodPosition() const;
 
 };
 

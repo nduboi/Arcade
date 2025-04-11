@@ -405,6 +405,13 @@ Core::Core(std::string argv): _menu(this->_window), _saver("savefile.json") {
 		throw HelpException();
 	}
 	this->_loadDisplayLib(argv);
+
+	for (auto &lib : this->_displayLibsPaths) {
+		if (lib.find(argv) != std::string::npos) {
+			this->_indexDisplay = &lib - &this->_displayLibsPaths[0];
+			break;
+		}
+	}
 }
 
 Core::~Core() {

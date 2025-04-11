@@ -63,6 +63,10 @@ void NibblerGame::setLayerWalls()
             if ((mapLayout[y][x] >= 1 && mapLayout[y][x] <= 14) || mapLayout[y][x] == 22) {
                 std::string wallSprite = _mapManager.getSpriteFromId(mapLayout[y][x]);
                 this->_entities[y][x][1] = std::make_shared<WallEntity>(wallSprite, std::make_pair(x, y));
+            } else if (mapLayout[y][x] == 99) {
+                this->_entities[y][x][1] = std::make_shared<FoodEntity>(std::make_pair(x, y));
+            } else {
+                this->_entities[y][x][1] = std::make_shared<VoidEntity>("assets/nibbler/Floor.png", 1, "", std::make_pair(x, y));
             }
         }
     }
@@ -70,17 +74,9 @@ void NibblerGame::setLayerWalls()
 
 void NibblerGame::setLayerEntities()
 {
-    for (int y = 0; y < _MAP_HEIGHT; y++) {
-        for (int x = 0; x < _MAP_WIDTH; x++) {
-            if (!this->_entities[y][x][1] || !std::dynamic_pointer_cast<WallEntity>(this->_entities[y][x][1]))
-                this->_entities[y][x][1] = std::make_shared<VoidEntity>(this->_entities[y][x][0]->getSpriteName(), 1, "", std::make_pair(x, y));
-        }
-    }
-
     auto startPos = _mapManager.getPlayerStartPosition();
     this->_entities[startPos.second][startPos.first][1] = std::make_shared<NibblerHeadEntity>(4, "h", startPos, _mapManager);
     this->setNibblerBody();
-    this->setLayerFood();
 }
 
 void NibblerGame::setNibblerBody()
@@ -125,31 +121,6 @@ void NibblerGame::setNibblerBody()
     }
 }
 
-std::pair<size_t, size_t> NibblerGame::findFoodPosition() const
-{
-    std::vector<std::pair<size_t, size_t>> emptyPositions;
-
-    for (int y = 0; y < _MAP_HEIGHT; y++) {
-        for (int x = 0; x < _MAP_WIDTH; x++) {
-            if (std::dynamic_pointer_cast<VoidEntity>(this->_entities[y][x][1])) {
-                emptyPositions.push_back(std::make_pair(x, y));
-            }
-        }
-    }
-
-    if (emptyPositions.empty())
-        return std::make_pair(0, 0);
-
-    int randIndex = rand() % emptyPositions.size();
-    return emptyPositions[randIndex];
-}
-
-void NibblerGame::setLayerFood()
-{
-    auto foodPos = findFoodPosition();
-    this->_entities[foodPos.second][foodPos.first][1] = std::make_shared<FoodEntity>(foodPos);
-}
-
 bool NibblerGame::isWallAt(const std::pair<size_t, size_t>& position) const
 {
     return _mapManager.isWallAt(position);
@@ -187,10 +158,12 @@ std::vector<std::shared_ptr<IEntity>> NibblerGame::getHUD() const
 
 void NibblerGame::changeDifficulty()
 {
-    this->_score = 0;
+    if (_gameState != WIN) {
+        this->_score = 0;
+        this->_time = std::chrono::steady_clock::now();
+    }
     this->_isStarted = false;
     this->_gameState = PLAYING;
-    this->_time = std::chrono::steady_clock::now();
     this->_currentLevel += 1;
     if (_currentLevel > 2)
         this->_currentLevel = 1;

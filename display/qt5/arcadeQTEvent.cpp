@@ -42,6 +42,10 @@ IEvent::event_t arcadeQTEvent::pollEvents(std::pair<int, int> gridSize) {
             } else if (key == Qt::Key_Backspace && !_input.empty()) {
                 _input.pop_back();
                 return IEvent::NOTHING;
+            } else if (key == Qt::Key_Return) {
+                this->_iswritting = false;
+                this->_mousePos = {730, 480};
+                return IEvent::MOUSELEFTCLICK;
             }
         }
 
@@ -80,8 +84,12 @@ IEvent::event_t arcadeQTEvent::pollEvents(std::pair<int, int> gridSize) {
         this->_mousePos = {eventData.mouseX, eventData.mouseY};
 
         if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 &&
-            this->_mousePos.second >= 120 && this->_mousePos.second <= 160)
+            this->_mousePos.second >= 120 && this->_mousePos.second <= 180)
             this->_iswritting = true;
+        if (_iswritting && (this->_mousePos.first >= 690 && this->_mousePos.first <= 790 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+                this->_iswritting = false;
+        if (_iswritting && (this->_mousePos.first >= 840 && this->_mousePos.first <= 940 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+            this->_iswritting = false;
 
         switch (eventData.mouseButton) {
             case Qt::RightButton:

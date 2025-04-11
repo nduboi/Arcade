@@ -24,6 +24,10 @@ IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize)
                 if (this->_input.length() <= 15 && event.keyboard.unichar >= 32 && event.keyboard.unichar <= 126) {
                     this->_input += static_cast<char>(event.keyboard.unichar);
                     return IEvent::NOTHING;
+                } else if (event.keyboard.unichar == 13) {
+                    this->_iswritting = false;
+                    this->_mousePos = {730, 480};
+                    return IEvent::MOUSELEFTCLICK;
                 }
             }
         }
@@ -50,9 +54,13 @@ IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize)
             this->_mousePos.first = event.mouse.x;
             this->_mousePos.second = event.mouse.y;
             if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 &&
-                this->_mousePos.second >= 120 && this->_mousePos.second <= 160) {
+                this->_mousePos.second >= 120 && this->_mousePos.second <= 180) {
                 this->_iswritting = true;
             }
+            if (_iswritting && (this->_mousePos.first >= 690 && this->_mousePos.first <= 790 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+                this->_iswritting = false;
+            if (_iswritting && (this->_mousePos.first >= 840 && this->_mousePos.first <= 940 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+                this->_iswritting = false;
             switch (event.mouse.button) {
                 case 1: return IEvent::MOUSELEFTCLICK;    // Left button
                 case 2: return IEvent::MOUSERIGHTCLICK;   // Right button
@@ -71,8 +79,6 @@ std::pair<int, int> arcadeAllegroEvent::getMousePos() {
     if (!al_is_mouse_installed()) {
         return std::make_pair(-1, -1);
     }
-    ALLEGRO_MOUSE_STATE mouse_state;
-    al_get_mouse_state(&mouse_state);
     if (this->_mapSize.first > 0 && this->_mapSize.second > 0) {
         auto WinSize = allegroWindow->allegro->getWindowSize();
         return {
@@ -80,7 +86,7 @@ std::pair<int, int> arcadeAllegroEvent::getMousePos() {
             ((this->_mousePos.second - hudOffset) * this->_mapSize.second) / (WinSize.second - hudOffset)
         };
     }
-    return std::make_pair(mouse_state.x, mouse_state.y);
+    return std::make_pair(_mousePos.first, _mousePos.second);
 }
 
 void arcadeAllegroEvent::setMapSize(std::pair<int, int> size) {
