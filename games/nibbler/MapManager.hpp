@@ -43,6 +43,7 @@ class MapManager {
         // Maps
         void createMapOne();
         void createMapTwo();
+        void createMapThree();
 
     };
 
