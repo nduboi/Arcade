@@ -41,12 +41,16 @@ class MapManager {
         void initSpriteMap();
 
         // Maps
+        void createMapBonus();
         void createMapOne();
         void createMapTwo();
         void createMapThree();
         void createMapFour();
+        void createMapFive();
         void createMapSix();
-        void createMapBonus();
+        void createMapSeven();
+        void createMapNine();
+
     };
 
 #endif /* !MAPMANAGER_HPP_ */
