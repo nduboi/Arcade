@@ -6,6 +6,7 @@
 #define ARCADESFMLEVENT_HPP
 
 #include <memory>
+#include <chrono>
 
 #include "arcadeSFML.hpp"
 #include "IEvent.hpp"
@@ -18,6 +19,7 @@ private:
 	std::pair<int, int> _mousePos;
 	std::string _input;
 	bool _iswritting;
+	std::chrono::time_point<std::chrono::steady_clock> _timePoint;
 
 public:
 	void init() override;

@@ -45,7 +45,7 @@ void MapManager::initSpriteMap()
         {18, "assets/nibbler/Nibbler_head_top.png"},
         {19, "assets/nibbler/Nibbler_tail_horizontal.png"},
         {20, "assets/nibbler/Nibbler_tail_vertical.png"},
-        {21, "assets/nibbler/Food.png"},
+        {21, "assets/nibbler/Food1.png"},
         {22, "assets/nibbler/Floor.png"},
     };
 }

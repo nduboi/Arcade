@@ -7,6 +7,8 @@
 
 #include <memory>
 #include <ncurses.h>
+#include <chrono>
+
 #include "IWindow.hpp"
 #include "IEvent.hpp"
 
@@ -19,6 +21,8 @@ namespace DisplayLib {
 		std::pair<int, int> _mousePos;
 		bool _isWriting = false;
 		std::string _input;
+		std::chrono::time_point<std::chrono::steady_clock> _timePoint;
+
 	public:
 		void init() override;
 

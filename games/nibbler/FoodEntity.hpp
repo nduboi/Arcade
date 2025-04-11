@@ -9,6 +9,7 @@
 #define FOODENTITY_HPP_
 
 #include "AEntity.hpp"
+#include <chrono>
 
 class FoodEntity : public AEntity {
     public:
@@ -18,10 +19,12 @@ class FoodEntity : public AEntity {
 
         // Method
         void onInteract(std::shared_ptr<IGameModule> gameModule) override;
+        std::string getSpriteName() const override;
 
     private:
         //Method
         int getNbFoodEntities(const grid_t &grid) const;
+        std::chrono::time_point<std::chrono::steady_clock> _timePoint;
 };
 
 #endif /* !FOODENTITY_HPP_ */

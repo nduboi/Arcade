@@ -143,8 +143,26 @@ std::string arcadeQTEvent::getUsername()
 
 void arcadeQTEvent::renderWrittiing()
 {
+        std::string username = _input;
+
+    if (username.empty()) {
+        this->_window->drawTextMenu(
+            "No Name",
+            {685, 407},
+            {127, 127, 127},
+            24
+        );
+        return;
+    }
+
+    std::chrono::duration<double> elapsed_seconds = std::chrono::steady_clock::now() - this->_timePoint;
+    if (elapsed_seconds.count() > 0.5)
+        username += "|";
+    if (elapsed_seconds.count() > 1)
+        this->_timePoint = std::chrono::steady_clock::now();
+
     this->_window->drawTextMenu(
-        _input,
+        username,
         {685, 407},
         {0, 0, 0},
         24
@@ -156,4 +174,5 @@ arcadeQTEvent::arcadeQTEvent(std::shared_ptr<IWindow> window) : _window(window) 
     this->_mapSize = std::make_pair(0, 0);
     this->_iswritting = false;
     this->_input = "";
+    this->_timePoint = std::chrono::steady_clock::now();
 }

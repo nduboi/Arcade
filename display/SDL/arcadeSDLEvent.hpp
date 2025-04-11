@@ -8,6 +8,7 @@
 #include "IEvent.hpp"
 #include "IWindow.hpp"
 #include <memory>
+#include <chrono>
 
 #include "arcadeSDL.hpp"
 
@@ -18,6 +19,7 @@ private:
 	std::pair<int, int> _mousePos;
 	std::string _input;
 	bool _iswritting;
+	std::chrono::time_point<std::chrono::steady_clock> _timePoint;
 
 public:
 	void init() override;

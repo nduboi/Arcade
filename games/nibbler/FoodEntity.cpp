@@ -12,13 +12,14 @@
 
 FoodEntity::FoodEntity(std::pair<size_t, size_t> position)
 {
-    this->_spriteName = "assets/nibbler/Food.png";
+    this->_spriteName = "assets/nibbler/Food1.png";
     this->_color = 2;
     this->_text = "";
     this->_position = position;
     this->_isMovable = false;
     this->_isControlable = false;
     this->_hasCollisions = true;
+    this->_timePoint = std::chrono::steady_clock::now();
 }
 
 FoodEntity::~FoodEntity()
@@ -51,4 +52,25 @@ void FoodEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
         return;
     }
     gameModule->setScore(gameModule->getScore() + 10);
+}
+
+std::string FoodEntity::getSpriteName() const
+{
+    std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = now - this->_timePoint;
+
+    int state = static_cast<int>(elapsed_seconds.count() * 5) % 4;
+
+    switch (state) {
+        case 0:
+            return this->_spriteName;
+        case 1:
+            return "assets/nibbler/Food2.png";
+        case 2:
+            return "assets/nibbler/Food3.png";
+        case 3:
+            return "assets/nibbler/Food2.png";
+        default:
+            return this->_spriteName;
+    }
 }
