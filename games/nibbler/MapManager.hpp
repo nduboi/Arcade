@@ -45,6 +45,7 @@ class MapManager {
         void createMapTwo();
         void createMapThree();
         void createMapFour();
+        void createMapBonus();
 
     };
 
