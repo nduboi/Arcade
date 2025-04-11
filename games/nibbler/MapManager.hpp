@@ -45,8 +45,8 @@ class MapManager {
         void createMapTwo();
         void createMapThree();
         void createMapFour();
+        void createMapSix();
         void createMapBonus();
-
     };
 
 #endif /* !MAPMANAGER_HPP_ */
