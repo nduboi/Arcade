@@ -57,6 +57,9 @@ class MapManager {
         void createMapThirteen();
         void createMapFourteen();
         void createMapFifteen();
+        void createMapSixteen();
+        void createMapSeventeen();
+        void createMapEighteen();
     };
 
 #endif /* !MAPMANAGER_HPP_ */
