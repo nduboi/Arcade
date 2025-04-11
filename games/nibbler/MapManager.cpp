@@ -47,6 +47,7 @@ void MapManager::initSpriteMap()
         {20, "assets/nibbler/Nibbler_tail_vertical.png"},
         {21, "assets/nibbler/Food1.png"},
         {22, "assets/nibbler/Floor.png"},
+        {23, "assets/nibbler/Wall_dot.png"},
     };
 }
 
@@ -99,7 +100,7 @@ std::vector<std::pair<int, int>> MapManager::getValidDirections(const std::pair<
 
 int MapManager::getNbLevels()
 {
-    return 2;
+    return 3;
 }
 
 void MapManager::generateMap(int level)
@@ -107,6 +108,7 @@ void MapManager::generateMap(int level)
     switch (level) {
         case 1: createMapOne(); break;
         case 2: createMapTwo(); break;
+        case 3: createMapThree(); break;
         default: createMapOne(); break;
     }
 }
@@ -171,4 +173,34 @@ void MapManager::createMapTwo()
     };
 
     _playerStartPosition = {10, 17};
+}
+
+void MapManager::createMapThree()
+{
+    const int height = 19;
+    const int width = 19;
+
+    _mapLayout = {
+        { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
+        { 2, 0, 0,99, 0, 0, 0,99, 0, 0, 0,99, 0, 0, 0,99, 0, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2,99, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0,99, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0,99, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2,99, 0, 0,99, 0, 0, 0, 0, 0, 0, 0, 0, 0,99, 0, 0,99, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23,99,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2, 0, 0,99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2,99,23, 0,23,99,23,99,23, 0,23,99,23,99,23, 0,23,99, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2,99,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23,99, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6},
+    };
+
+    _playerStartPosition = {11, 17};
 }
