@@ -25,6 +25,11 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
                 _input += static_cast<char>(event.text.unicode);
             else if (event.text.unicode == 8 && !_input.empty())
                 _input.pop_back();
+            else if (event.text.unicode == 13) {
+                this->_iswritting = false;
+                this->_mousePos = {730, 480};
+                return IEvent::MOUSELEFTCLICK;
+            }
             return IEvent::NOTHING;
         }
         if (event.type == sf::Event::KeyPressed) {
@@ -61,6 +66,10 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
             this->_mousePos = {event.mouseButton.x, event.mouseButton.y};
             if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 180)
                 this->_iswritting = true;
+            if (_iswritting && (this->_mousePos.first >= 690 && this->_mousePos.first <= 790 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+                this->_iswritting = false;
+            if (_iswritting && (this->_mousePos.first >= 840 && this->_mousePos.first <= 940 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+                this->_iswritting = false;
             if (event.mouseButton.button == sf::Mouse::Right)
                 return MOUSERIGHTCLICK;
             if (event.mouseButton.button == sf::Mouse::Left)

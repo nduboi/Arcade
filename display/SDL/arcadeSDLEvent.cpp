@@ -37,6 +37,11 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
                     this->_input.pop_back();
                 return IEvent::NOTHING;
             }
+            else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RETURN) {
+                this->_iswritting = false;
+                this->_mousePos = {730, 480};
+                return IEvent::MOUSELEFTCLICK;
+            }
         }
         if (event.type == SDL_KEYDOWN) {
             switch (event.key.keysym.sym) {
@@ -72,6 +77,10 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
             SDL_GetMouseState(&this->_mousePos.first, &this->_mousePos.second);
             if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 180)
                 this->_iswritting = true;
+            if (_iswritting && (this->_mousePos.first >= 690 && this->_mousePos.first <= 790 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+                this->_iswritting = false;
+            if (_iswritting && (this->_mousePos.first >= 840 && this->_mousePos.first <= 940 && this->_mousePos.second >= 470 && this->_mousePos.second <= 510))
+                this->_iswritting = false;
             switch (event.button.button) {
                 case SDL_BUTTON_LEFT:
                     return IEvent::MOUSELEFTCLICK;
