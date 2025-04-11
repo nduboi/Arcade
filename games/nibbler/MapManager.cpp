@@ -100,7 +100,7 @@ std::vector<std::pair<int, int>> MapManager::getValidDirections(const std::pair<
 
 int MapManager::getNbLevels()
 {
-    return 19 + 1;
+    return 30 + 1;
 }
 
 void MapManager::generateMap(int level)
@@ -127,6 +127,15 @@ void MapManager::generateMap(int level)
         case 19: createMapSixteen(); break;
         case 20: createMapSeventeen(); break;
         case 21: createMapEighteen(); break;
+        case 22: createMapFourteen(); break;
+        case 23: createMapEleven(); break;
+        case 24: createMapNine(); break;
+        case 25: createMapSixteen(); break;
+        case 26: createMapThirteen(); break;
+        case 27: createMapFourteen(); break;
+        case 28: createMapSeventeen(); break;
+        case 29: createMapEleven(); break;
+        case 30: createMapNineteen(); break;
         default: createMapBonus(); break;
     }
 }
@@ -698,6 +707,36 @@ void MapManager::createMapEighteen()
         { 2, 0, 0, 0, 2, 0, 0,99, 2, 0, 0, 0, 0,99, 2, 0, 0, 0, 2},
         { 2, 0,23,99, 7, 0,23, 0, 5, 1,10, 0, 9, 1, 6,99,23, 0, 2},
         { 2,99, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,99, 2},
+        { 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6},
+    };
+
+    _playerStartPosition = {11, 17};
+}
+
+void MapManager::createMapNineteen()
+{
+    const int height = 19;
+    const int width = 19;
+
+    _mapLayout = {
+        { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2,99, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0,99, 2},
+        { 2, 0,23,99,23, 0,23,99,23, 0,23,99,23, 0,23,99,23, 0, 2},
+        { 2, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23,99,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2, 0,23, 0,23,99,23, 0,23, 0,23, 0,23,99,23, 0,23, 0, 2},
+        { 2,99, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0,99, 2},
+        { 2, 0,23, 0,23,99,23, 0,23, 0,23, 0,23,99,23, 0,23, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23,99,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2, 0, 0, 0,99, 0, 0, 0, 0, 0, 0, 0, 0, 0,99, 0, 0, 0, 2},
+        { 2, 0,23,99,23, 0,23,99,23, 0,23,99,23, 0,23,99,23, 0, 2},
+        { 2, 0,99, 0, 0, 0,99, 0, 0, 0, 0, 0,99, 0, 0, 0,99, 0, 2},
+        { 2, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0,23, 0, 2},
+        { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
         { 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 6},
     };
 
