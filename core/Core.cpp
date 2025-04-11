@@ -83,9 +83,14 @@ void Core::_loadDisplayLib(const std::string &path) {
 	this->_windowPtr.reset();
 	this->_displayLoader.openLib(path);
 
-	this->_windowPtr = std::shared_ptr<IWindow>(
-		this->_displayLoader.initEntryPointPtr<IWindow>("createInstance")
-	);
+	try {
+		this->_windowPtr = std::shared_ptr<IWindow>(
+			this->_displayLoader.initEntryPointPtr<IWindow>("createInstance")
+		);
+	} catch (const std::exception &e) {
+		std::cerr << "Error: Library is not compatible or not a graphic library." << std::endl;
+		throw CoreException("Failed to load createInstance symbol.");
+	}
 	if (!this->_windowPtr) {
 		throw CoreException("Failed to load createDisplay symbol.");
 	}
