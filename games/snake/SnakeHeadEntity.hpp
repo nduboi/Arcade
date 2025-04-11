@@ -25,6 +25,7 @@ class SnakeHeadEntity : public AEntity {
         std::vector<std::pair<size_t, size_t>> _previousPositions;
         bool _pendingBodyPartAddition;
         std::pair<size_t, size_t> _lastTailPosition;
+        bool _closeToApple;
 
         void setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule);
         void moveEntities(std::shared_ptr<IGameModule> gameModule, std::pair<size_t, size_t> pos1, std::pair<size_t, size_t> pos2);
@@ -43,6 +44,8 @@ class SnakeHeadEntity : public AEntity {
         void ensurePreviousPositionsInitialized(std::shared_ptr<IGameModule> gameModule);
 
         float getSpeedMultiplier(std::shared_ptr<IGameModule> gameModule) const;
+
+        bool isCloseToApple(std::shared_ptr<IGameModule> gameModule) const;
 
     public:
         SnakeHeadEntity(std::size_t color, std::string text, std::pair<size_t, size_t> position);

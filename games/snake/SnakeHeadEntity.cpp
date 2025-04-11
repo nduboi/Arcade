@@ -37,6 +37,7 @@ SnakeHeadEntity::SnakeHeadEntity(std::size_t color, std::string text, std::pair<
     this->_lastTime = std::chrono::steady_clock::now();
     this->_pendingBodyPartAddition = false;
     this->_lastTailPosition = {0, 0};
+    this->_closeToApple = false;
 }
 
 void SnakeHeadEntity::setDirection(std::pair<int, int> direction, std::shared_ptr<IGameModule> gameModule)
@@ -84,11 +85,38 @@ bool SnakeHeadEntity::lastTimePassed(std::shared_ptr<IGameModule> gameModule)
     return true;
 }
 
+bool SnakeHeadEntity::isCloseToApple(std::shared_ptr<IGameModule> gameModule) const
+{
+    grid_t grid = gameModule->getEntities();
+
+    for (int y = _position.second - 2; y <= _position.second + 2; y++) {
+        if (y < 0 || y >= grid.size())
+            continue;
+
+        for (int x = _position.first - 2; x <= _position.first + 2; x++) {
+            if (x < 0 || x >= grid[y].size())
+                continue;
+
+            auto entity = grid[y][x][1];
+            auto apple = std::dynamic_pointer_cast<AppleEntity>(entity);
+            if (apple) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 std::string SnakeHeadEntity::getSpriteName() const
 {
     if (this->_assetsName.find(this->_direction) == this->_assetsName.end())
         return this->_spriteName;
-    return this->_assetsName.at(this->_direction);
+
+    std::string apple = "";
+    if (this->_closeToApple)
+        apple = "_apple";
+
+    return this->_assetsName.at(this->_direction).substr(0, this->_assetsName.at(this->_direction).find_last_of('.')) + apple + ".png";
 }
 
 std::vector<std::shared_ptr<SnakeBodyEntity>> SnakeHeadEntity::findAndSortBodyParts(const grid_t &grid) const
@@ -358,6 +386,7 @@ void SnakeHeadEntity::moveEntity(std::shared_ptr<IGameModule> gameModule, std::p
     }
 
     this->moveEntities(gameModule, this->_position, nextPosition);
+    this->_closeToApple = this->isCloseToApple(gameModule);
     this->moveBodyParts(gameModule);
     this->addPendingBodyPart(gameModule);
     this->updateBodyPartDirections(gameModule, findAndSortBodyParts(gameModule->getEntities()));

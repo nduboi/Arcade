@@ -15,13 +15,14 @@
 
 BigDotEntity::BigDotEntity(std::pair<size_t, size_t> position)
 {
-    this->_spriteName = "assets/pacman/other/strawberry.png";
+    this->_spriteName = "assets/pacman/other/strawberry1.png";
     this->_color = 5;
     this->_text = "";
     this->_position = position;
     this->_isMovable = false;
     this->_isControlable = false;
     this->_hasCollisions = true;
+    this->_timePoint = std::chrono::steady_clock::now();
 }
 
 void BigDotEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
@@ -47,5 +48,26 @@ void BigDotEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
                 ghost->setSpeedTime(0.5f);
             }
         }
+    }
+}
+
+std::string BigDotEntity::getSpriteName() const
+{
+    std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = now - this->_timePoint;
+
+    int state = static_cast<int>(elapsed_seconds.count() * 3) % 4;
+
+    switch (state) {
+        case 0:
+            return this->_spriteName;
+        case 1:
+            return "assets/pacman/other/strawberry2.png";
+        case 2:
+            return "assets/pacman/other/strawberry3.png";
+        case 3:
+            return "assets/pacman/other/strawberry2.png";
+        default:
+            return this->_spriteName;
     }
 }

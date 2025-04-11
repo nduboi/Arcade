@@ -9,6 +9,7 @@
 #define BIGDOTENTITY_HPP_
 
 #include "AEntity.hpp"
+#include <chrono>
 
 class BigDotEntity : public AEntity {
     public:
@@ -16,6 +17,10 @@ class BigDotEntity : public AEntity {
         ~BigDotEntity() = default;
 
         void onInteract(std::shared_ptr<IGameModule> gameModule) override;
+        std::string getSpriteName() const override;
+
+    private:
+        std::chrono::time_point<std::chrono::steady_clock> _timePoint;
 };
 
 #endif /* !BIGDOTENTITY_HPP_ */
