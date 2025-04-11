@@ -165,7 +165,7 @@ void NibblerGame::changeDifficulty()
     this->_isStarted = false;
     this->_gameState = PLAYING;
     this->_currentLevel += 1;
-    if (_currentLevel > 2)
+    if (_currentLevel > _mapManager.getNbLevels())
         this->_currentLevel = 1;
 
     _mapManager.generateMap(_currentLevel);

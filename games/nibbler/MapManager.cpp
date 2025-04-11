@@ -50,6 +50,58 @@ void MapManager::initSpriteMap()
     };
 }
 
+std::vector<std::vector<int>> MapManager::getMapLayout() const
+{
+    return _mapLayout;
+}
+
+std::string MapManager::getSpriteFromId(int id)
+{
+    auto it = _spriteMap.find(id);
+    if (it != _spriteMap.end())
+        return it->second;
+    return "";
+}
+
+
+std::pair<size_t, size_t> MapManager::getPlayerStartPosition() const
+{
+    return _playerStartPosition;
+}
+
+bool MapManager::isWallAt(const std::pair<size_t, size_t>& position) const
+{
+    if (position.first >= _mapLayout[0].size() || position.second >= _mapLayout.size())
+        return true;
+
+    int tileId = _mapLayout[position.second][position.first];
+    return (tileId >= 1 && tileId <= 14);
+}
+
+std::vector<std::pair<int, int>> MapManager::getValidDirections(const std::pair<size_t, size_t>& position) const
+{
+    std::vector<std::pair<int, int>> validDirections;
+    std::pair<int, int> directions[4] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    for (const auto& dir : directions) {
+        std::pair<size_t, size_t> newPos = {
+            position.first + dir.first,
+            position.second + dir.second
+        };
+
+        if (!isWallAt(newPos)) {
+            validDirections.push_back(dir);
+        }
+    }
+
+    return validDirections;
+}
+
+int MapManager::getNbLevels()
+{
+    return 2;
+}
+
 void MapManager::generateMap(int level)
 {
     switch (level) {
@@ -119,51 +171,4 @@ void MapManager::createMapTwo()
     };
 
     _playerStartPosition = {10, 17};
-}
-
-std::vector<std::vector<int>> MapManager::getMapLayout() const
-{
-    return _mapLayout;
-}
-
-std::string MapManager::getSpriteFromId(int id)
-{
-    auto it = _spriteMap.find(id);
-    if (it != _spriteMap.end())
-        return it->second;
-    return "";
-}
-
-
-std::pair<size_t, size_t> MapManager::getPlayerStartPosition() const
-{
-    return _playerStartPosition;
-}
-
-bool MapManager::isWallAt(const std::pair<size_t, size_t>& position) const
-{
-    if (position.first >= _mapLayout[0].size() || position.second >= _mapLayout.size())
-        return true;
-
-    int tileId = _mapLayout[position.second][position.first];
-    return (tileId >= 1 && tileId <= 14);
-}
-
-std::vector<std::pair<int, int>> MapManager::getValidDirections(const std::pair<size_t, size_t>& position) const
-{
-    std::vector<std::pair<int, int>> validDirections;
-    std::pair<int, int> directions[4] = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-
-    for (const auto& dir : directions) {
-        std::pair<size_t, size_t> newPos = {
-            position.first + dir.first,
-            position.second + dir.second
-        };
-
-        if (!isWallAt(newPos)) {
-            validDirections.push_back(dir);
-        }
-    }
-
-    return validDirections;
 }
