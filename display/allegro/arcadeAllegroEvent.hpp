@@ -5,6 +5,7 @@
 #include "IWindow.hpp"
 #include <memory>
 #include <allegro5/allegro.h>
+#include <chrono>
 
 /**
  * @class arcadeAllegroEvent
@@ -17,6 +18,7 @@ private:
     std::pair<int, int> _mapSize;
     bool _iswritting;
     std::string _input;
+    std::chrono::time_point<std::chrono::steady_clock> _timePoint;
 
 public:
     void init() override;
