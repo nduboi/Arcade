@@ -158,10 +158,12 @@ std::vector<std::shared_ptr<IEntity>> NibblerGame::getHUD() const
 
 void NibblerGame::changeDifficulty()
 {
-    this->_score = 0;
+    if (_gameState != WIN) {
+        this->_score = 0;
+        this->_time = std::chrono::steady_clock::now();
+    }
     this->_isStarted = false;
     this->_gameState = PLAYING;
-    this->_time = std::chrono::steady_clock::now();
     this->_currentLevel += 1;
     if (_currentLevel > 2)
         this->_currentLevel = 1;
