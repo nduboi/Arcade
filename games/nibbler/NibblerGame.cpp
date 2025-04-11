@@ -60,7 +60,7 @@ void NibblerGame::setLayerWalls()
 
     for (int y = 0; y < _MAP_HEIGHT && y < mapLayout.size(); y++) {
         for (int x = 0; x < _MAP_WIDTH && x < mapLayout[y].size(); x++) {
-            if ((mapLayout[y][x] >= 1 && mapLayout[y][x] <= 14) || mapLayout[y][x] == 22) {
+            if ((mapLayout[y][x] >= 1 && mapLayout[y][x] <= 14) || mapLayout[y][x] == 22 || mapLayout[y][x] == 23) {
                 std::string wallSprite = _mapManager.getSpriteFromId(mapLayout[y][x]);
                 this->_entities[y][x][1] = std::make_shared<WallEntity>(wallSprite, std::make_pair(x, y));
             } else if (mapLayout[y][x] == 99) {
