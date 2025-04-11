@@ -63,6 +63,8 @@ void NibblerGame::setLayerWalls()
             if ((mapLayout[y][x] >= 1 && mapLayout[y][x] <= 14) || mapLayout[y][x] == 22) {
                 std::string wallSprite = _mapManager.getSpriteFromId(mapLayout[y][x]);
                 this->_entities[y][x][1] = std::make_shared<WallEntity>(wallSprite, std::make_pair(x, y));
+            } else {
+                this->_entities[y][x][1] = std::make_shared<VoidEntity>("assets/nibbler/Floor.png", 1, "", std::make_pair(x, y));
             }
         }
     }
@@ -70,13 +72,6 @@ void NibblerGame::setLayerWalls()
 
 void NibblerGame::setLayerEntities()
 {
-    for (int y = 0; y < _MAP_HEIGHT; y++) {
-        for (int x = 0; x < _MAP_WIDTH; x++) {
-            if (!this->_entities[y][x][1] || !std::dynamic_pointer_cast<WallEntity>(this->_entities[y][x][1]))
-                this->_entities[y][x][1] = std::make_shared<VoidEntity>(this->_entities[y][x][0]->getSpriteName(), 1, "", std::make_pair(x, y));
-        }
-    }
-
     auto startPos = _mapManager.getPlayerStartPosition();
     this->_entities[startPos.second][startPos.first][1] = std::make_shared<NibblerHeadEntity>(4, "h", startPos, _mapManager);
     this->setNibblerBody();
