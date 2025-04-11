@@ -86,6 +86,8 @@ namespace DisplayLib {
                 return IEvent::MOUSELEFTCLICK;
             case BUTTON2_CLICKED:
                 return IEvent::MOUSERIGHTCLICK;
+            case 10:
+                return IEvent::ENTER;
             default:
                 return IEvent::NOTHING;
         }
