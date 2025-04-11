@@ -12,13 +12,14 @@
 
 AppleEntity::AppleEntity(std::pair<size_t, size_t> position)
 {
-    this->_spriteName = "assets/snake/apple.png";
+    this->_spriteName = "assets/snake/apple1.png";
     this->_color = 2;
     this->_text = "a";
     this->_position = position;
     this->_isMovable = false;
     this->_isControlable = false;
     this->_hasCollisions = true;
+    this->_timePoint = std::chrono::steady_clock::now();
 }
 
 int AppleEntity::getNbVoidEntities(const grid_t &grid) const
@@ -66,4 +67,25 @@ void AppleEntity::onInteract(std::shared_ptr<IGameModule> gameModule)
     grid[newPos.second][newPos.first][1] = std::make_shared<AppleEntity>(newPos);
     gameModule->setEntities(grid);
     gameModule->setScore(gameModule->getScore() + 10);
+}
+
+std::string AppleEntity::getSpriteName() const
+{
+    std::chrono::time_point<std::chrono::steady_clock> now = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = now - this->_timePoint;
+
+    int state = static_cast<int>(elapsed_seconds.count() * 5) % 4;
+
+    switch (state) {
+        case 0:
+            return this->_spriteName;
+        case 1:
+            return "assets/snake/apple2.png";
+        case 2:
+            return "assets/snake/apple3.png";
+        case 3:
+            return "assets/snake/apple2.png";
+        default:
+            return this->_spriteName;
+    }
 }
