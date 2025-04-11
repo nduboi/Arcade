@@ -50,7 +50,7 @@ IEvent::event_t arcadeAllegroEvent::pollEvents(std::pair<int, int> gridSize)
             this->_mousePos.first = event.mouse.x;
             this->_mousePos.second = event.mouse.y;
             if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 &&
-                this->_mousePos.second >= 120 && this->_mousePos.second <= 160) {
+                this->_mousePos.second >= 120 && this->_mousePos.second <= 180) {
                 this->_iswritting = true;
             }
             switch (event.mouse.button) {

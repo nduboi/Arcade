@@ -23,7 +23,7 @@ namespace DisplayLib {
 				auto pos = getMousePos();
 
                 if (pos.first >= 725 && pos.first <= 900 &&
-                    pos.second >= 120 && pos.second <= 160) {
+                    pos.second >= 120 && pos.second <= 180) {
                     this->_isWriting = true;
                 } else {
                     this->_isWriting = false;
@@ -36,7 +36,6 @@ namespace DisplayLib {
         }
 
         if (this->_isWriting) {
-        	std::cout << "Char: " << ch << std::endl;
             if (ch >= 32 && ch <= 126) {
                 if (this->_input.length() <= 15) {
                     this->_input += static_cast<char>(ch);

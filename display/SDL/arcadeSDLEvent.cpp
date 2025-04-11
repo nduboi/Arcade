@@ -70,7 +70,7 @@ IEvent::event_t arcadeSDLEvent::pollEvents(std::pair<int, int> gridSize) {
         }
         if (event.type == SDL_MOUSEBUTTONDOWN) {
             SDL_GetMouseState(&this->_mousePos.first, &this->_mousePos.second);
-            if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 160)
+            if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 180)
                 this->_iswritting = true;
             switch (event.button.button) {
                 case SDL_BUTTON_LEFT:

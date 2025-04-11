@@ -59,7 +59,7 @@ IEvent::event_t arcadeSFMLEvent::pollEvents(std::pair<int, int> gridSize) {
         }
         if (event.type == sf::Event::MouseButtonPressed) {
             this->_mousePos = {event.mouseButton.x, event.mouseButton.y};
-            if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 160)
+            if (this->_mousePos.first >= 725 && this->_mousePos.first <= 900 && this->_mousePos.second >= 120 && this->_mousePos.second <= 180)
                 this->_iswritting = true;
             if (event.mouseButton.button == sf::Mouse::Right)
                 return MOUSERIGHTCLICK;
