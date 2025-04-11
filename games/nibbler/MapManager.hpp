@@ -49,7 +49,13 @@ class MapManager {
         void createMapFive();
         void createMapSix();
         void createMapSeven();
+        void createMapEight();
         void createMapNine();
+        void createMapTen();
+        void createMapEleven();
+        void createMapTwelve();
+        void createMapThirteen();
+        void createMapFourteen();
 
     };
 
