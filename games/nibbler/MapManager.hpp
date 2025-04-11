@@ -29,6 +29,7 @@ class MapManager {
         std::pair<size_t, size_t> getPlayerStartPosition() const;
         bool isWallAt(const std::pair<size_t, size_t>& position) const;
         std::vector<std::pair<int, int>> getValidDirections(const std::pair<size_t, size_t>& position) const;
+        int getNbLevels();
 
     private:
         // Variable
