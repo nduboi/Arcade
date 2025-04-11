@@ -21,8 +21,7 @@ class FoodEntity : public AEntity {
 
     private:
         //Method
-        int getNbVoidEntities(const grid_t &grid) const;
-        bool isValidPosition(const std::pair<size_t, size_t> &pos, const grid_t &grid) const;
+        int getNbFoodEntities(const grid_t &grid) const;
 };
 
 #endif /* !FOODENTITY_HPP_ */
