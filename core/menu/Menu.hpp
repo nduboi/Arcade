@@ -40,7 +40,6 @@ class Menu : public IMenu {
 		void drawUsernameInput(const std::shared_ptr<IWindow> &window);
 		void drawUsernameButton(const std::shared_ptr<IWindow> &window);
 		void drawHighscores(const std::shared_ptr<IWindow> &window);
-		void handleKeyInput(char key);
 
 		// Getter
 		std::vector<Boxes> getBoxPoses() override;
@@ -53,6 +52,7 @@ class Menu : public IMenu {
 			const std::pair<int, int>& position = {200, 50}, int fontSize = 36);
 		void setSelectedGraphicLib(const std::string& graphicLib);
 		void setInputUsername(const std::string& input);
+
 	private:
 		// Variable
 		std::string _username;
